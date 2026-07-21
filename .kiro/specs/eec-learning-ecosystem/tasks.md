@@ -32,9 +32,10 @@
       Accent Lab focus, mindset focus, and study-hour budgets. `Req: 2` → `curriculum/01-cefr-roadmap.md`
 - [x] 1.2 Finalize the **standard lesson anatomy template** (reusable for all lessons). `Req: 1, 2`
       → `curriculum/02-lesson-template.md`
-- [~] 1.3 Build **Stage 0 (Pre-A1/A1) curriculum in full** — units and lessons following the template,
+- [x] 1.3 Build **Stage 0 (Pre-A1/A1) curriculum in full** — units and lessons following the template,
       with Arabic scaffolding. `Req: 2, 1`
-      → unit map done: `curriculum/stage0/00-stage0-unit-map.md` (11 units, ~55–60 lessons); Units 0–9 authored in full (10/11) — Units 0–2 are enough to launch the founding cohort; only Unit 10 (consolidation + summative) remains to complete Stage 0
+      → COMPLETE: `curriculum/stage0/` — unit map + all 11 units (Units 0–10, ~55 lessons) authored in full,
+      assessment-backed, with Day-1↔graduation before/after proof built in
 - [ ] 1.4 Build the **Accent Lab syllabus** and Stage-0 drills (interference-driven). `Req: 4`
 - [ ] 1.5 Build the **mindset/habit track** lessons that run alongside Stage 0. `Req: 5`
 - [ ] 1.6 Build the **assessment suite**: placement test, formative checks, Stage-0 summative, and the
