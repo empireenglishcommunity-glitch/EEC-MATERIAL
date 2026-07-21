@@ -42,7 +42,8 @@
       → `curriculum/04-mindset-and-accountability-track.md` (Stage-0 mindset arc M0–M10 mapped to units, accountability system, habit toolkit, re-engagement rules, delivery format, KPIs)
 - [x] 1.6 Build the **assessment suite**: placement test, formative checks, Stage-0 summative, and the
       CEFR-aligned speaking rubric. `Req: 3` → `curriculum/05-assessment-suite.md` (placement w/ bands + standard prompt, 5-dimension rubric with 0–5 descriptors, A1 thresholds, formative + summative design, exam track, scoring workflow)
-- [ ] 1.7 Define the **before/after speaking-sample protocol** (prompts + consent + storage). `Req: 3`
+- [x] 1.7 Define the **before/after speaking-sample protocol** (prompts + consent + storage). `Req: 3`
+      → `curriculum/06-before-after-protocol.md` (fixed prompts, capture protocol, layered consent tiers, storage/naming, paired-clip production, integration points)
 
 ## Phase 2 — Content engine & audience
 *Goal: build trust and an audience before selling.*
