@@ -56,7 +56,8 @@
       → `content/03-waitlist-funnel.md` (funnel map, capture mechanics, lead magnet, full bilingual landing-page copy, 8-step nurture sequence, segmentation, metrics); live page/form setup is an operator action
 - [x] 2.4 Define and prepare the **low-cost entry challenge** (7–14 days, first quick win). `Req: 9, 10`
       → `content/04-entry-challenge.md` ("7 Days to Your First English Conversation": full day-by-day plan reusing Stage 0 U0–U1 + Accent Lab + Mindset, before/after clips, tiered pricing + credit-to-cohort, conversion mechanics, metrics)
-- [ ] 2.5 Launch consistent publishing and begin **warm-starting** the founder's network. `Req: 6, 10`
+- [x] 2.5 Launch consistent publishing and begin **warm-starting** the founder's network. `Req: 6, 10`
+      → `content/05-launch-and-warmstart-plan.md` (pre-launch checklist, weeks 1–4 publishing plan, warm-start outreach playbook, timeline to founding cohort, roles, metrics); execution is an operator action
 
 ## Phase 3 — Founding cohort offer & launch prep
 *Goal: a fully defined, sellable first cohort.*
