@@ -65,8 +65,9 @@
 - [x] 3.1 Design the **founding-cohort offer**: scope (Stage 0[–A2]), size (~15–30), founding price
       (tiered EGP/USD), duration, deliverables, guarantee/promise wording. `Req: 8B, 9`
       → `program/01-founding-cohort-offer.md` (EEC Foundations: scope/size/duration/format, deliverables, honest "Do the Work" guarantee, tiered pricing + challenge credit + installments, founding-member exchange, positioning, enrollment terms, sales-page skeleton, success criteria)
-- [ ] 3.2 Build the **enrollment & onboarding flow**: sales page, checkout (EGP+USD), placement,
+- [x] 3.2 Build the **enrollment & onboarding flow**: sales page, checkout (EGP+USD), placement,
       Day-1 speaking sample, welcome sequence. `Req: 8B, 9, 3`
+      → `program/02-enrollment-and-onboarding.md` (end-to-end flow, checkout on both rails, onboarding form + layered consent, placement + Day-1 baseline, community onboarding + pods, pre-kickoff sequence, kickoff run-of-show, per-learner checklist, metrics)
 - [ ] 3.3 Write the **cohort run-of-show & SOPs**: weekly delivery, live-session format, feedback loop,
       accountability/nudge rules. `Req: 7, 5, 11`
 - [ ] 3.4 Define **success criteria** for the founding cohort (completion %, avg CEFR gain, # testimonials). `Req: 8B, 13`
