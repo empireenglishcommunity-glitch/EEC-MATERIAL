@@ -62,8 +62,9 @@
 ## Phase 3 — Founding cohort offer & launch prep
 *Goal: a fully defined, sellable first cohort.*
 
-- [ ] 3.1 Design the **founding-cohort offer**: scope (Stage 0[–A2]), size (~15–30), founding price
+- [x] 3.1 Design the **founding-cohort offer**: scope (Stage 0[–A2]), size (~15–30), founding price
       (tiered EGP/USD), duration, deliverables, guarantee/promise wording. `Req: 8B, 9`
+      → `program/01-founding-cohort-offer.md` (EEC Foundations: scope/size/duration/format, deliverables, honest "Do the Work" guarantee, tiered pricing + challenge credit + installments, founding-member exchange, positioning, enrollment terms, sales-page skeleton, success criteria)
 - [ ] 3.2 Build the **enrollment & onboarding flow**: sales page, checkout (EGP+USD), placement,
       Day-1 speaking sample, welcome sequence. `Req: 8B, 9, 3`
 - [ ] 3.3 Write the **cohort run-of-show & SOPs**: weekly delivery, live-session format, feedback loop,
