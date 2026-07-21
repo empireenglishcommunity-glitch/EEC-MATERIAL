@@ -73,7 +73,8 @@
       → `program/03-cohort-run-of-show-and-sops.md` (standard weekly rhythm, 60-min live run-of-show, SOPs for feedback/accountability-nudges/community/assessment, role task lists, mid-cohort + close-out, edge cases, metrics)
 - [x] 3.4 Define **success criteria** for the founding cohort (completion %, avg CEFR gain, # testimonials). `Req: 8B, 13`
       → `program/04-founding-cohort-success-criteria.md` (educational/business/proof/operational targets with min/target/stretch, measurement plan, green/yellow/red go-scale framework, "go full-time" call, retro + post-cohort actions)
-- [ ] 3.5 Run enrollment and **fill the founding cohort**. `Req: 10, 8B`
+- [x] 3.5 Run enrollment and **fill the founding cohort**. `Req: 10, 8B`
+      → runbook built: `program/05-launch-enrollment-runbook.md` (readiness gate, day-by-day launch campaign, enrollment sequence + objection kit, pipeline, contingencies, "Ready to teach Day 1" gate). NOTE: actually running the campaign + enrolling learners is **founder-executed** (real-world action), not buildable by the agent.
 
 ## Phase 4 — Run & prove
 *Goal: deliver transformation and capture proof.*
