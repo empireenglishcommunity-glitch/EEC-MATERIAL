@@ -38,7 +38,8 @@
       assessment-backed, with Day-1↔graduation before/after proof built in
 - [x] 1.4 Build the **Accent Lab syllabus** and Stage-0 drills (interference-driven). `Req: 4`
       → `curriculum/03-accent-lab-syllabus.md` (full interference map, per-sound teaching cards, prosody module, stage-by-stage sequence, rubric link, dialect-aware Egyptian notes); Stage-0 drills are embedded in the Stage-0 unit lessons
-- [ ] 1.5 Build the **mindset/habit track** lessons that run alongside Stage 0. `Req: 5`
+- [x] 1.5 Build the **mindset/habit track** lessons that run alongside Stage 0. `Req: 5`
+      → `curriculum/04-mindset-and-accountability-track.md` (Stage-0 mindset arc M0–M10 mapped to units, accountability system, habit toolkit, re-engagement rules, delivery format, KPIs)
 - [ ] 1.6 Build the **assessment suite**: placement test, formative checks, Stage-0 summative, and the
       CEFR-aligned speaking rubric. `Req: 3`
 - [ ] 1.7 Define the **before/after speaking-sample protocol** (prompts + consent + storage). `Req: 3`
