@@ -71,7 +71,8 @@
 - [x] 3.3 Write the **cohort run-of-show & SOPs**: weekly delivery, live-session format, feedback loop,
       accountability/nudge rules. `Req: 7, 5, 11`
       → `program/03-cohort-run-of-show-and-sops.md` (standard weekly rhythm, 60-min live run-of-show, SOPs for feedback/accountability-nudges/community/assessment, role task lists, mid-cohort + close-out, edge cases, metrics)
-- [ ] 3.4 Define **success criteria** for the founding cohort (completion %, avg CEFR gain, # testimonials). `Req: 8B, 13`
+- [x] 3.4 Define **success criteria** for the founding cohort (completion %, avg CEFR gain, # testimonials). `Req: 8B, 13`
+      → `program/04-founding-cohort-success-criteria.md` (educational/business/proof/operational targets with min/target/stretch, measurement plan, green/yellow/red go-scale framework, "go full-time" call, retro + post-cohort actions)
 - [ ] 3.5 Run enrollment and **fill the founding cohort**. `Req: 10, 8B`
 
 ## Phase 4 — Run & prove
