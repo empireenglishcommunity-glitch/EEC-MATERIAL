@@ -13,14 +13,17 @@
 ## Phase 0 — Foundations & setup
 *Goal: lock the operating basis so building is fast and consistent.*
 
-- [ ] 0.1 Approve the Foundational Strategy and this spec (strategy already drafted). `Req: all`
-- [ ] 0.2 Author the **EEC Methodology Handbook** — the detailed "how we teach": the learning loop,
+- [x] 0.1 Approve the Foundational Strategy and this spec (strategy already drafted). `Req: all`
+- [x] 0.2 Author the **EEC Methodology Handbook** — the detailed "how we teach": the learning loop,
       skill weighting, Arabic-scaffold fade rules, feedback model, and spaced-review policy. `Req: 1`
-- [ ] 0.3 Define **brand foundations** — positioning line, tone of voice, visual standards, and the
-      founder-story narrative used across touchpoints. `Req: 12`
-- [ ] 0.4 Select and set up the **lean tool stack** — community/course platform, live video, chat,
+      → `methodology/01-eec-methodology-handbook.md`
+- [x] 0.3 Define **brand foundations** — positioning line, tone of voice, visual standards, and the
+      founder-story narrative used across touchpoints. `Req: 12` → `brand/01-brand-foundations.md`
+- [x] 0.4 Select and set up the **lean tool stack** — community/course platform, live video, chat,
       payments (EGP + USD), scheduling, analytics. Confirm Egyptian payment support. `Req: 11, 9`
-- [ ] 0.5 Create the **Cohort Tracker** template and KPI dashboard (spreadsheet). `Req: 13, 3`
+      → `operations/01-tool-stack.md` *(design/decisions done; live account setup is an operator action)*
+- [x] 0.5 Create the **Cohort Tracker** template and KPI dashboard (spreadsheet). `Req: 13, 3`
+      → `operations/02-cohort-tracker.md` + `operations/cohort-tracker-template.csv`
 
 ## Phase 1 — Core learning system (first levels + assessment)
 *Goal: a complete, teachable Stage 0, plus the measurement backbone.*
