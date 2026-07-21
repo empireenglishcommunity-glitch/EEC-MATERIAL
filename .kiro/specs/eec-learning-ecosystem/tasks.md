@@ -36,7 +36,8 @@
       with Arabic scaffolding. `Req: 2, 1`
       → COMPLETE: `curriculum/stage0/` — unit map + all 11 units (Units 0–10, ~55 lessons) authored in full,
       assessment-backed, with Day-1↔graduation before/after proof built in
-- [ ] 1.4 Build the **Accent Lab syllabus** and Stage-0 drills (interference-driven). `Req: 4`
+- [x] 1.4 Build the **Accent Lab syllabus** and Stage-0 drills (interference-driven). `Req: 4`
+      → `curriculum/03-accent-lab-syllabus.md` (full interference map, per-sound teaching cards, prosody module, stage-by-stage sequence, rubric link, dialect-aware Egyptian notes); Stage-0 drills are embedded in the Stage-0 unit lessons
 - [ ] 1.5 Build the **mindset/habit track** lessons that run alongside Stage 0. `Req: 5`
 - [ ] 1.6 Build the **assessment suite**: placement test, formative checks, Stage-0 summative, and the
       CEFR-aligned speaking rubric. `Req: 3`
