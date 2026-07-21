@@ -40,8 +40,8 @@
       → `curriculum/03-accent-lab-syllabus.md` (full interference map, per-sound teaching cards, prosody module, stage-by-stage sequence, rubric link, dialect-aware Egyptian notes); Stage-0 drills are embedded in the Stage-0 unit lessons
 - [x] 1.5 Build the **mindset/habit track** lessons that run alongside Stage 0. `Req: 5`
       → `curriculum/04-mindset-and-accountability-track.md` (Stage-0 mindset arc M0–M10 mapped to units, accountability system, habit toolkit, re-engagement rules, delivery format, KPIs)
-- [ ] 1.6 Build the **assessment suite**: placement test, formative checks, Stage-0 summative, and the
-      CEFR-aligned speaking rubric. `Req: 3`
+- [x] 1.6 Build the **assessment suite**: placement test, formative checks, Stage-0 summative, and the
+      CEFR-aligned speaking rubric. `Req: 3` → `curriculum/05-assessment-suite.md` (placement w/ bands + standard prompt, 5-dimension rubric with 0–5 descriptors, A1 thresholds, formative + summative design, exam track, scoring workflow)
 - [ ] 1.7 Define the **before/after speaking-sample protocol** (prompts + consent + storage). `Req: 3`
 
 ## Phase 2 — Content engine & audience
