@@ -68,8 +68,9 @@
 - [x] 3.2 Build the **enrollment & onboarding flow**: sales page, checkout (EGP+USD), placement,
       Day-1 speaking sample, welcome sequence. `Req: 8B, 9, 3`
       → `program/02-enrollment-and-onboarding.md` (end-to-end flow, checkout on both rails, onboarding form + layered consent, placement + Day-1 baseline, community onboarding + pods, pre-kickoff sequence, kickoff run-of-show, per-learner checklist, metrics)
-- [ ] 3.3 Write the **cohort run-of-show & SOPs**: weekly delivery, live-session format, feedback loop,
+- [x] 3.3 Write the **cohort run-of-show & SOPs**: weekly delivery, live-session format, feedback loop,
       accountability/nudge rules. `Req: 7, 5, 11`
+      → `program/03-cohort-run-of-show-and-sops.md` (standard weekly rhythm, 60-min live run-of-show, SOPs for feedback/accountability-nudges/community/assessment, role task lists, mid-cohort + close-out, edge cases, metrics)
 - [ ] 3.4 Define **success criteria** for the founding cohort (completion %, avg CEFR gain, # testimonials). `Req: 8B, 13`
 - [ ] 3.5 Run enrollment and **fill the founding cohort**. `Req: 10, 8B`
 
