@@ -28,8 +28,8 @@
 ## Phase 1 — Core learning system (first levels + assessment)
 *Goal: a complete, teachable Stage 0, plus the measurement backbone.*
 
-- [ ] 1.1 Define the **CEFR roadmap**: all stages with entry/exit criteria, vocab/grammar targets,
-      Accent Lab focus, mindset focus, and study-hour budgets. `Req: 2`
+- [x] 1.1 Define the **CEFR roadmap**: all stages with entry/exit criteria, vocab/grammar targets,
+      Accent Lab focus, mindset focus, and study-hour budgets. `Req: 2` → `curriculum/01-cefr-roadmap.md`
 - [ ] 1.2 Finalize the **standard lesson anatomy template** (reusable for all lessons). `Req: 1, 2`
 - [ ] 1.3 Build **Stage 0 (Pre-A1/A1) curriculum in full** — units and lessons following the template,
       with Arabic scaffolding. `Req: 2, 1`
