@@ -50,7 +50,8 @@
 
 - [x] 2.1 Define the **content strategy & calendar** — pillars, formats, cadence, platforms, CTAs. `Req: 6`
       → `content/01-content-strategy-and-calendar.md` (positioning, 6 pillars, platform roles, funnel + CTA rules, short-form template + hook bank, weekly calendar, production/repurposing workflow, metrics, 30-day starter plan)
-- [ ] 2.2 Produce the flagship **Accent Lab free-content series** (Egyptian Arabic). `Req: 6, 4`
+- [x] 2.2 Produce the flagship **Accent Lab free-content series** (Egyptian Arabic). `Req: 6, 4`
+      → `content/02-accent-lab-series-scripts.md` (12 ready-to-film short scripts AL-01–12 + 2 YouTube outlines, Egyptian-Arabic narration, CTAs, production/repurposing notes); filming/editing is an operator action
 - [ ] 2.3 Set up **lead capture / waitlist** and the content→waitlist funnel. `Req: 6, 10`
 - [ ] 2.4 Define and prepare the **low-cost entry challenge** (7–14 days, first quick win). `Req: 9, 10`
 - [ ] 2.5 Launch consistent publishing and begin **warm-starting** the founder's network. `Req: 6, 10`
