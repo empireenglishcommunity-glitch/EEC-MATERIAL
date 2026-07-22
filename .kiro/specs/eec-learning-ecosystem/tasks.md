@@ -114,8 +114,14 @@ until absorbed later. (Revises GC-2.)*
       (127.0.0.1:8080) routed via Cloudflare Tunnel `79dff464` (remote config v3); proxied CNAMEs for root
       + www; verified public (307→/ar, RTL/LTR, API ok). **Funnel wired:** `/guide` lead-magnet page live +
       waitlist success CTA; **leads persist to a volume-backed file** (`/data/leads.jsonl`) + optional n8n webhook (`WAITLIST_WEBHOOK_URL`).
-- [ ] 3C.2 **Learner portal** — login/auth + course & lessons + progress + quizzes + **Accent Lab
+- [~] 3C.2 **Learner portal** — login/auth + course & lessons + progress + quizzes + **Accent Lab
       record-and-compare**; replaces rented course tools for delivery. `Req: 7, 3, 4`
+      → **IN PROGRESS — built in increments.** **Increment 1 (auth foundation) DONE & pushed:** JSON store
+      (users/progress on `DATA_DIR` volume), bcryptjs hashing + jose HS256 session cookie (`eec_session`),
+      login page/form + logout, session-guarded `/[locale]/portal` dashboard with Stage-0 lesson manifest,
+      admin create-user API (`x-admin-token`) for post-payment provisioning; env + compose updated
+      (`DATA_DIR`, `SESSION_SECRET`, `ADMIN_TOKEN`). Build verified. *Next increments:* 2 lessons view +
+      mark-complete + progress; 3 quizzes from item banks; 4 Accent Lab record-and-compare.
 - [ ] 3C.3 **Native community + payments (later, post-proof)** — absorb community chat + integrate
       payments natively once revenue justifies it (until then: WhatsApp/Telegram + PayPal/InstaPay). `Req: 8, 9`
 
