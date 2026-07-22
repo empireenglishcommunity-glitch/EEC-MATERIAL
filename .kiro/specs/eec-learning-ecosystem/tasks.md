@@ -112,7 +112,8 @@ until absorbed later. (Revises GC-2.)*
       home, cohort/sales, waitlist+form, accent-lab, about; waitlist API → n8n webhook; Docker + `web/DEPLOY.md`
       for the VPS). **DONE & LIVE → https://empireenglish.online** — Dockerized on the Hetzner VPS
       (127.0.0.1:8080) routed via Cloudflare Tunnel `79dff464` (remote config v3); proxied CNAMEs for root
-      + www; waitlist API forwards to n8n webhook when `WAITLIST_WEBHOOK_URL` is set. Verified public (307→/ar, RTL/LTR, API ok).
+      + www; verified public (307→/ar, RTL/LTR, API ok). **Funnel wired:** `/guide` lead-magnet page live +
+      waitlist success CTA; **leads persist to a volume-backed file** (`/data/leads.jsonl`) + optional n8n webhook (`WAITLIST_WEBHOOK_URL`).
 - [ ] 3C.2 **Learner portal** — login/auth + course & lessons + progress + quizzes + **Accent Lab
       record-and-compare**; replaces rented course tools for delivery. `Req: 7, 3, 4`
 - [ ] 3C.3 **Native community + payments (later, post-proof)** — absorb community chat + integrate
