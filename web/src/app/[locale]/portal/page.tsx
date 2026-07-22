@@ -2,9 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getCurrentUser } from "@/lib/auth";
-import { getUserProgress, getUserQuizResults } from "@/lib/store";
+import { getUserProgress, getUserQuizResults, getUserAccentPractice } from "@/lib/store";
 import { STAGE0, TOTAL_LESSONS } from "@/lib/lessons";
 import { QUIZZES } from "@/content/quizzes";
+import { ACCENT_DRILLS } from "@/content/accent-drills";
 import { Section } from "@/components/ui";
 
 export default async function PortalDashboard({ params }: { params: Promise<{ locale: string }> }) {
@@ -16,6 +17,7 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
 
   const done = await getUserProgress(user.id);
   const quizResults = await getUserQuizResults(user.id);
+  const accentPracticed = await getUserAccentPractice(user.id);
   const pct = TOTAL_LESSONS ? Math.round((done.length / TOTAL_LESSONS) * 100) : 0;
   const ar = locale === "ar";
 
@@ -32,7 +34,24 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
         <div className="h-3 rounded-full bg-gold-500" style={{ width: `${pct}%` }} />
       </div>
 
-      <div className="mt-10 space-y-6">
+      <Link
+        href={`/${locale}/portal/accent-lab`}
+        className="mt-6 flex items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-royal-900 to-royal-700 p-5 text-white transition-transform hover:scale-[1.01]"
+      >
+        <div>
+          <p className="text-lg font-bold">🎙️ Accent Lab</p>
+          <p className="mt-1 text-sm text-royal-100/90">
+            {ar
+              ? "اسمع، سجّل، وقارن نطقك — الأصوات اللي بيغلط فيها المصريون."
+              : "Listen, record, compare — the sounds Egyptian speakers get wrong."}
+          </p>
+        </div>
+        <span className="shrink-0 rounded-lg bg-white/15 px-3 py-1.5 text-sm font-semibold">
+          {accentPracticed.length}/{ACCENT_DRILLS.length}
+        </span>
+      </Link>
+
+      <div className="mt-8 space-y-6">
         {STAGE0.map((u) => (
           <div key={u.id} className="rounded-2xl bg-white p-6 ring-1 ring-royal-100">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -75,8 +94,8 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
 
       <p className="mt-8 text-sm text-ink/50">
         {ar
-          ? "اضغط على أي درس عشان تفتح محتواه وتعلّمه كمكتمل، وجرّب كويز كل وحدة. Accent Lab جاي في التحديث الجاي."
-          : "Tap any lesson to open its content and mark it complete, and try each unit's quiz. Accent Lab is coming next."}
+          ? "اضغط على أي درس عشان تفتح محتواه وتعلّمه كمكتمل، جرّب كويز كل وحدة، واتمرّن على نطقك في الـ Accent Lab."
+          : "Open any lesson and mark it complete, try each unit's quiz, and practice your pronunciation in the Accent Lab."}
       </p>
     </Section>
   );

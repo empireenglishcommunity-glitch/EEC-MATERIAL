@@ -69,3 +69,17 @@ export async function saveQuizResults(q: QuizResults): Promise<void> {
 export async function getUserQuizResults(userId: string): Promise<Record<string, QuizResult>> {
   return (await getQuizResults())[userId] ?? {};
 }
+
+// Accent Lab: which record-and-compare drills a learner has marked as practiced.
+// userId -> list of drill ids
+export type AccentPractice = Record<string, string[]>;
+
+export async function getAccentPractice(): Promise<AccentPractice> {
+  return readJson<AccentPractice>("accent-practice.json", {});
+}
+export async function saveAccentPractice(a: AccentPractice): Promise<void> {
+  return writeJson("accent-practice.json", a);
+}
+export async function getUserAccentPractice(userId: string): Promise<string[]> {
+  return (await getAccentPractice())[userId] ?? [];
+}
