@@ -26,7 +26,10 @@
 ## Global constraints (apply to all requirements)
 
 - **GC-1** — The system SHALL prioritize measurable learner outcomes over reach or entertainment.
-- **GC-2** — The system SHALL be delivered lean, using off-the-shelf tools, with **no custom app** in v1.
+- **GC-2** — The system SHALL be delivered on **EEC's own custom platform, built in layers** (public web
+  first, then a learner portal), hosted on EEC's own domain/server, **integrating** specialized third-party
+  services where rebuilding is low-ROI (live video, payment processing, messaging). It SHALL stay lean —
+  build only what the current phase needs, and never delay the founding cohort for platform work.
 - **GC-3** — The system SHALL be operable by the founder at 24–30 hrs/week plus a small Egyptian team.
 - **GC-4** — The system SHALL keep its cost base in EGP while supporting tiered USD/Gulf pricing.
 - **GC-5** — The system SHALL never promise a guaranteed native accent; it promises a clear, neutral
@@ -131,8 +134,8 @@ community, so that I get real transformation and support, not just videos.
 1. THE SYSTEM SHALL deliver the paid program in a hybrid format: recorded lessons + live sessions +
    community + accountability.
 2. THE SYSTEM SHALL define a cohort structure (duration, weekly cadence, live-session rhythm, workload).
-3. THE SYSTEM SHALL define the delivery tool stack (course/community platform, live video, payments,
-   chat) using off-the-shelf tools.
+3. THE SYSTEM SHALL deliver via **EEC's own platform** (a learner portal for lessons/progress/quizzes),
+   integrating specialized services for live video, payment processing, and messaging.
 4. WHEN a cohort completes, THE SYSTEM SHALL produce documented outcomes (CEFR gains + testimonials).
 5. THE SYSTEM SHALL define a repeatable process to launch each subsequent cohort.
 
@@ -192,11 +195,12 @@ cheap Egyptian team until revenue justifies scaling.
 **Acceptance criteria**
 1. THE SYSTEM SHALL define required roles: founder (teacher/face), part-time video editor, part-time
    community manager/VA — hired in Egypt, paid in EGP.
-2. THE SYSTEM SHALL define the operational tool stack and how the tools connect (content, LMS/community,
-   live, payments, analytics).
+2. THE SYSTEM SHALL define the operational stack and how parts connect: **EEC's own web + learner portal**
+   (built in-house) plus integrated services (live video, payments, messaging), content, and analytics.
 3. THE SYSTEM SHALL define standard operating procedures for the recurring work (content production,
    cohort launch, onboarding, live sessions, feedback, assessment).
-4. THE SYSTEM SHALL NOT require custom software development in v1.
+4. THE SYSTEM SHALL build custom software **in layers** (public web → learner portal → later native
+   community/payments), and SHALL NOT big-bang a full platform before the founding cohort is proven.
 
 ## Requirement 12 — Brand & Presentation Quality
 
@@ -226,7 +230,8 @@ so that I make decisions on evidence, not guesswork.
 
 ## Out of scope for v1
 
-- Custom mobile/web application development.
+- Native **mobile apps** (iOS/Android) — the platform is **web-based** in v1. *(A custom web app is now
+  IN scope, built in layers — see revised GC-2 and tasks Phase 3C.)*
 - Teacher-training / franchising (planned for later expansion).
 - Dedicated kids' program (separate pedagogy and safeguarding; later phase).
 - Full C1/C2 curriculum build (upper levels built after B2 is proven).

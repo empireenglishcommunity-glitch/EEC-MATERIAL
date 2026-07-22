@@ -1,8 +1,14 @@
 # EEC Lean Tool Stack (v1.0)
 
 > **Spec task:** 0.4 · **Requirements:** R11 (Operations/Tooling), R9 (Payments) · **Constraint:** GC-2 (no custom app in v1)
-> **Purpose:** Define the off-the-shelf tools EEC runs on, how they connect, and the decision criteria —
-> so we launch fast and cheap, keep the cost base in EGP, and can still collect USD/Gulf revenue.
+> **Purpose:** Define the tools EEC runs on, how they connect, and the decision criteria.
+>
+> ⚠️ **UPDATED — see revised GC-2 + tasks Phase 3C:** EEC now **builds its own platform** (public web →
+> learner portal), hosted on our **own domain/server**, and **integrates** only: live video (Zoom),
+> payments (**individual-first**: InstaPay/wallet + personal PayPal, fee-on-top — task 3B.3), and messaging
+> (WhatsApp/Telegram). The **Skool/Circle course-platform** and **Paymob/Stripe** recommendations below are
+> **no longer the delivery plan** — keep only the live-video / payments / messaging integration notes.
+> This doc will be rewritten during Phase 3C-1.
 
 ---
 

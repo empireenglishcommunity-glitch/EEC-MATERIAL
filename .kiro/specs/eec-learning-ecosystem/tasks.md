@@ -3,8 +3,8 @@
 > **Spec:** EEC Learning Ecosystem
 > **Version:** 1.0 (draft for approval)
 > **Reads with:** `requirements.md` and `design.md`
-> **How to use:** Execute phases in order. Each task is a discrete, reviewable deliverable (mostly
-> documents and materials, since v1 builds no custom software). Check items off as completed.
+> **How to use:** Execute phases in order. Each task is a discrete, reviewable deliverable (documents,
+> materials, **and — from Phase 3C — our own platform code**). Check items off as completed.
 > `Req:` tags trace each task to requirements. Phases 0–4 get EEC to a proven, revenue-generating
 > founding cohort; Phases 5–6 scale.
 
@@ -97,6 +97,24 @@ requires — so the launch is turn-key. These are the real **tasks**; the Runboo
 - [ ] 3B.6 **Consent form** — layered Tier 0/1/2 (Arabic + English) + a plain-language explainer. `Req: 3`
 - [ ] 3B.7 **Runbook §11 launch assets** — enrollment sequence messages 1–7 + objection kit; live
       Q&A/info-session outline; enrollment pipeline sheet; "Ready to teach Day 1" checklist; post-close message. `Req: 10, 8B`
+
+## Phase 3C — Build EEC platform (our own, layered)
+*Goal: build and own EEC's signature platform — in layers, on our own domain/server — without delaying
+the founding cohort. Replaces rented page/course tools; keeps live video + payments + chat as integrations
+until absorbed later. (Revises GC-2.)*
+
+- [ ] 3C.1 **Public web** — branded site: home + **sales page** (uses 3B.2) + **waitlist/lead-magnet**
+      (uses 3B.1) + free-content hub. Deployed on EEC's own domain/server. `Req: 6, 8B, 12`
+- [ ] 3C.2 **Learner portal** — login/auth + course & lessons + progress + quizzes + **Accent Lab
+      record-and-compare**; replaces rented course tools for delivery. `Req: 7, 3, 4`
+- [ ] 3C.3 **Native community + payments (later, post-proof)** — absorb community chat + integrate
+      payments natively once revenue justifies it (until then: WhatsApp/Telegram + PayPal/InstaPay). `Req: 8, 9`
+
+> **Sequencing:** 3C-1 (public web) goes live for the funnel/launch first; 3C-2 (portal) before/at cohort
+> start; 3C-3 after cohort #1 proves the model. Live video (Zoom), payments (PayPal/InstaPay), and chat
+> (WhatsApp/Telegram) stay **integrated** per the revised GC-2.
+> **Relationship to 3B:** Phase 3B produces the *content* (sales/waitlist copy, lead magnet, forms/quizzes)
+> that Phase 3C *houses*. `operations/01-tool-stack.md` is superseded by this own-platform approach.
 
 ## Phase 4 — Run & prove
 *Goal: deliver transformation and capture proof.*

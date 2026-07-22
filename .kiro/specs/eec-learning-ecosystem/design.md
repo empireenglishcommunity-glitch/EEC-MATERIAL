@@ -202,18 +202,23 @@ Target: **≥70% completion** (vs. 3–10% for self-paced).
 - **Cohort length per stage:** derived from the level's study-hour budget (e.g., a stage ≈ 6–10 weeks).
 - **Group size:** small enough for real feedback; scale via peer pods and TA support later.
 
-### 7.2 Tool stack (off-the-shelf, no custom app — GC-2)
+### 7.2 Delivery stack — EEC's own platform (layered) + integrations (revised GC-2)
 
-| Need | Reference tool options |
+EEC **builds and owns** the platform, hosted on our own domain/server, in layers (see tasks Phase 3C):
+
+| Need | Approach |
 |---|---|
-| Course + community home | An all-in-one community/course platform (e.g., Circle-style, Skool-style, Teachable/Kajabi-style) |
-| Live sessions | Zoom / Google Meet |
-| Chat & nudges | WhatsApp / Telegram / Discord |
-| Payments (EGP + USD) | A processor supporting both local Egyptian and international cards |
-| Scheduling | Calendly-style booking |
-| Analytics/KPIs | Spreadsheet + platform analytics (see §9) |
+| Public web (home, **sales page**, waitlist, lead-magnet, free-content hub) | **Built by EEC** — Phase 3C-1 |
+| Learner portal (login, lessons, progress, quizzes, Accent Lab record-and-compare) | **Built by EEC** — Phase 3C-2 |
+| Live sessions | **Integrate** Zoom / Google Meet (embed link) |
+| Payments (EGP + USD) | **Integrate** individual-first: InstaPay/wallet/bank (EGP) + personal PayPal (USD), fee-on-top |
+| Chat & nudges / community | **Integrate** WhatsApp / Telegram initially; native community absorbed later (Phase 3C-3) |
+| Scheduling | Calendly or built-in booking |
+| Analytics/KPIs | Cohort Tracker (§9) + platform analytics |
 
-*(Exact vendors chosen in Phase 0 based on Egypt payment support and cost.)*
+*Rationale: owning the **web + learning experience** gives EEC its signature and removes platform rent;
+**live video, payment processing, and real-time chat stay integrated** because rebuilding them early is
+low-ROI — absorb them natively post-proof. Build in layers so platform work never delays the first cohort.*
 
 ### 7.3 Repeatable cohort launch process
 
@@ -251,7 +256,9 @@ Track CAC and payback so the proof flywheel drives CAC down cohort over cohort.
 
 ## 9. Data, tracking & KPIs
 
-**Lean approach:** a single **Cohort Tracker** (spreadsheet) + platform-native analytics. No custom DB.
+**Lean approach (v1):** a single **Cohort Tracker** (spreadsheet) + platform analytics. The **learner
+portal (Phase 3C-2)** introduces a small app database for accounts/lessons/progress; the Cohort Tracker
+stays the KPI source of truth until (and alongside) that.
 
 - **Learner records:** name, tier, start level, placement score, Day-1 sample link, weekly activity,
   end level, final scores, testimonial link, membership conversion.
@@ -311,8 +318,10 @@ Track CAC and payback so the proof flywheel drives CAC down cohort over cohort.
 
 ## 13. Key design decisions & rationale
 
-1. **Cohort-first, app-later** — completion (the real problem) is solved by cohorts/community, not
-   software. Lowest cost, highest results, fastest to launch.
+1. **Cohort-first + own platform, built in layers** — completion is solved by cohorts/community/
+   accountability, not software; so we launch on that engine while building **EEC's own platform in
+   layers** (public web → learner portal → native community/payments). This gives EEC its signature and
+   ownership without delaying the first cohort or big-banging a full build.
 2. **CEFR as spine, B2 as promise** — objective, universal measurement; B2 is life-changing and provable.
 3. **Arabic-first fade** — reduces beginner anxiety and dropout, then forces immersion for fluency.
 4. **Accent Lab as signature** — turns a known weakness (Arabic interference) into a differentiator and
