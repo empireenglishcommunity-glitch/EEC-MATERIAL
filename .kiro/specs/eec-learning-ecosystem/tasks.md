@@ -103,8 +103,11 @@ requires — so the launch is turn-key. These are the real **tasks**; the Runboo
 the founding cohort. Replaces rented page/course tools; keeps live video + payments + chat as integrations
 until absorbed later. (Revises GC-2.)*
 
-- [ ] 3C.1 **Public web** — branded site: home + **sales page** (uses 3B.2) + **waitlist/lead-magnet**
-      (uses 3B.1) + free-content hub. Deployed on EEC's own domain/server. `Req: 6, 8B, 12`
+- [~] 3C.1 **Public web** — branded site: home + **sales page** + **waitlist/lead-magnet** + free-content hub. `Req: 6, 8B, 12`
+      → **Built & verified** in `web/` (Next.js 16 + TS + Tailwind v4; Arabic-first RTL + English; pages:
+      home, cohort/sales, waitlist+form, accent-lab, about; waitlist API → n8n webhook; Docker + `web/DEPLOY.md`
+      for the VPS). Build passes; runtime smoke-tested (/ → /ar, RTL/LTR OK). **Remaining (together): deploy
+      to the VPS on `empireenglish.online`.**
 - [ ] 3C.2 **Learner portal** — login/auth + course & lessons + progress + quizzes + **Accent Lab
       record-and-compare**; replaces rented course tools for delivery. `Req: 7, 3, 4`
 - [ ] 3C.3 **Native community + payments (later, post-proof)** — absorb community chat + integrate

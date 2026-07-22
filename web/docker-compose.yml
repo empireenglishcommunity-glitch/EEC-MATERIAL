@@ -1,0 +1,21 @@
+# EEC website — follows the VPS convention: /opt/eec-web/, bound to 127.0.0.1:PORT,
+# routed via the existing Cloudflare Tunnel. Docker bypasses UFW, so localhost binding
+# is the real access control.
+
+services:
+  eec-web:
+    build: .
+    image: eec-web:latest
+    container_name: eec-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:3000" # host 8080 (localhost only) -> container 3000
+    environment:
+      - NODE_ENV=production
+      # Set to your n8n waitlist webhook to capture leads; leave empty to log only.
+      - WAITLIST_WEBHOOK_URL=${WAITLIST_WEBHOOK_URL:-}
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.75"

@@ -1,0 +1,169 @@
+{
+  "common": {
+    "brand": "Empire English Community",
+    "brandShort": "EEC",
+    "tagline": "A real system, not tricks",
+    "joinWaitlist": "Join the Waitlist",
+    "startChallenge": "Start the 7-Day Challenge",
+    "learnMore": "Learn more",
+    "seeProgram": "See the program"
+  },
+  "nav": {
+    "home": "Home",
+    "cohort": "Program",
+    "accentLab": "Accent Lab",
+    "about": "Our Story",
+    "waitlist": "Join"
+  },
+  "home": {
+    "heroBadge": "Founding Cohort — limited spots",
+    "heroTitle": "From zero to confident English conversation",
+    "heroSub": "A complete step-by-step system built for Arabic speakers — clear American accent, real conversation, measurable results. Not tricks, not empty promises.",
+    "heroPrimary": "Join the Waitlist",
+    "heroSecondary": "See the program",
+    "heroNote": "You'll also get a free guide: the 5 sounds Arabic speakers get wrong.",
+    "problemTitle": "Why do most people fail at English?",
+    "problemSub": "Not for lack of information — the internet is full of it. They fail because of this:",
+    "problems": [
+      { "title": "Scattered tricks", "desc": "You learn lots of things with no system, so the effort never compounds into fluency." },
+      { "title": "No real speaking", "desc": "You understand shows but freeze when you speak — because you never practiced speaking." },
+      { "title": "No accountability", "desc": "You start motivated and quit after two weeks. Inconsistency is the real problem." }
+    ],
+    "systemTitle": "The EEC system is different",
+    "systemSub": "Six pillars grounded in language-acquisition science — working together to actually get you there.",
+    "pillars": [
+      { "title": "Comprehensible input", "desc": "You hear and understand English at your level, building natural intuition." },
+      { "title": "Speaking + feedback", "desc": "You speak from day one and get gentle correction — that's what builds fluency and confidence." },
+      { "title": "Accent Lab", "desc": "Pronunciation training for the exact sounds Arabic speakers get wrong (like school, not iskool)." },
+      { "title": "Spaced review", "desc": "We revisit everything over time so it sticks and you don't forget." },
+      { "title": "Mindset & discipline", "desc": "The habits and consistency that get you there — part of the curriculum, not a pep talk." },
+      { "title": "Community & accountability", "desc": "A group moving with you and checking on you daily, so you actually finish." }
+    ],
+    "outcomeTitle": "The outcome we engineer for",
+    "outcomeDesc": "After ~12 weeks of consistent effort, you can hold a simple English conversation with confidence — introduce yourself, your family, your day, order something, give directions — with a clearer accent, and you'll have a before/after video proving the difference.",
+    "stepsTitle": "How it works",
+    "steps": [
+      { "title": "1. Join & get placed", "desc": "A placement test + a 'Day 1' speaking video — that's your before." },
+      { "title": "2. Study on your time", "desc": "Short recorded lessons, ~20 minutes a day." },
+      { "title": "3. Attend the weekly live", "desc": "Real speaking + feedback + your small pod." },
+      { "title": "4. Track your progress", "desc": "Review, assessments, and an 'after' video that shows the difference." }
+    ],
+    "ctaTitle": "Ready to start your journey?",
+    "ctaSub": "Join the waitlist now, grab the free guide, and be first to hear about the founding cohort at a special price.",
+    "ctaButton": "Join the Waitlist"
+  },
+  "cohort": {
+    "title": "EEC Foundations — The Founding Cohort",
+    "sub": "From zero to confident English conversation in ~12 weeks. Small group, close support, and a special founding price.",
+    "whoForTitle": "This is for you if",
+    "whoFor": [
+      "You're a beginner (even from zero) and want to start right.",
+      "You understand English but freeze when you speak.",
+      "You've tried many methods and felt no real progress.",
+      "You want a clear accent and confidence when speaking."
+    ],
+    "whoNotTitle": "Not for you if",
+    "whoNot": [
+      "You want 'fluency in a week' with no effort.",
+      "You're not ready to give ~20 minutes a day consistently."
+    ],
+    "includesTitle": "What you get",
+    "includes": [
+      { "title": "The full Foundations program", "desc": "From zero to A1, step by step." },
+      { "title": "Accent Lab", "desc": "Fixing the sounds we get wrong as Arabic speakers." },
+      { "title": "Weekly live sessions", "desc": "Speaking + feedback + a small pod to practice with." },
+      { "title": "Community & daily accountability", "desc": "So you finish and don't drop off." },
+      { "title": "Mindset & habits coaching", "desc": "The discipline and consistency that get you there." },
+      { "title": "Proof of your progress", "desc": "A before/after video + your CEFR level." },
+      { "title": "Certificate of completion", "desc": "+ a clear path to the next level." }
+    ],
+    "howTitle": "How the program runs",
+    "how": [
+      "Hybrid: recorded lessons + a weekly live session + community + accountability.",
+      "~20 minutes a day + the weekly live — consistency beats long sessions.",
+      "Duration ~10–14 weeks (the full A1 level).",
+      "A small group (15–30) so support stays real.",
+      "We all start together on a set date."
+    ],
+    "guaranteeTitle": "The 'Do the Work' Guarantee",
+    "guaranteeDesc": "Attend the lives, do the lessons and assignments, and take the assessments — if you do all that and don't reach the A1 conversation level, you get the next cohort free (or a refund, per the terms). Honestly: I can't guarantee results for someone who doesn't show up — but if you commit, I'm confident you'll get there.",
+    "pricingTitle": "Pricing",
+    "pricingNote": "A special founding price — for the first group only.",
+    "pricingPoints": [
+      "A large founding discount off the future standard price.",
+      "An accessible price for Egypt (EGP) + installment option.",
+      "A USD price for the Gulf & diaspora.",
+      "If you do the 7-day challenge first, its fee is credited toward the program."
+    ],
+    "faqTitle": "FAQ",
+    "faq": [
+      { "q": "I'm very weak / a total beginner — will it work?", "a": "Yes, that's exactly what it's built for. We start from zero and explain in Arabic at first, then reduce the Arabic gradually." },
+      { "q": "I'm busy — no time.", "a": "~20 minutes a day is enough. Consistency beats scattered hours, and the community helps you finish." },
+      { "q": "Will I get an American accent?", "a": "We'll get you to a clear, confident, American-leaning accent. Native-like is a ceiling for the most dedicated — no empty promises." },
+      { "q": "I've tried before and failed.", "a": "You probably had tricks, not a system + accountability. The difference here is a step-by-step build and support that keeps you going." },
+      { "q": "How do I pay?", "a": "Egypt: InstaPay / mobile wallet / bank transfer (with installments). Outside Egypt: PayPal." }
+    ],
+    "ctaTitle": "Spots are limited",
+    "ctaButton": "Join the Waitlist"
+  },
+  "waitlist": {
+    "title": "Join the Waitlist",
+    "sub": "Get the free guide instantly, and be first to hear about the founding cohort at a special price with priority.",
+    "benefits": [
+      "🎧 The '5 sounds Arabic speakers get wrong' guide (instant).",
+      "🥇 Priority + a discount for the founding cohort.",
+      "💡 Weekly tips on WhatsApp/Telegram — a system, not tricks."
+    ],
+    "form": {
+      "name": "Name",
+      "contact": "WhatsApp or email",
+      "country": "Your country",
+      "goal": "Your goal with English",
+      "goalOptions": ["Work / job", "Travel", "Study", "Migration", "Confidence speaking"],
+      "level": "Your current level",
+      "levelOptions": ["Beginner / from zero", "I know some", "Intermediate"],
+      "submit": "Add me to the Waitlist",
+      "reassurance": "Free. No spam. Real value only.",
+      "success": "Done! We got your request. We'll send the free guide and details soon. 🎉",
+      "error": "Something went wrong. Please try again or reach us on WhatsApp."
+    }
+  },
+  "accentLab": {
+    "title": "Accent Lab — the sounds Arabic speakers get wrong",
+    "sub": "Pronunciation training built for Arabic speakers. These are the most common recurring errors — and all of them are fixable.",
+    "intro": "Arabic doesn't have some of the sounds English has, so our brain swaps them for the closest Arabic sound. The result is predictable errors we can fix precisely.",
+    "soundsTitle": "5 sounds to start with",
+    "sounds": [
+      { "title": "school, not iskool", "desc": "Consonant clusters — glide through them without inserting an extra vowel." },
+      { "title": "job, not gob", "desc": "The /dʒ/ sound — as Egyptians we say jim as /g/, so we must train the 'j'." },
+      { "title": "people, not beople", "desc": "The /p/ sound — lips together + a puff of air." },
+      { "title": "very, not fery", "desc": "The /v/ sound — top teeth on your lower lip + voice." },
+      { "title": "think, not sink", "desc": "The /θ/ sound — tongue tip lightly between your teeth." }
+    ],
+    "cta": "Want the full system? Join the waitlist and get the free guide."
+  },
+  "about": {
+    "title": "The EEC Story",
+    "sub": "Not just a course — a system I built from my real journey.",
+    "story": [
+      "I'm an Egyptian who reached a near-native level in English — not by luck, by discipline.",
+      "A strong grammar foundation from a young age, and a full university education in English (Faculty of Commerce, English).",
+      "And 6 years in Dubai speaking English every day with people from over 200 nationalities.",
+      "I built the system I wish I'd had when I started — and now I teach it to Arabic speakers who want to get there."
+    ],
+    "valuesTitle": "Our values",
+    "values": [
+      { "title": "Results first", "desc": "Our students' success is the proof — not ads." },
+      { "title": "Honesty, not hype", "desc": "Real promises, measurable progress, no magic." },
+      { "title": "Discipline & consistency", "desc": "The one who shows up wins — and we help you show up." },
+      { "title": "Belonging", "desc": "Every student is part of a community that wants them to win." }
+    ],
+    "cta": "Join us"
+  },
+  "footer": {
+    "tagline": "A real system, not tricks.",
+    "navTitle": "Links",
+    "rights": "All rights reserved.",
+    "honesty": "We don't promise a 'guaranteed' American accent or fluency in a week. We promise a clear, confident accent and a system that works if you follow it."
+  }
+}

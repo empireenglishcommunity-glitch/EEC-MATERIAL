@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* ===== EEC brand theme (royal purple + gold) ===== */
+@theme {
+  --color-royal-50: #f5f3ff;
+  --color-royal-100: #ede9fe;
+  --color-royal-200: #ddd6fe;
+  --color-royal-400: #a78bfa;
+  --color-royal-500: #8b5cf6;
+  --color-royal-600: #7c3aed;
+  --color-royal-700: #6d28d9;
+  --color-royal-800: #5b21b6;
+  --color-royal-900: #4c1d95;
+  --color-royal-950: #2e1065;
+
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f5b301;
+  --color-gold-600: #d99e00;
+
+  --color-ink: #1b1231;
+  --color-cream: #faf8ff;
+
+  --font-sans: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: var(--color-ink);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Nice default heading balance */
+h1, h2, h3 {
+  text-wrap: balance;
+}
