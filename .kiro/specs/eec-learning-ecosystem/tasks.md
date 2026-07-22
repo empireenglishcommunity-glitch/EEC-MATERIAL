@@ -120,8 +120,12 @@ until absorbed later. (Revises GC-2.)*
       (users/progress on `DATA_DIR` volume), bcryptjs hashing + jose HS256 session cookie (`eec_session`),
       login page/form + logout, session-guarded `/[locale]/portal` dashboard with Stage-0 lesson manifest,
       admin create-user API (`x-admin-token`) for post-payment provisioning; env + compose updated
-      (`DATA_DIR`, `SESSION_SECRET`, `ADMIN_TOKEN`). Build verified. *Next increments:* 2 lessons view +
-      mark-complete + progress; 3 quizzes from item banks; 4 Accent Lab record-and-compare.
+      (`DATA_DIR`, `SESSION_SECRET`, `ADMIN_TOKEN`). **Increment 2 (lessons + progress) DONE & deployed:**
+      real Stage-0 curriculum embedded server-side + per-lesson markdown render (marked); lesson detail
+      page `/[locale]/portal/lessons/[id]` (AR/EN, prev/next nav); mark-complete toggle → `/api/progress`
+      persists per-user to volume; dashboard lessons clickable with live progress bar. Verified live
+      (lesson 200, invalid 404, progress persists, unauthed 401, guard 307). *Next increments:* 3 quizzes
+      from item banks; 4 Accent Lab record-and-compare.
 - [ ] 3C.3 **Native community + payments (later, post-proof)** — absorb community chat + integrate
       payments natively once revenue justifies it (until then: WhatsApp/Telegram + PayPal/InstaPay). `Req: 8, 9`
 
