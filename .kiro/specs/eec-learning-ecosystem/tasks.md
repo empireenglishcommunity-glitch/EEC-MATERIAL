@@ -123,9 +123,13 @@ until absorbed later. (Revises GC-2.)*
       (`DATA_DIR`, `SESSION_SECRET`, `ADMIN_TOKEN`). **Increment 2 (lessons + progress) DONE & deployed:**
       real Stage-0 curriculum embedded server-side + per-lesson markdown render (marked); lesson detail
       page `/[locale]/portal/lessons/[id]` (AR/EN, prev/next nav); mark-complete toggle → `/api/progress`
-      persists per-user to volume; dashboard lessons clickable with live progress bar. Verified live
-      (lesson 200, invalid 404, progress persists, unauthed 401, guard 307). *Next increments:* 3 quizzes
-      from item banks; 4 Accent Lab record-and-compare.
+      persists per-user to volume; dashboard lessons clickable with live progress bar. **Increment 3
+      (quizzes) DONE & deployed:** 11 Stage-0 formative quizzes from item banks (curriculum 07) as typed
+      objects; server-side grading `/api/quiz` (answer key never sent to client); interactive QuizRunner
+      with per-question feedback + retry (AR/EN); results persist per-user (best/attempts) to volume;
+      dashboard shows per-unit quiz link + best-score badge. Verified live (200, no answer-leak, correct
+      grading, best-score retention, 400/401 guards, 307 auth guard). *Next increment:* 4 Accent Lab
+      record-and-compare.
 - [ ] 3C.3 **Native community + payments (later, post-proof)** — absorb community chat + integrate
       payments natively once revenue justifies it (until then: WhatsApp/Telegram + PayPal/InstaPay). `Req: 8, 9`
 
