@@ -23,22 +23,28 @@
 
 ## 2. Pre-launch readiness gate (all must be ✅ before opening enrollment)
 
+> **Status (synced):** every *buildable* item is ✅ done, including the **live platform** (`empireenglish.online` —
+> public site + waitlist + lead-magnet page + the learner portal with lessons/quizzes/Accent Lab, 3C.1–3C.2).
+> The remaining ⬜ items are **founder real-world actions** (account/tool setup + running the campaign), not more building.
+
 **Product (deliver Day 1):**
-- [x] Stage 0 Units 0–2 fully ready (built); Units 3+ scheduled build-just-ahead. ✅ **All 11 units (0–10) built** — exceeds requirement (`curriculum/stage0/`).
-- [x] Accent Lab drills, Mindset M0–M2, assessment/placement + rubric ready. ✅ `curriculum/03` (Accent Lab, drills embedded in units) · `curriculum/04` (Mindset M0–M10) · `curriculum/05` (placement + 5-dim rubric).
+- [x] Stage 0 Units 0–2 fully ready (built); Units 3+ scheduled build-just-ahead. ✅ **All 11 units (0–10) built** — exceeds requirement (`curriculum/stage0/`), and **live in the portal** for delivery.
+- [x] Accent Lab drills, Mindset M0–M2, assessment/placement + rubric ready. ✅ `curriculum/03` (Accent Lab, drills embedded in units + **live record-and-compare in the portal**) · `curriculum/04` (Mindset M0–M10) · `curriculum/05` (placement + 5-dim rubric).
 - [ ] Community space + cohort chat + Zoom set up; unit-release schedule drafted. ⬜ **real-world setup — not done yet** (we do this together); dated unit-release schedule to be drafted at kickoff.
 
 **Funnel & offer:**
-- [ ] Channels live + publishing (Phase 2); **waitlist** capturing (Task 2.3).
-      ⏳ **Lead magnet ✅ built** (`content/06-lead-magnet-5-sounds-guide.md`); still to do: put page + form live.
-- [ ] **Entry challenge** ready to run (Task 2.4).
-- [ ] **Offer/sales page** live with checkout — **individual-first** (EGP: InstaPay/wallet/bank; USD: personal PayPal + fee on top), terms + guarantee (Task 3.1).
-      ⏳ **Sales-page copy ✅ built** (`program/06-founding-cohort-sales-page.md`); still to do: put page live + wire payment links.
-- [ ] **Onboarding flow** ready (form, placement, Day-1 sample, welcome sequence — Task 3.2).
+- [~] Channels live + publishing (Phase 2); **waitlist** capturing (Task 2.3).
+      ✅ **Waitlist page + form LIVE** (`empireenglish.online` → leads persist to the volume + optional n8n webhook); **lead-magnet `/guide` page LIVE** (`content/06-lead-magnet-5-sounds-guide.md`). ⬜ still founder-executed: content channels live + regular publishing.
+- [~] **Entry challenge** ready to run (Task 2.4).
+      ✅ **daily lessons built** (`content/07-entry-challenge-daily-lessons.md`) + design (`content/04`). ⬜ running it is founder-executed.
+- [~] **Offer/sales page** live with checkout — **individual-first** (EGP: InstaPay/wallet/bank; USD: personal PayPal + fee on top), terms + guarantee (Task 3.1).
+      ✅ **sales/cohort page LIVE** (`empireenglish.online/ar/cohort`) with terms + guarantee (copy `program/06-founding-cohort-sales-page.md`). ⬜ still to do: wire the individual-first payment details (your InstaPay handle + personal PayPal.me link).
+- [x] **Onboarding flow** ready (form, placement, Day-1 sample, welcome sequence — Task 3.2).
+      ✅ flow designed (`program/02`); onboarding-form fields + placement bank + per-unit formative quizzes (`curriculum/07`); Day-1 protocol (`curriculum/06`); **portal live** (login + lessons + quizzes + Accent Lab) with **admin account-provisioning API**. ⬜ live Google-Forms instances (if used pre-portal) are a founder setup step.
 
 **Ops & measurement:**
-- [ ] Cohort Tracker live; consent form ready; SOPs/run-of-show ready (Task 3.3); success criteria set (Task 3.4).
-      ◑ SOPs ✅ (`program/03`) · success criteria ✅ (`program/04`) · tracker template ✅ (`operations/02` + csv, needs go-live) · **consent form ⬜ still to build**.
+- [~] Cohort Tracker live; consent form ready; SOPs/run-of-show ready (Task 3.3); success criteria set (Task 3.4).
+      ✅ SOPs (`program/03`) · ✅ success criteria (`program/04`) · ✅ **consent form built** (`program/07-consent-form.md`) · ✅ tracker template (`operations/02` + csv). ⬜ tracker **go-live** (import the csv into a live sheet).
 - [ ] Team briefed (founder + Egyptian editor + community manager). ⬜ later.
 
 > If any product item isn't ready, you can still open enrollment as long as **Day 1 + week 1 are ready and
