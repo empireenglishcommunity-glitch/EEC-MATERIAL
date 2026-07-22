@@ -124,7 +124,8 @@
       "levelOptions": ["Beginner / from zero", "I know some", "Intermediate"],
       "submit": "Add me to the Waitlist",
       "reassurance": "Free. No spam. Real value only.",
-      "success": "Done! We got your request. We'll send the free guide and details soon. 🎉",
+      "success": "Done! We got your request. 🎉",
+      "getGuide": "Get your free guide now →",
       "error": "Something went wrong. Please try again or reach us on WhatsApp."
     }
   },
@@ -141,6 +142,29 @@
       { "title": "think, not sink", "desc": "The /θ/ sound — tongue tip lightly between your teeth." }
     ],
     "cta": "Want the full system? Join the waitlist and get the free guide."
+  },
+  "guide": {
+    "title": "Your free guide: the 5 sounds Arabic speakers get wrong",
+    "sub": "Apply these and your English gets clearer right away. You won't be native in a day — but this is a real first step.",
+    "intro": "Arabic lacks some English sounds, so our brain swaps them for the closest Arabic sound. The result is predictable errors we can fix precisely.",
+    "soundsTitle": "The 5 sounds — and how to fix them",
+    "sounds": [
+      { "title": "school, not iskool", "fix": "Glide through consonant clusters without inserting an extra vowel." },
+      { "title": "job, not gob", "fix": "The /dʒ/ sound = d + j together — not the Egyptian /g/." },
+      { "title": "people, not beople", "fix": "The /p/ sound = lips together + a puff of air (try a paper in front of your mouth)." },
+      { "title": "very, not fery", "fix": "The /v/ sound = top teeth on your lower lip + voice." },
+      { "title": "think, not sink", "fix": "The /θ/ sound = tongue tip lightly between your teeth." }
+    ],
+    "planTitle": "The 5-day plan (one sound a day)",
+    "plan": [
+      "Day 1: consonant clusters — record: school, street, desk.",
+      "Day 2: /dʒ/ — record: job, orange, engineer.",
+      "Day 3: /p/–/b/ — record: people, stop, cup.",
+      "Day 4: /v/–/f/ — record: very, five, love.",
+      "Day 5: /θ/ — record: think, three, this — then re-record Day 1 and hear the difference."
+    ],
+    "ctaTitle": "Want the full system, from zero?",
+    "cta": "Join the Waitlist"
   },
   "about": {
     "title": "The EEC Story",

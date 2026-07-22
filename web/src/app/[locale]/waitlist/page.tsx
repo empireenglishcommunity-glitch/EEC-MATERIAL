@@ -26,7 +26,7 @@ export default async function WaitlistPage({ params }: { params: Promise<{ local
             </ul>
           </div>
           <div className="rounded-3xl bg-white p-6 text-ink shadow-2xl sm:p-8">
-            <WaitlistForm form={t.form} />
+            <WaitlistForm form={t.form} guideHref={`/${locale}/guide`} />
           </div>
         </div>
       </Container>
