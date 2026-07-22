@@ -165,8 +165,16 @@ until absorbed later. (Revises GC-2.)*
       quantity (countable/uncountable + quantifiers), modals (should/have to/must, can/could), adverbs +
       simple-vs-continuous + phone/small talk; Accent Lab per-unit (-ed endings, /θ//ð/, clusters, stress,
       rhythm); Mindset "Consistency & Momentum"; end-of-unit checks + Unit-10 A2 summative + **A2 milestone
-      speaking sample** (Day-1 → Stage-0 → A2 proof timeline). *Next stage to build:* Stage 2 (B1). Feedback-driven
-      refinement happens once the cohort runs.
+      speaking sample** (Day-1 → Stage-0 → A2 proof timeline).
+      → **B1 (Stage 2 — Intermediate) BUILT IN FULL** (ahead of the cohort per design §3.4): `curriculum/stage2/`
+      — unit map + Units 1–12 (60 lessons). Spine: present perfect (experience + recent) & **vs past simple**,
+      narrative past (past continuous + used to), 1st & 2nd conditionals (+ wish), relative clauses, reported
+      speech (intro), passive (intro), connectors + opinions, discussion skills (agree/disagree/hedge), detailed
+      storytelling + real-world topics; Accent Lab = **connected speech** (linking, weak forms, reductions,
+      intonation, stress-timing); Mindset "Breaking the Plateau & Going Immersive"; Arabic ~15% → **0% (immersion)**;
+      end-of-unit checks + Unit-12 B1 summative (8–12 min opinion+discussion) + **B1 milestone sample** (proof
+      timeline now Day-1 → Stage-0 → A2 → B1). *Next stage to build:* Stage 3 (B2 — the flagship graduation).
+      Feedback-driven refinement happens once the cohort runs.
 - [ ] 5.3 Productize the **repeatable cohort-launch playbook**; run **cohort #2** at scaled price/size. `Req: 7, 9, 10`
 - [ ] 5.4 Optimize the **funnel & unit economics** (CAC down, conversion up). `Req: 9, 10, 13`
 
