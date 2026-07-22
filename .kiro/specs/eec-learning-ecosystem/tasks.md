@@ -194,7 +194,13 @@ until absorbed later. (Revises GC-2.)*
       everyday+professional conversation scored with a defined minimum across all 5 rubric dimensions — + the
       **graduation "after" sample** (full proof timeline Day-1 → Stage-0 → A2 → B1 → **B2 graduation**).
       *Validation of B2 outcomes happens once a cohort reaches B2. Optional next:* Stage 4 (C1 / Exam track).
-- [ ] 6.2 Add **Exam Tracks** (TOEFL/IELTS) at upper levels. `Req: 3`
+- [~] 6.2 Add **Exam Tracks** (TOEFL/IELTS) at upper levels. `Req: 3`
+      → **BUILT** as part of Stage 4: `curriculum/stage4/exam-track-toefl.md` (TOEFL iBT — orientation+diagnostic,
+      per-section strategy for Reading/Listening/Speaking/Writing, timed drills, 2 full mocks with 0–120 scoring,
+      readiness report) + `curriculum/stage4/exam-track-ielts.md` (IELTS Academic + General — version choice,
+      per-section strategy incl. Not-Given + the 3-part Speaking interview, Writing Task 1/2, full mock with band
+      0–9 scoring, readiness report). Optional add-on for certification candidates; reuses C1 core skills; honest
+      prep (no guaranteed score/band). *Delivery/scoring against live official formats happens when a candidate runs it.*
 - [ ] 6.3 Expand audience segments (teens; later kids with separate pedagogy/safeguarding). `Req: strategy`
 - [ ] 6.4 Plan **team scale / teacher-training** to grow beyond founder capacity. `Req: 11, strategy`
 - [ ] 6.5 Evaluate **custom tech** (app/LMS) only if validated demand justifies it. `Req: strategy`
