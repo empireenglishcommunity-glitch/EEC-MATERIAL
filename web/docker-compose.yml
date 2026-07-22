@@ -12,10 +12,16 @@ services:
       - "127.0.0.1:8080:3000" # host 8080 (localhost only) -> container 3000
     environment:
       - NODE_ENV=production
-      # Set to your n8n waitlist webhook to capture leads; leave empty to log only.
+      - LEADS_FILE=/data/leads.jsonl
+      # Optional: also forward leads to an n8n webhook. Leave empty to use file capture only.
       - WAITLIST_WEBHOOK_URL=${WAITLIST_WEBHOOK_URL:-}
+    volumes:
+      - leads_data:/data # persists waitlist leads across rebuilds
     deploy:
       resources:
         limits:
           memory: 512M
           cpus: "0.75"
+
+volumes:
+  leads_data:
