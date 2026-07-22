@@ -181,7 +181,19 @@ until absorbed later. (Revises GC-2.)*
 ## Phase 6 — Expansion
 *Goal: extend the ecosystem once the core is proven.*
 
-- [ ] 6.1 Build **B2 curriculum** to the flagship graduation benchmark; validate B2 outcomes. `Req: 2, 3`
+- [~] 6.1 Build **B2 curriculum** to the flagship graduation benchmark; validate B2 outcomes. `Req: 2, 3`
+      → **B2 (Stage 3 — Confident) BUILT IN FULL** ⭐ the flagship graduation stage: `curriculum/stage3/`
+      — unit map + Units 1–12 (60 lessons). Spine: full tense range (perfect continuous, past perfect
+      simple+continuous, advanced future forms), 3rd & mixed conditionals (+ wish + past perfect), modals of
+      deduction/speculation, advanced passive (all tenses, reporting passive, causative), advanced relatives
+      (non-defining, reduced, prep+which/whom), advanced reported speech (full verb range + patterns),
+      register & nuance (formal/informal, diplomacy, collocations), professional communication (meetings,
+      presentations, negotiating, calls), abstract topics & debate; Accent Lab = **refinement** (prosody,
+      thought groups, contrastive stress, self-monitoring); Mindset "Real-World Fluency & Identity Lock-in";
+      Arabic = **none (full immersion)**; culminates in the **flagship B2 benchmark** — a 20–30 min
+      everyday+professional conversation scored with a defined minimum across all 5 rubric dimensions — + the
+      **graduation "after" sample** (full proof timeline Day-1 → Stage-0 → A2 → B1 → **B2 graduation**).
+      *Validation of B2 outcomes happens once a cohort reaches B2. Optional next:* Stage 4 (C1 / Exam track).
 - [ ] 6.2 Add **Exam Tracks** (TOEFL/IELTS) at upper levels. `Req: 3`
 - [ ] 6.3 Expand audience segments (teens; later kids with separate pedagogy/safeguarding). `Req: strategy`
 - [ ] 6.4 Plan **team scale / teacher-training** to grow beyond founder capacity. `Req: 11, strategy`
