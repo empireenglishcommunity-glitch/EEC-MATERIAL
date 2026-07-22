@@ -114,9 +114,9 @@ until absorbed later. (Revises GC-2.)*
       (127.0.0.1:8080) routed via Cloudflare Tunnel `79dff464` (remote config v3); proxied CNAMEs for root
       + www; verified public (307→/ar, RTL/LTR, API ok). **Funnel wired:** `/guide` lead-magnet page live +
       waitlist success CTA; **leads persist to a volume-backed file** (`/data/leads.jsonl`) + optional n8n webhook (`WAITLIST_WEBHOOK_URL`).
-- [~] 3C.2 **Learner portal** — login/auth + course & lessons + progress + quizzes + **Accent Lab
+- [x] 3C.2 **Learner portal** — login/auth + course & lessons + progress + quizzes + **Accent Lab
       record-and-compare**; replaces rented course tools for delivery. `Req: 7, 3, 4`
-      → **IN PROGRESS — built in increments.** **Increment 1 (auth foundation) DONE & pushed:** JSON store
+      → **COMPLETE & LIVE (4 increments, all deployed to VPS + verified).** **Increment 1 (auth foundation):** JSON store
       (users/progress on `DATA_DIR` volume), bcryptjs hashing + jose HS256 session cookie (`eec_session`),
       login page/form + logout, session-guarded `/[locale]/portal` dashboard with Stage-0 lesson manifest,
       admin create-user API (`x-admin-token`) for post-payment provisioning; env + compose updated
@@ -127,9 +127,14 @@ until absorbed later. (Revises GC-2.)*
       (quizzes) DONE & deployed:** 11 Stage-0 formative quizzes from item banks (curriculum 07) as typed
       objects; server-side grading `/api/quiz` (answer key never sent to client); interactive QuizRunner
       with per-question feedback + retry (AR/EN); results persist per-user (best/attempts) to volume;
-      dashboard shows per-unit quiz link + best-score badge. Verified live (200, no answer-leak, correct
-      grading, best-score retention, 400/401 guards, 307 auth guard). *Next increment:* 4 Accent Lab
-      record-and-compare.
+      dashboard shows per-unit quiz link + best-score badge. **Increment 4 (Accent Lab record-and-compare)
+      DONE & deployed:** 9 Stage-0 accent drills from the syllabus (cards C1–C9, V1) with AR/EN cues;
+      `/[locale]/portal/accent-lab` with SpeechSynthesis model playback + MediaRecorder record-and-compare;
+      mark-practiced persists per-user (`/api/accent`); dashboard Accent Lab entry card + practiced count;
+      honesty framing (clear American reference, not guaranteed native accent). All increments verified
+      live on `empireenglish.online` (page 200s, data persists to volume, 400/401 API guards, 307 auth
+      redirects). **Portal delivery layer done — ready for the founding cohort.** *Deferred to 3C.3:*
+      native community + payments (post-proof).
 - [ ] 3C.3 **Native community + payments (later, post-proof)** — absorb community chat + integrate
       payments natively once revenue justifies it (until then: WhatsApp/Telegram + PayPal/InstaPay). `Req: 8, 9`
 
