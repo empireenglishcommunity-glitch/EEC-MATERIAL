@@ -91,8 +91,9 @@ requires — so the launch is turn-key. These are the real **tasks**; the Runboo
 - [x] 3B.3 **Payments consistency pass** — propagate the individual-first model (InstaPay/wallet + personal
       PayPal, fee-on-top) across `operations/01`, `program/01`, `content/04`, Runbook §8. `Req: 9`
       → done: reconciled tool-stack (§2 note + principle + summary table), founding-offer pricing, entry-challenge, and runbook contingency. (`program/02` had no provider mentions — already clean.)
-- [ ] 3B.4 **Onboarding forms + quiz banks** — onboarding-form fields, the placement quiz item bank, and
-      per-unit formative quiz questions (ready to drop into Google Forms). `Req: 3, 8B`
+- [x] 3B.4 **Onboarding forms + quiz banks** — onboarding-form fields, the placement quiz item bank, and
+      per-unit formative quiz questions. `Req: 3, 8B` → `curriculum/07-assessment-item-banks.md`
+      (onboarding form + 15-item placement bank with scoring bands + 4-item formative quizzes for all 11 Stage-0 units; Forms-now / portal-later)
 - [ ] 3B.5 **Entry-challenge daily lessons** — the Day 0–7 lesson content (adapted from Stage 0 U0–U1 +
       Accent Lab + Mindset M0–M2). `Req: 6, 9`
 - [ ] 3B.6 **Consent form** — layered Tier 0/1/2 (Arabic + English) + a plain-language explainer. `Req: 3`
