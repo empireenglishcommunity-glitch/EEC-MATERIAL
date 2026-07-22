@@ -24,9 +24,9 @@
 ## 2. Pre-launch readiness gate (all must be ✅ before opening enrollment)
 
 **Product (deliver Day 1):**
-- [ ] Stage 0 Units 0–2 fully ready (built); Units 3+ scheduled build-just-ahead.
-- [ ] Accent Lab drills, Mindset M0–M2, assessment/placement + rubric ready.
-- [ ] Community space + cohort chat + Zoom set up; unit-release schedule drafted.
+- [x] Stage 0 Units 0–2 fully ready (built); Units 3+ scheduled build-just-ahead. ✅ **All 11 units (0–10) built** — exceeds requirement (`curriculum/stage0/`).
+- [x] Accent Lab drills, Mindset M0–M2, assessment/placement + rubric ready. ✅ `curriculum/03` (Accent Lab, drills embedded in units) · `curriculum/04` (Mindset M0–M10) · `curriculum/05` (placement + 5-dim rubric).
+- [ ] Community space + cohort chat + Zoom set up; unit-release schedule drafted. ⬜ **real-world setup — not done yet** (we do this together); dated unit-release schedule to be drafted at kickoff.
 
 **Funnel & offer:**
 - [ ] Channels live + publishing (Phase 2); **waitlist** capturing (Task 2.3).
@@ -38,7 +38,8 @@
 
 **Ops & measurement:**
 - [ ] Cohort Tracker live; consent form ready; SOPs/run-of-show ready (Task 3.3); success criteria set (Task 3.4).
-- [ ] Team briefed (founder + Egyptian editor + community manager).
+      ◑ SOPs ✅ (`program/03`) · success criteria ✅ (`program/04`) · tracker template ✅ (`operations/02` + csv, needs go-live) · **consent form ⬜ still to build**.
+- [ ] Team briefed (founder + Egyptian editor + community manager). ⬜ later.
 
 > If any product item isn't ready, you can still open enrollment as long as **Day 1 + week 1 are ready and
 > the build stays ahead of the cohort** (build-just-ahead rule).
