@@ -12,9 +12,13 @@ services:
       - "127.0.0.1:8080:3000" # host 8080 (localhost only) -> container 3000
     environment:
       - NODE_ENV=production
+      - DATA_DIR=/data
       - LEADS_FILE=/data/leads.jsonl
       # Optional: also forward leads to an n8n webhook. Leave empty to use file capture only.
       - WAITLIST_WEBHOOK_URL=${WAITLIST_WEBHOOK_URL:-}
+      # Portal auth (set these in .env on the server)
+      - SESSION_SECRET=${SESSION_SECRET:-}
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-}
     volumes:
       - leads_data:/data # persists waitlist leads across rebuilds
     deploy:
