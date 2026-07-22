@@ -147,12 +147,12 @@ Before kickoff, confirm:
 Waitlist size · challenge signups + completion · **challenge→cohort conversion** · enrollment count ·
 CAC + source attribution · onboarding completion · kickoff attendance.
 
-## 11. Assets to produce
-- [ ] The **enrollment sequence** messages (1–7) + the objection kit.
-- [ ] The **live Q&A / info-session** outline.
-- [ ] The **enrollment pipeline** sheet (or CRM tags) with statuses + source.
-- [ ] The **"Ready to teach Day 1"** go/no-go checklist (printable).
-- [ ] Post-close "next cohort waitlist" message.
+## 11. Assets to produce  ✅ built → `program/08-launch-assets.md` (+ `operations/enrollment-pipeline-template.csv`)
+- [x] The **enrollment sequence** messages (1–7) + the objection kit.
+- [x] The **live Q&A / info-session** outline.
+- [x] The **enrollment pipeline** sheet (or CRM tags) with statuses + source.
+- [x] The **"Ready to teach Day 1"** go/no-go checklist (printable).
+- [x] Post-close "next cohort waitlist" message.
 
 ---
 
