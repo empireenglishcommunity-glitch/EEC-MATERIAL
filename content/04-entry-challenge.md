@@ -91,7 +91,7 @@ an emotional "I can speak!" moment, and creates a natural bridge to the full jou
 - **Gulf/diaspora tier (USD):** a modestly higher equivalent.
 - **Options to test:** paid entry with a **"applies-to-cohort" credit** (challenge fee deducted from cohort
   tuition if they enroll) — a strong conversion lever; or a symbolic price + refund-on-completion.
-- Payments via the two rails (Paymob/Fawry for EGP; Stripe/PayPal for USD) — tool stack §2.
+- Payments individual-first: InstaPay/wallet/bank (EGP) + personal PayPal (USD, fee-on-top) — tool stack §2.
 
 *(Exact numbers validated in the founding round; anchor on value + the credit-toward-cohort mechanic.)*
 

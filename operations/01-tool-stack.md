@@ -15,8 +15,8 @@
 ## 1. Principles for choosing tools
 
 1. **Buy, don't build (GC-2).** No custom software in v1.
-2. **Egyptian payments must work.** We must accept **EGP** (local cards, Fawry, wallets, installments)
-   *and* **USD/international** cards for the Gulf/diaspora tier (R9).
+2. **Egyptian payments must work — individual-first.** Accept **EGP** via InstaPay / wallet / bank transfer
+   *and* **USD** via personal PayPal (fee-on-top). No company/merchant account in v1 (R9).
 3. **Lean & consolidated.** Fewer tools, lower monthly cost, less glue work.
 4. **Good enough now > perfect later.** We can migrate once the method is proven and revenue justifies it.
 5. **Mobile-first.** Our learners live on phones (WhatsApp/Telegram, IG/TikTok).
@@ -24,6 +24,11 @@
 ---
 
 ## 2. Payments — the critical decision
+
+> ✅ **Current plan = individual-first** (per the banner above): **EGP** via InstaPay/wallet/bank transfer
+> + **USD** via **personal PayPal** (fee-on-top, added on top of the price). The Paymob/Fawry/Stripe
+> content below is the **later Phase-2 upgrade** (after registering a sole proprietorship) — *not* the
+> launch plan.
 
 Egypt is a special case: most global course platforms rely on Stripe/PayPal, which are **limited or
 awkward in Egypt** (e.g., PayPal can't link an Egyptian bank account and carries high fees). So we
@@ -120,8 +125,8 @@ video host — but a proper platform is worth it for structure and credibility f
 
 | Function | v1 pick | Why |
 |---|---|---|
-| Egypt payments | **Paymob / Fawry** (payment links) | Local cards, wallets, Fawry, installments; Egypt-native |
-| Intl payments | **Stripe / PayPal** (payment links) | USD from Gulf/diaspora tier |
+| Egypt payments | **InstaPay / wallet / bank transfer** | Personal, no company; fee-on-top; installments = 2–3 scheduled transfers |
+| Intl payments | **Personal PayPal** | USD from Gulf/diaspora; fee-on-top |
 | Course + community | **Skool or Circle** | Cheap, community-first, cohort-friendly; payments decoupled |
 | Live sessions | **Zoom** | Breakout rooms for speaking pods + recording |
 | Chat/nudges | **WhatsApp (+ Telegram)** | Egypt default; accountability + re-engagement |

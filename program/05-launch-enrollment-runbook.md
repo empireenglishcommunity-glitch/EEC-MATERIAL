@@ -133,7 +133,7 @@ Before kickoff, confirm:
 | **Under-enrolled** (< ~12) | Extend the deadline; add a second challenge wave; lean harder on warm-start + referrals; or run a smaller "pilot" cohort (still valid for proof) |
 | **Over-demand** (> capacity) | Cap it; waitlist the rest for cohort #2 (scarcity + a warm pipeline for next round) |
 | **Low challenge→cohort conversion** | Diagnose (offer? price? pitch?); improve the sequence; re-invite; note for success-criteria review |
-| **Payment friction (Egypt)** | Push Fawry/installments; offer manual/bank-transfer fallback; assist 1:1 |
+| **Payment friction (Egypt)** | Offer InstaPay/wallet + a bank-transfer/installment option (2–3 payments); assist 1:1 |
 | **Weak audience/waitlist** | Delay the cohort; extend Phase A publishing + warm-start until the pipeline is real |
 
 ---

@@ -88,8 +88,9 @@ requires — so the launch is turn-key. These are the real **tasks**; the Runboo
       → `content/06-lead-magnet-5-sounds-guide.md`
 - [x] 3B.2 **Founding-cohort sales-page copy** (ready to publish, bilingual). `Req: 8B, 9`
       → `program/06-founding-cohort-sales-page.md`
-- [ ] 3B.3 **Payments consistency pass** — propagate the individual-first model (InstaPay/wallet + personal
-      PayPal, fee-on-top) across `operations/01-tool-stack.md`, `program/01`, `program/02`, and Runbook §8. `Req: 9`
+- [x] 3B.3 **Payments consistency pass** — propagate the individual-first model (InstaPay/wallet + personal
+      PayPal, fee-on-top) across `operations/01`, `program/01`, `content/04`, Runbook §8. `Req: 9`
+      → done: reconciled tool-stack (§2 note + principle + summary table), founding-offer pricing, entry-challenge, and runbook contingency. (`program/02` had no provider mentions — already clean.)
 - [ ] 3B.4 **Onboarding forms + quiz banks** — onboarding-form fields, the placement quiz item bank, and
       per-unit formative quiz questions (ready to drop into Google Forms). `Req: 3, 8B`
 - [ ] 3B.5 **Entry-challenge daily lessons** — the Day 0–7 lesson content (adapted from Stage 0 U0–U1 +

@@ -85,8 +85,8 @@ before launch; keep terms simple and written.)
 - **Founding discount:** a significant one-time discount off the future standard price (e.g., ~40–50% off),
   framed clearly ("founding price, this cohort only").
 - **Two tiers** (strategy §12):
-  - **Egypt tier (EGP):** accessible; **payment plan** option (e.g., 2–3 installments via Paymob/Fawry).
-  - **Gulf/diaspora tier (USD):** ~3–5× the Egypt tier for the same program (Stripe/PayPal).
+  - **Egypt tier (EGP):** accessible; **payment plan** option (2–3 scheduled InstaPay/bank transfers).
+  - **Gulf/diaspora tier (USD):** ~3–5× the Egypt tier for the same program (personal PayPal, fee-on-top).
 - **Challenge credit:** entry-challenge fee **credited** toward tuition (Task 2.4) — rewards the on-ramp.
 - **Anchor on value, not "cheap":** compare to the cost/outcome of years of failed self-study, random
   tutors, or apps that don't make you speak — EEC sells a *result*, not lessons.
