@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getCurrentUser } from "@/lib/auth";
@@ -39,9 +40,14 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
               {u.lessons.map((l) => {
                 const c = done.includes(l.id);
                 return (
-                  <li key={l.id} className="flex items-center gap-2 text-sm text-ink/80">
-                    <span className={c ? "text-green-600" : "text-royal-300"}>{c ? "✓" : "○"}</span>
-                    {l.title}
+                  <li key={l.id}>
+                    <Link
+                      href={`/${locale}/portal/lessons/${l.id}`}
+                      className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-ink/80 transition-colors hover:bg-royal-50 hover:text-royal-900"
+                    >
+                      <span className={c ? "text-green-600" : "text-royal-300"}>{c ? "✓" : "○"}</span>
+                      {l.title}
+                    </Link>
                   </li>
                 );
               })}
@@ -52,8 +58,8 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
 
       <p className="mt-8 text-sm text-ink/50">
         {ar
-          ? "الدروس التفاعلية + الكويزات + Accent Lab جايين في التحديثات الجاية."
-          : "Interactive lessons + quizzes + Accent Lab are coming in the next updates."}
+          ? "اضغط على أي درس عشان تفتح محتواه وتعلّمه كمكتمل. الكويزات + Accent Lab جايين في التحديثات الجاية."
+          : "Tap any lesson to open its content and mark it complete. Quizzes + Accent Lab are coming in the next updates."}
       </p>
     </Section>
   );

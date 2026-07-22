@@ -43,3 +43,88 @@ body {
 h1, h2, h3 {
   text-wrap: balance;
 }
+
+/* ===== Rendered lesson content (portal) ===== */
+.lesson-prose {
+  color: var(--color-ink);
+  line-height: 1.7;
+}
+.lesson-prose h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-royal-900);
+  margin: 0 0 1rem;
+}
+.lesson-prose h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-royal-800);
+  margin: 1.75rem 0 0.5rem;
+}
+.lesson-prose p {
+  margin: 0.75rem 0;
+}
+.lesson-prose strong {
+  color: var(--color-royal-900);
+  font-weight: 700;
+}
+.lesson-prose em {
+  color: var(--color-royal-700);
+}
+.lesson-prose ul,
+.lesson-prose ol {
+  margin: 0.75rem 0;
+  padding-inline-start: 1.5rem;
+}
+.lesson-prose ul {
+  list-style: disc;
+}
+.lesson-prose ol {
+  list-style: decimal;
+}
+.lesson-prose li {
+  margin: 0.35rem 0;
+}
+.lesson-prose blockquote {
+  border-inline-start: 4px solid var(--color-gold-500);
+  background: var(--color-royal-50);
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  color: var(--color-ink);
+}
+.lesson-prose code {
+  background: var(--color-royal-100);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
+  font-size: 0.9em;
+}
+.lesson-prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-royal-100);
+  margin: 1.5rem 0;
+}
+.lesson-prose a {
+  color: var(--color-royal-700);
+  text-decoration: underline;
+}
+.lesson-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  display: block;
+  overflow-x: auto;
+}
+.lesson-prose th,
+.lesson-prose td {
+  border: 1px solid var(--color-royal-100);
+  padding: 0.5rem 0.75rem;
+  text-align: start;
+  vertical-align: top;
+}
+.lesson-prose th {
+  background: var(--color-royal-50);
+  font-weight: 700;
+  color: var(--color-royal-900);
+}

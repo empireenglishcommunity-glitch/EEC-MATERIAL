@@ -47,3 +47,30 @@ export const STAGE0: Unit[] = [
 
 export const ALL_LESSON_IDS: string[] = STAGE0.flatMap((u) => u.lessons.map((l) => l.id));
 export const TOTAL_LESSONS = ALL_LESSON_IDS.length;
+
+// Flat, ordered view of every lesson with its unit context + running index.
+// Used for the lesson page (title, prev/next navigation).
+export type FlatLesson = {
+  id: string;
+  title: string;
+  unitNum: number;
+  unitTitle: string;
+  index: number; // 0-based position across all Stage-0 lessons
+};
+
+export const FLAT_LESSONS: FlatLesson[] = STAGE0.flatMap((u) =>
+  u.lessons.map((l) => ({ id: l.id, title: l.title, unitNum: u.num, unitTitle: u.title, index: 0 })),
+).map((l, i) => ({ ...l, index: i }));
+
+export function getFlatLesson(id: string): FlatLesson | null {
+  return FLAT_LESSONS.find((l) => l.id === id) ?? null;
+}
+
+export function getAdjacentLessons(id: string): { prev: FlatLesson | null; next: FlatLesson | null } {
+  const i = FLAT_LESSONS.findIndex((l) => l.id === id);
+  if (i === -1) return { prev: null, next: null };
+  return {
+    prev: i > 0 ? FLAT_LESSONS[i - 1] : null,
+    next: i < FLAT_LESSONS.length - 1 ? FLAT_LESSONS[i + 1] : null,
+  };
+}
