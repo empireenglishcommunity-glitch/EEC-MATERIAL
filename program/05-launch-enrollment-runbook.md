@@ -32,7 +32,8 @@
 - [ ] Channels live + publishing (Phase 2); **waitlist** capturing (Task 2.3).
       ⏳ **Lead magnet ✅ built** (`content/06-lead-magnet-5-sounds-guide.md`); still to do: put page + form live.
 - [ ] **Entry challenge** ready to run (Task 2.4).
-- [ ] **Offer/sales page** live with checkout on both rails (EGP Paymob/Fawry; USD Stripe/PayPal), terms + guarantee (Task 3.1).
+- [ ] **Offer/sales page** live with checkout — **individual-first** (EGP: InstaPay/wallet/bank; USD: personal PayPal + fee on top), terms + guarantee (Task 3.1).
+      ⏳ **Sales-page copy ✅ built** (`program/06-founding-cohort-sales-page.md`); still to do: put page live + wire payment links.
 - [ ] **Onboarding flow** ready (form, placement, Day-1 sample, welcome sequence — Task 3.2).
 
 **Ops & measurement:**
