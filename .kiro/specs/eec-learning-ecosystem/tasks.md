@@ -158,7 +158,15 @@ until absorbed later. (Revises GC-2.)*
 
 - [ ] 5.1 Launch the **community membership** (speaking clubs, live practice, challenges) and the
       graduate transition path. `Req: 8`
-- [ ] 5.2 Refine curriculum/assessment from cohort feedback; **build A2 (and B1 as cohort climbs)**. `Req: 2, 1`
+- [~] 5.2 Refine curriculum/assessment from cohort feedback; **build A2 (and B1 as cohort climbs)**. `Req: 2, 1`
+      → **A2 (Stage 1 — Elementary) BUILT IN FULL** (ahead of the cohort per design §3.4): `curriculum/stage1/`
+      — unit map + Units 1–10 (~50 lessons) authored on the lesson template. Spine: past (was/were → regular
+      +**-ed endings** → irregular + did/didn't → storytelling), future (going to/will), comparatives/superlatives,
+      quantity (countable/uncountable + quantifiers), modals (should/have to/must, can/could), adverbs +
+      simple-vs-continuous + phone/small talk; Accent Lab per-unit (-ed endings, /θ//ð/, clusters, stress,
+      rhythm); Mindset "Consistency & Momentum"; end-of-unit checks + Unit-10 A2 summative + **A2 milestone
+      speaking sample** (Day-1 → Stage-0 → A2 proof timeline). *Next stage to build:* Stage 2 (B1). Feedback-driven
+      refinement happens once the cohort runs.
 - [ ] 5.3 Productize the **repeatable cohort-launch playbook**; run **cohort #2** at scaled price/size. `Req: 7, 9, 10`
 - [ ] 5.4 Optimize the **funnel & unit economics** (CAC down, conversion up). `Req: 9, 10, 13`
 
