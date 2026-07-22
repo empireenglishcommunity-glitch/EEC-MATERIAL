@@ -15,8 +15,9 @@
 
 ## 0. Before you start
 
-- **Have ready:** business/personal ID + (if available) commercial registration/tax ID (some Egyptian
-  payment providers require it), a bank account for payouts, a logo/handle, an email for accounts.
+- **Have ready:** your **personal ID**, a **personal bank account + a mobile wallet** (e.g., InstaPay /
+  Vodafone Cash) for EGP, your working **personal PayPal** for USD, a logo/handle, and an email for accounts.
+  **No company is needed to launch** (see §3, individual-first payments).
 - **Accounts to create with one consistent handle:** `@EmpireEnglishCommunity` / `EEC` (or your final choice).
 - **Budget:** platform subscription (~$40–150/mo depending on choice) + payment processing % fees.
   Team + ads are in EGP. No development cost.
@@ -25,7 +26,7 @@
 ```
 1. Google Workspace basics (Drive + Forms + Sheets)   → free, everything hangs off this
 2. Cohort Tracker (import the CSV)                     → your source of truth
-3. Payments Rail A (Egypt: Paymob/Fawry) + Rail B (Stripe/PayPal)
+3. Payments — individual, no company (Egypt: InstaPay/wallet/bank · International: personal PayPal)
 4. Community/course platform (Skool or Circle)
 5. Waitlist landing page + lead-capture form + lead magnet delivery
 6. WhatsApp/Telegram community + broadcast
@@ -33,8 +34,8 @@
 8. Scheduler (Calendly)
 9. Connect the flow (payment link → manual access grant) + test end-to-end
 ```
-**Time estimate:** ~1–2 focused days for a basic, working setup (excluding payment-provider approval,
-which can take longer — start that first).
+**Time estimate:** ~1–2 focused days for a basic, working setup. (The individual payment methods in §3
+need **no approval**, so nothing blocks you there.)
 
 ---
 
@@ -51,23 +52,43 @@ which can take longer — start that first).
 - [ ] Restrict sharing to you + community manager.
 - **Done when:** the tracker opens, formulas calculate, access is restricted.
 
-## 3. Payments (start this FIRST — approval can take days)
+## 3. Payments — individual, no company (Phase 1 launch)
 
-### Rail A — Egypt (EGP): Paymob and/or Fawry
-**For:** local cards, wallets, Fawry cash, installments.
-- [ ] Create a **Paymob** merchant account (leading Egyptian gateway); complete KYC/merchant onboarding.
-- [ ] Confirm: accepted methods (Meeza/Visa/Mastercard, wallets, **Fawry**), **fees**, **payout timing**,
-      and whether **installments** are available.
-- [ ] Enable **hosted payment links** (so you can sell without building integration).
-- [ ] (Optional) Fawry directly or via an aggregator if you want Fawry-reference/cash payments.
-- **Done when:** you can generate a working EGP payment link and see where payouts land.
+> You're launching as an **individual with no company** — that's fine, you do **not** need one to start.
+> Use the personal methods below (no approval, no merchant account). Card gateways (Paymob/Fawry) are a
+> later upgrade (see Phase 2).
+>
+> 💡 **Fee pass-through rule:** whatever a method's processing fee is, **add it on top** of the tuition so
+> your **net = the intended price** (the client covers the fee). State this at checkout ("+ payment fee").
 
-### Rail B — Gulf/diaspora (USD/international): Stripe or PayPal
-**For:** USD from higher-paying learners.
-- [ ] Create **Stripe** (check current Egypt eligibility for your setup) **or** **PayPal** business.
-- [ ] Enable **payment links / hosted checkout**.
-- [ ] Confirm fees + payout method.
-- **Done when:** you can generate a working USD payment link.
+### Rail A — Egypt tier (EGP): InstaPay / bank transfer / mobile wallet
+**For:** Egyptian learners paying in EGP. No company or merchant account needed.
+- [ ] Set up **InstaPay** (instant bank-to-bank) + a **mobile wallet** (e.g., Vodafone Cash) + note your
+      bank-transfer details.
+- [ ] Write a short **"How to pay" instructions** note (your InstaPay handle / wallet number / bank
+      details + "send the payment screenshot to confirm").
+- **Flow:** learner pays → sends screenshot/reference → you (or community mgr) confirm receipt →
+  **manually grant platform access** + add to the cohort chat.
+- **Done when:** you receive a **test EGP payment** to a personal account and confirm it.
+
+### Rail B — International / Gulf tier (USD): your personal PayPal ✅
+**For:** Gulf + diaspora learners paying in USD. **Your personal PayPal already works and can receive** —
+this is your international rail. *(Receiving is restricted for **Egypt-registered** PayPal, but yours
+works because you're based in the UAE — good.)*
+- [ ] Collect via a **PayPal.me link** or a **PayPal invoice / payment request** (no website/integration needed).
+- [ ] **Fees:** you noted **~1%** — **verify your actual PayPal fee** (international + currency-conversion
+      fees are often **higher** than 1%), then **add that fee on top** of the price so your net matches the tuition.
+- [ ] Confirm your **withdrawal method** (how funds reach your bank/card) + any per-transaction limits.
+- **Flow:** learner pays via your PayPal link → payment confirmed → **manually grant access**.
+- **Done when:** a **small test payment** lands in your PayPal and you know your **net after fees**.
+
+### Phase 2 upgrade (later — optional, NOT needed to launch)
+When card payments + installments become worth it:
+- [ ] Register an **Egyptian sole proprietorship** (منشأة فردية) — cheap-ish (min capital ~1,000 EGP; real
+      all-in higher; adds tax obligations) → unlocks **Paymob/Fawry** (cards, wallets, Fawry cash,
+      installments; ~2.75% + 3 EGP, weekly settlement).
+- [ ] Consider a **US LLC (~$399)** only if international **card** acceptance (beyond PayPal) becomes a real bottleneck.
+- Skip **UAE incorporation** for now (thousands of USD — not justified pre-proof).
 
 > If Stripe isn't available to you, use PayPal and/or a Gulf gateway (Tap/PayTabs) later. For launch,
 > **payment links + manual access grant** avoid all integration work.
@@ -127,7 +148,8 @@ Learner clicks pay (EGP or USD payment link) → payment confirmed
 ## 10. Master infrastructure readiness checklist (maps to runbook §2 gate)
 
 - [ ] Google Drive + Forms + Sheets set up; **Cohort Tracker** live.
-- [ ] **Payments** working on both rails (test link succeeds); fees/payouts confirmed.
+- [ ] **Payments** working: EGP (InstaPay/wallet/bank) receive test **+** personal **PayPal** USD receive
+      test; fees confirmed **and passed on to clients** (added on top).
 - [ ] **Community/course platform** live, branded, private; Units 0–2 shell ready.
 - [ ] **Waitlist page + form + lead magnet** live; instant delivery works.
 - [ ] **WhatsApp/Telegram** community + click-to-chat + welcome ready.
