@@ -14,17 +14,21 @@
 
 ## Phase 1 — Foundations of the material system (write the standard, then ONE lesson)
 *Goal: lock the format on a single lesson before repeating it.*
-- [ ] 1.1 Author `materials/_style/empire-style-guide.md` — full voice + visual + bilingual convention + final section labels + ranks + honesty lines.
-- [ ] 1.2 Author `materials/_style/lesson-anatomy.md` — the fixed section spec + the per-lesson "done" checklist + the Teacher-overlay convention.
-- [ ] 1.3 Build the **pilot lesson**: `materials/stage0/unit1/s0-u1-l01.md` — Student's Edition + Teacher overlay, **from blueprint `S0-U1-L01`** (single source).
-- [ ] 1.4 Wire it into the **portal** (render the Student's Edition from `materials/…`, teacher blocks stripped, RTL correct) as the working sample.
-- [ ] **1.5 CHECKPOINT — founder reviews the pilot lesson** (format, voice, bilingual dial, Empire feel, clarity). Refine until approved. *No further lessons until this passes.*
+- [x] 1.1 Author `materials/_style/empire-style-guide.md` — voice, ranks, section labels, bilingual convention, honesty lines. ✅
+- [x] 1.2 Author `materials/_style/lesson-anatomy.md` — fixed 12-section spec + "done" checklist + Teacher-overlay convention. ✅
+- [x] 1.3 Build the **pilot lesson** `materials/stage0/unit1/s0-u1-l01.md` (Student + Teacher overlay, from `S0-U1-L01`). ✅
+- [x] 1.4 Wire into the **portal**: `web/src/content/materials-stage0.ts` (embedded) + `web/src/lib/lesson-content.ts` (prefer finished material, strip `[!TEACHER]`, fall back to blueprint). Build verified. ✅ *(live deploy pending — see note)*
+- [x] **1.5 CHECKPOINT — pilot approved by founder** ("all ok go ahead"). Format locked. ✅
 
 ## Phase 2 — Prove consistency (complete Stage 0 · Unit 1)
-- [ ] 2.1 Author `s0-u1-l02.md` … `s0-u1-l05.md` (both editions) from their blueprints, applying the locked format.
-- [ ] 2.2 Author `unit1-front-matter.md` — the Empire unit wrapper (cover/"campaign" intro, rank, end-of-unit review) + the unit's formative check surfaced as material.
-- [ ] 2.3 Render the full Unit 1 in the portal.
-- [ ] **2.4 CHECKPOINT — founder reviews full Unit 1** (consistency across 5 lessons + the wrapper). Refine the style guide if needed.
+- [x] 2.1 Author `s0-u1-l02.md` … `s0-u1-l05.md` (both editions) from blueprints, in the locked format. ✅
+- [x] 2.2 Author `unit1-front-matter.md` — Empire campaign wrapper (cover/intro, rank, lessons table, end-of-unit check). ✅
+- [x] 2.3 Render full Unit 1 in the portal (finished material embedded; student view strips teacher overlay; build verified). ✅ *(live deploy pending)*
+- [ ] **2.4 CHECKPOINT — founder reviews full Unit 1** (consistency across 5 lessons + the wrapper). ← *awaiting your review.*
+
+> **Deploy note:** portal wiring is code-complete + build-verified. Pushing it **live** to `empireenglish.online`
+> needs a VPS deploy — the earlier temporary SSH key has expired, so a fresh deploy (a new temp key, or you
+> running the redeploy) is required to see it on the live site. Content + code are ready and pushed to the branch.
 
 ## Phase 3 — Outputs: portal integration + send-ready PDF
 - [ ] 3.1 Finalize portal rendering of finished material (Empire section styling, Accent Lab card, vocab table, self-check, RTL) — replacing the raw-blueprint rendering for Stage 0 Unit 1.
