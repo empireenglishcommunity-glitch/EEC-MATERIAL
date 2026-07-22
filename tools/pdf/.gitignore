@@ -1,0 +1,4 @@
+node_modules/
+.chromium/
+_fonttest.*
+package-lock.json

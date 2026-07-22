@@ -1,0 +1,16 @@
+{
+  "name": "eec-coursebook-pdf",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Empire English coursebook PDF generator — one markdown source to branded Student's + Teacher's Edition PDFs.",
+  "scripts": {
+    "build": "node build-book.mjs --stage 0 --edition both",
+    "student": "node build-book.mjs --stage 0 --edition student",
+    "teacher": "node build-book.mjs --stage 0 --edition teacher"
+  },
+  "dependencies": {
+    "marked": "^16.4.2",
+    "puppeteer": "^24.10.0"
+  }
+}

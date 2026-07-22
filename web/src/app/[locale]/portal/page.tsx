@@ -51,6 +51,25 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
         </span>
       </Link>
 
+      <a
+        href="/coursebook/eec-stage0-student.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-gold-500/50 bg-gradient-to-r from-cream to-white p-5 transition-transform hover:scale-[1.01]"
+      >
+        <div>
+          <p className="text-lg font-bold text-royal-900">👑 {ar ? "كتاب الإمبراطورية — Stage 0" : "The Empire Coursebook — Stage 0"}</p>
+          <p className="mt-1 text-sm text-ink/70">
+            {ar
+              ? "نزّل نسخة الطالب PDF كاملة (11 وحدة · 55 درس) — ذاكر أوفلاين أو اطبعها."
+              : "Download the full Student's Edition PDF (11 units · 55 lessons) — study offline or print it."}
+          </p>
+        </div>
+        <span className="shrink-0 rounded-lg bg-gold-500 px-3 py-1.5 text-sm font-semibold text-royal-950">
+          {ar ? "تحميل PDF" : "Download PDF"}
+        </span>
+      </a>
+
       <div className="mt-8 space-y-6">
         {STAGE0.map((u) => (
           <div key={u.id} className="rounded-2xl bg-white p-6 ring-1 ring-royal-100">
