@@ -55,7 +55,7 @@
 - [x] 2.3 Set up **lead capture / waitlist** and the content→waitlist funnel. `Req: 6, 10`
       → `content/03-waitlist-funnel.md` (funnel map, capture mechanics, lead magnet, full bilingual landing-page copy, 8-step nurture sequence, segmentation, metrics); live page/form setup is an operator action
 - [x] 2.4 Define and prepare the **low-cost entry challenge** (7–14 days, first quick win). `Req: 9, 10`
-      → `content/04-entry-challenge.md` ("7 Days to Your First English Conversation": full day-by-day plan reusing Stage 0 U0–U1 + Accent Lab + Mindset, before/after clips, tiered pricing + credit-to-cohort, conversion mechanics, metrics)
+      → `content/04-entry-challenge.md` ("7 Days to Your First English Conversation": full day-by-day plan reusing Stage 0 U0–U1 + Accent Lab + Mindset, before/after clips, tiered pricing + credit-to-cohort, conversion mechanics, metrics) · *design done; the actual daily lesson content is tracked in **3B.5***
 - [x] 2.5 Launch consistent publishing and begin **warm-starting** the founder's network. `Req: 6, 10`
       → `content/05-launch-and-warmstart-plan.md` (pre-launch checklist, weeks 1–4 publishing plan, warm-start outreach playbook, timeline to founding cohort, roles, metrics); execution is an operator action
 
@@ -67,14 +67,36 @@
       → `program/01-founding-cohort-offer.md` (EEC Foundations: scope/size/duration/format, deliverables, honest "Do the Work" guarantee, tiered pricing + challenge credit + installments, founding-member exchange, positioning, enrollment terms, sales-page skeleton, success criteria)
 - [x] 3.2 Build the **enrollment & onboarding flow**: sales page, checkout (EGP+USD), placement,
       Day-1 speaking sample, welcome sequence. `Req: 8B, 9, 3`
-      → `program/02-enrollment-and-onboarding.md` (end-to-end flow, checkout on both rails, onboarding form + layered consent, placement + Day-1 baseline, community onboarding + pods, pre-kickoff sequence, kickoff run-of-show, per-learner checklist, metrics)
+      → `program/02-enrollment-and-onboarding.md` (end-to-end flow, checkout on both rails, onboarding form + layered consent, placement + Day-1 baseline, community onboarding + pods, pre-kickoff sequence, kickoff run-of-show, per-learner checklist, metrics) · *design done; the actual forms + placement quiz are tracked in **3B.4***
 - [x] 3.3 Write the **cohort run-of-show & SOPs**: weekly delivery, live-session format, feedback loop,
       accountability/nudge rules. `Req: 7, 5, 11`
       → `program/03-cohort-run-of-show-and-sops.md` (standard weekly rhythm, 60-min live run-of-show, SOPs for feedback/accountability-nudges/community/assessment, role task lists, mid-cohort + close-out, edge cases, metrics)
 - [x] 3.4 Define **success criteria** for the founding cohort (completion %, avg CEFR gain, # testimonials). `Req: 8B, 13`
       → `program/04-founding-cohort-success-criteria.md` (educational/business/proof/operational targets with min/target/stretch, measurement plan, green/yellow/red go-scale framework, "go full-time" call, retro + post-cohort actions)
-- [x] 3.5 Run enrollment and **fill the founding cohort**. `Req: 10, 8B`
-      → runbook built: `program/05-launch-enrollment-runbook.md` (readiness gate, day-by-day launch campaign, enrollment sequence + objection kit, pipeline, contingencies, "Ready to teach Day 1" gate). NOTE: actually running the campaign + enrolling learners is **founder-executed** (real-world action), not buildable by the agent.
+- [~] 3.5 Run enrollment and **fill the founding cohort**. `Req: 10, 8B`
+      → **The launch checklist/playbook is built:** `program/05-launch-enrollment-runbook.md` (readiness
+      gate, day-by-day campaign, enrollment sequence, pipeline, contingencies, "Ready to teach Day 1" gate).
+      **Not yet executed** — depends on the Phase 3B assets below + the real-world launch (founder-executed,
+      guided together). This task = the *plan*; actually filling the cohort happens at launch.
+
+## Phase 3B — Launch-ready production assets
+*Goal: turn the Phase 2–3 **blueprints** into the concrete, usable assets the Runbook's readiness gate
+requires — so the launch is turn-key. These are the real **tasks**; the Runbook (`program/05`) is the
+**checklist** they satisfy. Complete these before executing 3.5 / Phase 4.*
+
+- [x] 3B.1 **Lead magnet** — the free "5 sounds Egyptians get wrong" guide. `Req: 6, 4`
+      → `content/06-lead-magnet-5-sounds-guide.md`
+- [x] 3B.2 **Founding-cohort sales-page copy** (ready to publish, bilingual). `Req: 8B, 9`
+      → `program/06-founding-cohort-sales-page.md`
+- [ ] 3B.3 **Payments consistency pass** — propagate the individual-first model (InstaPay/wallet + personal
+      PayPal, fee-on-top) across `operations/01-tool-stack.md`, `program/01`, `program/02`, and Runbook §8. `Req: 9`
+- [ ] 3B.4 **Onboarding forms + quiz banks** — onboarding-form fields, the placement quiz item bank, and
+      per-unit formative quiz questions (ready to drop into Google Forms). `Req: 3, 8B`
+- [ ] 3B.5 **Entry-challenge daily lessons** — the Day 0–7 lesson content (adapted from Stage 0 U0–U1 +
+      Accent Lab + Mindset M0–M2). `Req: 6, 9`
+- [ ] 3B.6 **Consent form** — layered Tier 0/1/2 (Arabic + English) + a plain-language explainer. `Req: 3`
+- [ ] 3B.7 **Runbook §11 launch assets** — enrollment sequence messages 1–7 + objection kit; live
+      Q&A/info-session outline; enrollment pipeline sheet; "Ready to teach Day 1" checklist; post-close message. `Req: 10, 8B`
 
 ## Phase 4 — Run & prove
 *Goal: deliver transformation and capture proof.*
@@ -116,3 +138,7 @@
   can parallel-track 3.1 the founding-cohort offer, but the method should lead.)
 - Each task, when executed, should be delivered as its own reviewable artifact (document/material) on a
   branch, mapped back to its `Req:` tag.
+- **Two-tracker model (to avoid confusion):** `tasks.md` (this file) = the **task tracker** — what we
+  *build*. `program/05-launch-enrollment-runbook.md` = the **launch checklist/playbook** — what the
+  founder *verifies and executes* to go live. Phase 3B tasks are the buildable assets that satisfy the
+  Runbook's readiness gate. Keep both in sync as work completes.
