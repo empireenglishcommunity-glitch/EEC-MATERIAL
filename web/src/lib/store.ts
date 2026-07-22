@@ -54,3 +54,18 @@ export async function saveProgress(p: Progress): Promise<void> {
 export async function getUserProgress(userId: string): Promise<string[]> {
   return (await getProgress())[userId] ?? [];
 }
+
+// Per-unit formative quiz results.
+export type QuizResult = { best: number; total: number; lastScore: number; attempts: number; at: string };
+// userId -> unitKey ("u0".."u10") -> result
+export type QuizResults = Record<string, Record<string, QuizResult>>;
+
+export async function getQuizResults(): Promise<QuizResults> {
+  return readJson<QuizResults>("quiz-results.json", {});
+}
+export async function saveQuizResults(q: QuizResults): Promise<void> {
+  return writeJson("quiz-results.json", q);
+}
+export async function getUserQuizResults(userId: string): Promise<Record<string, QuizResult>> {
+  return (await getQuizResults())[userId] ?? {};
+}

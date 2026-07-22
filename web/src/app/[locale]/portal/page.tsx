@@ -2,8 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getCurrentUser } from "@/lib/auth";
-import { getUserProgress } from "@/lib/store";
+import { getUserProgress, getUserQuizResults } from "@/lib/store";
 import { STAGE0, TOTAL_LESSONS } from "@/lib/lessons";
+import { QUIZZES } from "@/content/quizzes";
 import { Section } from "@/components/ui";
 
 export default async function PortalDashboard({ params }: { params: Promise<{ locale: string }> }) {
@@ -14,6 +15,7 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
   if (!user) return null; // layout already guards/redirects
 
   const done = await getUserProgress(user.id);
+  const quizResults = await getUserQuizResults(user.id);
   const pct = TOTAL_LESSONS ? Math.round((done.length / TOTAL_LESSONS) * 100) : 0;
   const ar = locale === "ar";
 
@@ -33,9 +35,24 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
       <div className="mt-10 space-y-6">
         {STAGE0.map((u) => (
           <div key={u.id} className="rounded-2xl bg-white p-6 ring-1 ring-royal-100">
-            <h2 className="font-bold text-royal-900">
-              {ar ? "الوحدة" : "Unit"} {u.num} — {u.title}
-            </h2>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="font-bold text-royal-900">
+                {ar ? "الوحدة" : "Unit"} {u.num} — {u.title}
+              </h2>
+              {QUIZZES[u.id] && (
+                <Link
+                  href={`/${locale}/portal/quiz/${u.id}`}
+                  className="inline-flex items-center gap-2 rounded-lg bg-royal-50 px-3 py-1.5 text-xs font-semibold text-royal-700 transition-colors hover:bg-royal-100"
+                >
+                  {ar ? "كويز الوحدة" : "Unit quiz"}
+                  {quizResults[u.id] && (
+                    <span className="rounded bg-gold-500 px-1.5 py-0.5 text-royal-950">
+                      {quizResults[u.id].best}/{quizResults[u.id].total}
+                    </span>
+                  )}
+                </Link>
+              )}
+            </div>
             <ul className="mt-3 grid gap-2 sm:grid-cols-2">
               {u.lessons.map((l) => {
                 const c = done.includes(l.id);
@@ -58,8 +75,8 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
 
       <p className="mt-8 text-sm text-ink/50">
         {ar
-          ? "اضغط على أي درس عشان تفتح محتواه وتعلّمه كمكتمل. الكويزات + Accent Lab جايين في التحديثات الجاية."
-          : "Tap any lesson to open its content and mark it complete. Quizzes + Accent Lab are coming in the next updates."}
+          ? "اضغط على أي درس عشان تفتح محتواه وتعلّمه كمكتمل، وجرّب كويز كل وحدة. Accent Lab جاي في التحديث الجاي."
+          : "Tap any lesson to open its content and mark it complete, and try each unit's quiz. Accent Lab is coming next."}
       </p>
     </Section>
   );
