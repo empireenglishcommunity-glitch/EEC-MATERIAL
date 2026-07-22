@@ -222,3 +222,8 @@ until absorbed later. (Revises GC-2.)*
   *build*. `program/05-launch-enrollment-runbook.md` = the **launch checklist/playbook** — what the
   founder *verifies and executes* to go live. Phase 3B tasks are the buildable assets that satisfy the
   Runbook's readiness gate. Keep both in sync as work completes.
+- **Lesson-materials sub-project (finished Student's + Teacher's Editions):** the curriculum tasks above
+  (1.3, 5.2, 6.1, 6.2) produce lesson **blueprints** in `curriculum/`. Turning those blueprints into the
+  finished, Empire-professional **teaching & learning material** (Student's Edition + Teacher's Edition,
+  portal-first + send-ready PDF coursebook) is a distinct workstream tracked in its own spec:
+  **`.kiro/specs/eec-lesson-materials/`** (requirements + design + phased plan; pilot = Stage 0 · Unit 1).
