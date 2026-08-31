@@ -54,4 +54,4 @@ like + -ing · hobbies · can for ability · *Do you like…?* — talk about yo
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم.*
+*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم*

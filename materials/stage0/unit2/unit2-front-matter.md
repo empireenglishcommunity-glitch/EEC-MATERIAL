@@ -54,4 +54,4 @@ there is / there are · a/an/the · plurals · prepositions of place — describ
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم.*
+*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم*

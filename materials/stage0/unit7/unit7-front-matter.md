@@ -53,4 +53,4 @@ imperatives · *Is there a…?* · giving directions · prepositions of movement
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم.*
+*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم*
