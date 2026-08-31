@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getUserProgress } from "@/lib/store";
 import { getFlatLesson, getAdjacentLessons } from "@/lib/lessons";
 import { renderLessonHtml } from "@/lib/lesson-content";
+import { userCanAccessStage } from "@/lib/access";
 import { stageNav } from "@/lib/portal-nav";
 import { Section } from "@/components/ui";
 import MarkCompleteButton from "@/components/MarkCompleteButton";
@@ -23,6 +24,11 @@ export default async function LessonPage({
 
   const user = await getCurrentUser();
   if (!user) return null; // layout guards/redirects
+
+  // Gate lessons of a locked stage (Stage 0 is always open).
+  if (!(await userCanAccessStage(user, lesson.stageId))) {
+    notFound();
+  }
 
   const done = (await getUserProgress(user.id)).includes(lessonId);
   const { prev, next } = getAdjacentLessons(lessonId);

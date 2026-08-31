@@ -33,6 +33,14 @@ export type User = {
    * deliberately — it unlocks the Teacher's Edition, answer keys and all.
    */
   role?: UserRole;
+  /**
+   * Explicit stage entitlement (e.g. ["s1"]). Optional and additive: a stage a
+   * student has been granted is open regardless of prior-stage completion — the
+   * placement path from the curriculum ("A1 achieved OR placement"). Absent on
+   * legacy accounts; access then falls back to prior-stage completion. Stage 0
+   * is always open and never needs listing here.
+   */
+  availableStages?: string[];
 };
 
 /** Fails closed: anything that is not explicitly a teacher is treated as a student. */

@@ -1,6 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { isLocale } from "@/i18n/config";
+import { getCurrentUser } from "@/lib/auth";
 import { getStage } from "@/lib/lessons";
+import { userCanAccessStage } from "@/lib/access";
 import { stageNav } from "@/lib/portal-nav";
 import CoursebookPage from "@/components/CoursebookPage";
 
@@ -14,6 +16,10 @@ export default async function StageGlossaryPage({
   if (stage === "s0") redirect(`/${locale}/portal/glossary`);
   const meta = getStage(stage);
   if (!meta) notFound();
+
+  const user = await getCurrentUser();
+  if (!user) return null;
+  if (!(await userCanAccessStage(user, meta.id))) redirect(stageNav(locale, meta.id).dashboard);
 
   return (
     <CoursebookPage
