@@ -72,14 +72,36 @@ git fetch origin
 git checkout spec/eec-learning-ecosystem
 git pull
 
-# 2) refresh the app copy (preserves /opt/eec-web/.env, which is not in the repo)
-cp -r /opt/EEC-MATERIAL/web/. /opt/eec-web/
+# 2) refresh the app copy — MIRROR it, do not merge into it
+rsync -a --delete --exclude '.env' /opt/EEC-MATERIAL/web/ /opt/eec-web/
 
 # 3) rebuild + restart
 cd /opt/eec-web
 docker compose up -d --build
 docker compose ps            # eec-web should be "Up"
 ```
+
+> ### ⚠️ Use `rsync --delete`, never `cp -r`
+>
+> `cp -r` only adds and overwrites — it **cannot remove a file the repo deleted**. A file
+> dropped from the repo therefore survives in `/opt/eec-web` forever and is baked straight
+> back into the next image.
+>
+> That is not hypothetical here. The coursebook PDFs moved out of `web/public/` precisely
+> because everything under `public/` is world readable. With `cp -r`, the old
+> `/opt/eec-web/public/coursebook/*.pdf` would stay on disk, the Dockerfile's
+> `COPY … /app/public ./public` would bake them in again, and **the Teacher's Edition
+> would still be downloadable at the old URL** — a deploy that reports success while
+> changing nothing about the problem it was meant to fix.
+>
+> `--delete` is safe here: `.env` is excluded, and student data lives in the `leads_data`
+> **Docker volume**, not in this directory. Nothing in `/opt/eec-web` is precious.
+>
+> If `rsync` is missing on the box, delete the tracked directories first:
+> ```bash
+> rm -rf /opt/eec-web/public /opt/eec-web/private /opt/eec-web/src
+> cp -r /opt/EEC-MATERIAL/web/. /opt/eec-web/
+> ```
 
 Verify the new build on the box:
 ```bash
@@ -92,6 +114,18 @@ curl -I http://127.0.0.1:8080/coursebook/eec-stage0-teacher.pdf   # 404 — must
 
 A `401` on `/api/coursebook/student` is the gate working. A `503` means the PDFs are
 missing from the image — check that the Dockerfile still copies `private/`.
+
+Then confirm it from **outside** the box, because the point of the change is what the
+public can reach:
+```bash
+for u in /coursebook/eec-stage0-teacher.pdf /coursebook/eec-stage0-student.pdf \
+         /api/coursebook/teacher /api/coursebook/student /en ; do
+  printf '%-42s %s\n' "$u" "$(curl -s -o /dev/null -w '%{http_code}' https://empireenglish.online$u)"
+done
+# expected: 404, 404, 404, 401, 200
+```
+A `200` on either `/coursebook/*.pdf` means step 2 was done with `cp -r` and the stale
+files are still in the image. Redo step 2 with `--delete` and rebuild.
 
 ### What ships in this build
 - **55 finished Stage-0 lessons**, the **11 unit front-matter wrappers**, the **Stage-0
