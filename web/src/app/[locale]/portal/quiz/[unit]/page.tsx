@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getCurrentUser } from "@/lib/auth";
 import { getUserQuizResults } from "@/lib/store";
-import { getQuiz } from "@/content/quizzes";
+import { getQuiz, publicQuestion } from "@/content/quizzes";
 import { Section } from "@/components/ui";
 import QuizRunner from "@/components/QuizRunner";
 
@@ -24,12 +24,10 @@ export default async function QuizPage({
   const prev = (await getUserQuizResults(user.id))[quiz.unit];
   const ar = locale === "ar";
 
-  // Never send the answer key to the client — strip it.
-  const publicQuestions = quiz.questions.map((q) => ({
-    id: q.id,
-    prompt: q.prompt,
-    options: q.options,
-  }));
+  // Never send the answer key to the client, and rotate the options so the
+  // correct one is not sitting in a predictable slot. Both are done by
+  // publicQuestion(), which the grading route pairs with.
+  const publicQuestions = quiz.questions.map(publicQuestion);
 
   return (
     <Section className="py-10 sm:py-14">

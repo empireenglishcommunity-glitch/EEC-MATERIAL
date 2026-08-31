@@ -23,6 +23,74 @@ const q = (id: string, prompt: string, options: string[], answer: number): QuizQ
   answer,
 });
 
+/* ==========================================================================
+ * OPTION ORDER — why these quizzes are rotated before they are shown
+ * --------------------------------------------------------------------------
+ * Options are rendered in array order and were never shuffled, while the
+ * authored `answer` sat at index 0 almost everywhere. Measured over the
+ * committed item banks:
+ *
+ *   stage 0:  26/44 answers at index 0  -> "always pick the first option" = 59%
+ *   stage 1:  40/41                     ->                                  98%
+ *   stage 2:  54/54                     ->                                 100%
+ *
+ * Stage 1 and Stage 2 are live. Their unit quizzes were fully solvable without
+ * reading the question, which makes them worthless as the formative evidence
+ * they are supposed to feed into the review queue and the stage determination.
+ * The answer key itself was never leaked — the pages strip it correctly — so
+ * this was purely a positional tell, and the cheapest way to score well was to
+ * ignore the English entirely.
+ *
+ * The fix is structural rather than 139 hand edits, because hand edits would
+ * drift again the moment somebody authored a new unit by copying an old one.
+ * Each question's options are ROTATED so that the correct answer lands at a
+ * position derived from a hash of the question id:
+ *
+ *   target t = hash(id) mod n          (uniform by construction, not by care)
+ *   display[i] = options[(answer + i - t) mod n]
+ *
+ * Properties that matter:
+ *   - Deterministic, so a reload never reorders what a learner is mid-way
+ *     through, and no per-user state has to be stored.
+ *   - Rotation preserves the authored cyclic order, so option lists that were
+ *     written as a progression still read sensibly.
+ *   - It is computed in ONE place and used by both the pages and the grading
+ *     route, so a display order and a grade can never disagree.
+ *
+ * This is obfuscation of a tell, not security: the item bank is authored in the
+ * repo and a determined learner can always share answers. It closes the gap
+ * where a learner could score 100% while learning nothing, which is the part
+ * that corrupts the evidence.
+ * ========================================================================== */
+
+/** FNV-1a. Small, stable across processes, and good enough to spread positions. */
+function hashId(id: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
+
+/** The display position the correct answer occupies for this question. */
+export function correctDisplayIndex(question: QuizQuestion): number {
+  return hashId(question.id) % question.options.length;
+}
+
+/** The question as the learner sees it: options rotated, answer key removed. */
+export function publicQuestion(question: QuizQuestion): { id: string; prompt: string; options: string[] } {
+  const n = question.options.length;
+  const t = correctDisplayIndex(question);
+  const options = Array.from({ length: n }, (_, i) => question.options[(question.answer + i - t + n * n) % n]);
+  return { id: question.id, prompt: question.prompt, options };
+}
+
+/** True when the learner's chosen DISPLAY index is the correct one. */
+export function isCorrectChoice(question: QuizQuestion, chosenDisplayIndex: number): boolean {
+  return chosenDisplayIndex === correctDisplayIndex(question);
+}
+
 export const QUIZZES: Record<string, UnitQuiz> = {
   u0: {
     unit: "u0",

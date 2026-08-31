@@ -24,8 +24,9 @@
     "anatomy": "node check-lesson-anatomy.mjs",
     "dial": "node measure-arabic-dial.mjs",
     "immersion": "node check-immersion.mjs",
+    "quiz": "node check-quiz-integrity.mjs",
     "generate": "npm run glossary && npm run embed",
-    "all": "npm run drift && npm run wrappers && npm run anatomy && npm run dial && npm run immersion && npm run bidi"
+    "all": "npm run drift && npm run wrappers && npm run anatomy && npm run dial && npm run immersion && npm run quiz && npm run bidi"
   },
   "dependencies": {
     "marked": "^16.4.2",
