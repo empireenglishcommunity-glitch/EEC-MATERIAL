@@ -7,8 +7,8 @@
 
 ## STATUS — 2026-08-31 (read this, not the checkboxes)
 
-**Stages 0, 1 and 2 are COMPLETE and shipping — content, portal and PDF. Everything still
-open is either a founder review or the upper stages (5.3–5.4).**
+**Stages 0, 1 and 2 are COMPLETE, MERGED and LIVE — content, portal and PDF. Everything
+still open is either a founder review or the upper stages (5.3–5.4).**
 
 Stage 0 (55 lessons), Stage 1 (50) and Stage 2 (60) are all finished: every lesson, every
 unit wrapper, each stage's front matter and generated glossary, all rendered in the portal
@@ -33,7 +33,27 @@ Each claim names the evidence that proves it. Re-derive rather than trust:
 | All six PDF editions are built and shipped | `web/private/coursebook/eec-stage{0,1,2}-{student,teacher}.pdf` | s0 204/222 pp · s1 269/309 pp · s2 353/414 pp; all 6 font families + emoji embedded |
 | Coursebooks are not world-downloadable | `/api/coursebook/[...seg]` (s0 aliases + `/s1/…`, `/s2/…`) | anon → 401/404 · student → 200/404 · teacher → 200/200 |
 | Portal + PDF render bilingual text correctly | `globals.css` + `book.css` | `npm run bidi` → 0 failures, 0 advisories over 204 pages |
+| Every stage wrapper page is actually reachable | `tools/audit/check-portal-wrappers.mjs` | `npm run wrappers` → both keys per stage, and no route hand-builds the key |
 | Stages 1–2 are wired into the portal | `/portal/stages/{s1,s2}` + `web/src/content/materials-stage{1,2}.ts` | `cd web && npx next build` → green, all routes registered |
+
+> ### ⚠️ These gates are all ANONYMOUS — they cannot verify the portal
+>
+> Every check above runs unauthenticated, and portal pages require sign-in, so the best any
+> of them can return for a lesson, glossary or stage page is **307 → login**. A 307 says
+> nothing about whether the page renders.
+>
+> `/portal/stages/{s1,s2}/{start,glossary}` — **four pages** — were live and returning 404
+> while every gate was green: TypeScript saw two strings, drift saw the markdown correctly
+> embedded, `next build` compiled the route, and the lookup miss rendered as an ordinary
+> 404. Stage 0's static pages hardcoded the right key so Stage 0 worked, hiding it. Fixed
+> in #9; `npm run wrappers` now closes that class.
+>
+> **To verify a portal change, create a throwaway account and load the pages.**
+> `POST /api/admin/users` with `ADMIN_TOKEN` (takes `availableStages`, so gating can be
+> tested both ways), sign in, request the pages, grep the HTML for what must be present —
+> and for the coach-only phrases that must **not** be. Then restore `users.json` to `[]` and
+> `progress.json` to `{}`, and confirm the login 401s. Production has zero accounts by
+> design.
 
 **Genuinely open, in priority order:**
 1. **2.4 / 3.4 / 4.4 — three founder checkpoints.** Nothing is blocked on building;
