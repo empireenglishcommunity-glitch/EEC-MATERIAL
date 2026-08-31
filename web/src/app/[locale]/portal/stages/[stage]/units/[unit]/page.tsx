@@ -1,49 +1,49 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { isLocale } from "@/i18n/config";
-import { STAGE0 } from "@/lib/lessons";
+import { getStage } from "@/lib/lessons";
 import { unitFrontMatterId, hasWrapperPage } from "@/lib/lesson-content";
+import { stageNav } from "@/lib/portal-nav";
 import CoursebookPage from "@/components/CoursebookPage";
 
-// Stage-0 unit overview. Stage 1 uses /portal/stages/s1/units/[unit].
-
-/**
- * A unit's campaign front matter — the mission, the lesson table, the prize and
- * the end-of-unit check. This is what the PDF opens each unit with.
- */
-export default async function UnitOverviewPage({
+export default async function StageUnitOverviewPage({
   params,
 }: {
-  params: Promise<{ locale: string; unit: string }>;
+  params: Promise<{ locale: string; stage: string; unit: string }>;
 }) {
-  const { locale, unit } = await params;
+  const { locale, stage, unit } = await params;
   if (!isLocale(locale)) notFound();
+  if (stage === "s0") redirect(`/${locale}/portal/units/${unit}`);
+  const meta = getStage(stage);
+  if (!meta) notFound();
 
-  const meta = STAGE0.find((u) => u.id === unit);
+  const unitMeta = meta.units.find((u) => u.id === unit);
   const pageId = unitFrontMatterId(unit);
-  if (!meta || !pageId || !hasWrapperPage("s0", pageId)) notFound();
+  if (!unitMeta || !pageId || !hasWrapperPage(meta.id, pageId)) notFound();
 
   const ar = locale === "ar";
-  const first = meta.lessons[0];
+  const nav = stageNav(locale, meta.id);
+  const first = unitMeta.lessons[0];
 
   return (
     <CoursebookPage
       locale={locale}
-      stageId="s0"
+      stageId={meta.id}
       pageId={pageId}
-      eyebrow={`${ar ? "الوحدة" : "Unit"} ${meta.num} — ${meta.title}`}
+      eyebrow={`${ar ? "الوحدة" : "Unit"} ${unitMeta.num} — ${unitMeta.title}`}
+      backHref={nav.dashboard}
     >
       <div className="mt-8 flex flex-wrap items-center gap-3">
         {first && (
           <Link
-            href={`/${locale}/portal/lessons/${first.id}`}
+            href={nav.lesson(first.id)}
             className="rounded-lg bg-royal-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-royal-800"
           >
             {ar ? `ابدأ الوحدة — ${first.title}` : `Start the unit — ${first.title}`}
           </Link>
         )}
         <Link
-          href={`/${locale}/portal/glossary`}
+          href={nav.glossary}
           className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-royal-700 ring-1 ring-royal-200 transition-colors hover:bg-royal-50"
         >
           {ar ? "الذخيرة" : "Glossary"}

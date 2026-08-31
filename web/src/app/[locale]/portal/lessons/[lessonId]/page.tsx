@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getUserProgress } from "@/lib/store";
 import { getFlatLesson, getAdjacentLessons } from "@/lib/lessons";
 import { renderLessonHtml } from "@/lib/lesson-content";
+import { stageNav } from "@/lib/portal-nav";
 import { Section } from "@/components/ui";
 import MarkCompleteButton from "@/components/MarkCompleteButton";
 
@@ -26,6 +27,7 @@ export default async function LessonPage({
   const done = (await getUserProgress(user.id)).includes(lessonId);
   const { prev, next } = getAdjacentLessons(lessonId);
   const ar = locale === "ar";
+  const nav = stageNav(locale, lesson.stageId);
 
   const t = {
     back: ar ? "‹ رجوع للوحة" : "‹ Back to dashboard",
@@ -39,12 +41,12 @@ export default async function LessonPage({
 
   return (
     <Section className="py-10 sm:py-14">
-      <Link href={`/${locale}/portal`} className="text-sm font-semibold text-royal-700 hover:text-royal-900">
+      <Link href={nav.dashboard} className="text-sm font-semibold text-royal-700 hover:text-royal-900">
         {t.back}
       </Link>
 
       <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-royal-500">
-        {t.unit} {lesson.unitNum} — {lesson.unitTitle}
+        Stage {lesson.stageNum} · {t.unit} {lesson.unitNum} — {lesson.unitTitle}
       </p>
 
       <article

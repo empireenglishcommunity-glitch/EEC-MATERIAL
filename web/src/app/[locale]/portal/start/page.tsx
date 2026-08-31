@@ -10,6 +10,7 @@ export default async function StageStartPage({ params }: { params: Promise<{ loc
   return (
     <CoursebookPage
       locale={locale}
+      stageId="s0"
       pageId="stage0-front-matter"
       eyebrow={locale === "ar" ? "ابدأ من هنا · Stage 0" : "Start here · Stage 0"}
     />

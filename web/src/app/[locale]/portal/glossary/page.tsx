@@ -10,6 +10,7 @@ export default async function GlossaryPage({ params }: { params: Promise<{ local
   return (
     <CoursebookPage
       locale={locale}
+      stageId="s0"
       pageId="stage0-glossary"
       eyebrow={locale === "ar" ? "ذخيرتك · Stage 0" : "Glossary · Stage 0"}
     />
