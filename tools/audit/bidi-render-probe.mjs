@@ -277,7 +277,9 @@ const PROBE = () => {
 
   console.log(`mode: ${PATCHED ? "PATCHED (unicode-bidi: plaintext)" : "globals.css as committed"}`);
   console.log(`pages probed:   ${files.length}`);
-  console.log(`FAIL  misrendered lines (closing punctuation on the wrong side): ${total}`);
+  console.log(
+    `${total ? "FAIL" : "PASS"}  misrendered lines (closing punctuation on the wrong side): ${total}`,
+  );
   console.log(`note  needs rewording (mixed-direction line, no base direction is right): ${ambig}`);
 
   if (total) {
