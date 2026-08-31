@@ -98,6 +98,10 @@ const STAGE_RULES = {
     "stage-finale": ["s1-u10-l05"], // A2 summative + separate standard milestone sample
     review: ["s1-u10-l01", "s1-u10-l02", "s1-u10-l04"], // retrieval reviews + full mock
   },
+  2: {
+    "stage-finale": ["s2-u12-l05"], // B1 summative + separate standard milestone sample
+    review: ["s2-u12-l01", "s2-u12-l02", "s2-u12-l03", "s2-u12-l04"], // retrieval, clinic, mock
+  },
 };
 
 /** Lesson types, most specific first. */
@@ -181,6 +185,27 @@ for (const { id, p } of lessons()) {
       problems.push(
         `section "${sec.label}" sub-label is "${arPart}", expected one of: ${sec.ar.map((a) => `"${a}"`).join(", ")}` +
           ` (bare, or followed by a parenthetical)`,
+      );
+  }
+
+  // 6a. No mixed-script section labels.
+  //
+  // A single wrong-script character inside a heading — a Latin "t" inside
+  // "افتكر", an Arabic "م" inside "Warm-up" — is invisible to checks 2, 3 and 6
+  // above, because those find a section with `head.includes(label)`. A corrupted
+  // label simply does not match, so the section is treated as ABSENT: it is
+  // reported only if it happens to be mandatory, and silently ignored otherwise.
+  // Every non-mandatory section (Warm-up, Your Arsenal, Train, Remember) can
+  // therefore be corrupted while the lesson still reports as conforming — which
+  // is exactly how four of these shipped past a "145/145 conforming" run.
+  // Adjacent Latin and Arabic characters never occur legitimately: the corpus
+  // always separates the two scripts with a space, an em dash or punctuation.
+  for (const head of heads) {
+    const bad = /[A-Za-z][\u0600-\u06FF]|[\u0600-\u06FF][A-Za-z]/.exec(head);
+    if (bad)
+      problems.push(
+        `mixed-script section label — a Latin and an Arabic character are adjacent in "${head}"` +
+          ` (near "${bad[0]}"). One of them is a typo, and it makes the section invisible to this check.`,
       );
   }
 

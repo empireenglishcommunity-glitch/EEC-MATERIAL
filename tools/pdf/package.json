@@ -10,7 +10,10 @@
     "teacher": "node build-book.mjs --stage 0 --edition teacher",
     "build:stage1": "node build-book.mjs --stage 1 --edition both",
     "student:stage1": "node build-book.mjs --stage 1 --edition student",
-    "teacher:stage1": "node build-book.mjs --stage 1 --edition teacher"
+    "teacher:stage1": "node build-book.mjs --stage 1 --edition teacher",
+    "build:stage2": "node build-book.mjs --stage 2 --edition both",
+    "student:stage2": "node build-book.mjs --stage 2 --edition student",
+    "teacher:stage2": "node build-book.mjs --stage 2 --edition teacher"
   },
   "dependencies": {
     "marked": "^16.4.2",

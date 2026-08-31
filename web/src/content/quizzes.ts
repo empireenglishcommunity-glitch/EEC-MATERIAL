@@ -312,13 +312,234 @@ export const STAGE1_QUIZZES: Record<string, UnitQuiz> = {
   },
 };
 
-const ALL_QUIZZES: Record<string, UnitQuiz> = { ...QUIZZES, ...STAGE1_QUIZZES };
+// Stage-2 per-unit formative quizzes. Keys are stage-qualified ("s2-uN").
+// Source of truth: the authored Stage-2 lessons in materials/stage2/.
+// Each item targets a documented Stage-2 error, not trivia: the distractors are
+// the mistakes the coach notes say learners actually make.
+export const STAGE2_QUIZZES: Record<string, UnitQuiz> = {
+  "s2-u1": {
+    unit: "s2-u1",
+    num: 1,
+    title: "Present Perfect — Experiences",
+    questions: [
+      q("s2u1q1", "___ you ever been to Turkey?", ["Have", "Has", "Did"], 0),
+      q("s2u1q2", "She ___ never tried sushi.", ["has", "have", "is"], 0),
+      q("s2u1q3", "The past participle of \u201cgo\u201d (for experience) is:", ["gone", "went", "goed"], 0),
+      q("s2u1q4", "He isn't here \u2014 he's ___ to the bank.", ["gone", "been", "going"], 0),
+      q("s2u1q5", "Which sentence gives no date?", [
+        "I've visited Jordan.",
+        "I visited Jordan in 2019.",
+        "I was visiting Jordan.",
+      ], 0),
+    ],
+  },
+  "s2-u2": {
+    unit: "s2-u2",
+    num: 2,
+    title: "Present Perfect — Recent & Unfinished",
+    questions: [
+      q("s2u2q1", "I've ___ finished \u2014 two minutes ago.", ["just", "yet", "since"], 0),
+      q("s2u2q2", "I haven't called her ___.", ["yet", "already", "just"], 0),
+      q("s2u2q3", "I've lived here ___ 2019.", ["since", "for", "from"], 0),
+      q("s2u2q4", "I've worked here ___ three years.", ["for", "since", "during"], 0),
+      q("s2u2q5", "Which is correct?", [
+        "I saw him yesterday.",
+        "I've seen him yesterday.",
+        "I've saw him yesterday.",
+      ], 0),
+    ],
+  },
+  "s2-u3": {
+    unit: "s2-u3",
+    num: 3,
+    title: "Narrative Past — Continuous & Used To",
+    questions: [
+      q("s2u3q1", "I ___ working when the phone rang.", ["was", "were", "am"], 0),
+      q("s2u3q2", "The long background action takes:", ["past continuous", "past simple", "present perfect"], 0),
+      q("s2u3q3", "I ___ play football every Friday, but I stopped.", ["used to", "use to", "am used to"], 0),
+      q("s2u3q4", "Choose the correct pair:", [
+        "While I was cooking, the lights went out.",
+        "While I cooked, the lights were going out.",
+        "While I was cooking, the lights were going out.",
+      ], 0),
+    ],
+  },
+  "s2-u4": {
+    unit: "s2-u4",
+    num: 4,
+    title: "First Conditional & Future Time",
+    questions: [
+      q("s2u4q1", "If it ___ tomorrow, we'll stay in.", ["rains", "will rain", "rained"], 0),
+      q("s2u4q2", "I'll call you as soon as I ___.", ["arrive", "will arrive", "arrived"], 0),
+      q("s2u4q3", "___ you hurry, you'll miss the train.", ["Unless", "If", "When"], 0),
+      q("s2u4q4", "Which is WRONG?", [
+        "If I will see him, I'll tell him.",
+        "If I see him, I'll tell him.",
+        "I'll tell him if I see him.",
+      ], 0),
+    ],
+  },
+  "s2-u5": {
+    unit: "s2-u5",
+    num: 5,
+    title: "Hypotheticals — Second Conditional",
+    questions: [
+      q("s2u5q1", "If I ___ more time, I would travel.", ["had", "have", "will have"], 0),
+      q("s2u5q2", "If I were you, I ___ take the job.", ["'d", "'ll", "will"], 0),
+      q("s2u5q3", "Which one is about something UNREAL?", [
+        "If I won the prize, I'd move house.",
+        "If I win the prize, I'll move house.",
+        "When I win the prize, I'll move house.",
+      ], 0),
+      q("s2u5q4", "I wish I ___ more languages.", ["spoke", "speak", "will speak"], 0),
+    ],
+  },
+  "s2-u6": {
+    unit: "s2-u6",
+    num: 6,
+    title: "Relative Clauses",
+    questions: [
+      q("s2u6q1", "The woman ___ lives next door is a nurse.", ["who", "which", "what"], 0),
+      q("s2u6q2", "That's the caf\u00e9 ___ we first met.", ["where", "which", "who"], 0),
+      q("s2u6q3", "That's the man ___ car was stolen.", ["whose", "who's", "who"], 0),
+      q("s2u6q4", "Which sentence is WRONG?", [
+        "The man who he lives here is my uncle.",
+        "The man who lives here is my uncle.",
+        "The man living here is my uncle.",
+      ], 0),
+      q("s2u6q5", "You can leave out the relative pronoun when it is:", [
+        "the object of the clause",
+        "the subject of the clause",
+        "always",
+      ], 0),
+    ],
+  },
+  "s2-u7": {
+    unit: "s2-u7",
+    num: 7,
+    title: "Reported Speech",
+    questions: [
+      q("s2u7q1", "She ___ me she was tired.", ["told", "said", "spoke"], 0),
+      q("s2u7q2", "\u201cI am busy.\u201d \u2192 He said he ___ busy.", ["was", "is", "has been"], 0),
+      q("s2u7q3", "\u201cWhere do you live?\u201d \u2192 She asked me where I ___.", ["lived", "did live", "do live"], 0),
+      q("s2u7q4", "\u201cPlease wait.\u201d \u2192 He asked me ___ wait.", ["to", "that", "for"], 0),
+      q("s2u7q5", "Which is correct?", [
+        "She said that she'd finished.",
+        "She said me that she'd finished.",
+        "She told that she'd finished.",
+      ], 0),
+    ],
+  },
+  "s2-u8": {
+    unit: "s2-u8",
+    num: 8,
+    title: "The Passive",
+    questions: [
+      q("s2u8q1", "Coffee ___ grown in Brazil.", ["is", "are", "has"], 0),
+      q("s2u8q2", "The bridge ___ built in 1998.", ["was", "is", "were"], 0),
+      q("s2u8q3", "Include \u201cby + agent\u201d when:", [
+        "the doer is new or important information",
+        "always",
+        "never",
+      ], 0),
+      q("s2u8q4", "Which is WRONG?", [
+        "The letter sent yesterday by my sister.",
+        "The letter was sent yesterday by my sister.",
+        "My sister sent the letter yesterday.",
+      ], 0),
+    ],
+  },
+  "s2-u9": {
+    unit: "s2-u9",
+    num: 9,
+    title: "Connecting Ideas & Opinions",
+    questions: [
+      q("s2u9q1", "I left early ___ I could catch the train.", ["so that", "because", "although"], 0),
+      q("s2u9q2", "___ it was expensive, I bought it.", ["Although", "However", "Despite"], 0),
+      q("s2u9q3", "Which punctuation is right?", [
+        "It's expensive. However, it's worth it.",
+        "It's expensive, however it's worth it.",
+        "It's expensive however, it's worth it.",
+      ], 0),
+      q("s2u9q4", "A complete B1 opinion turn needs:", [
+        "an opinion plus a reason",
+        "an opinion only",
+        "a long list of facts",
+      ], 0),
+    ],
+  },
+  "s2-u10": {
+    unit: "s2-u10",
+    num: 10,
+    title: "Discussion Skills",
+    questions: [
+      q("s2u10q1", "The most useful move in a real discussion is:", [
+        "partial agreement",
+        "total agreement",
+        "silence",
+      ], 0),
+      q("s2u10q2", "Which disagreement is politest?", [
+        "I see it differently, actually.",
+        "That's wrong.",
+        "No.",
+      ], 0),
+      q("s2u10q3", "\u201cIt depends\u201d is an example of:", ["hedging", "agreeing", "reporting"], 0),
+      q("s2u10q4", "When someone challenges your point, the strongest move is to:", [
+        "concede the fair part, then hold the rest",
+        "repeat your point louder",
+        "change the subject",
+      ], 0),
+    ],
+  },
+  "s2-u11": {
+    unit: "s2-u11",
+    num: 11,
+    title: "Storytelling & Real-World Topics",
+    questions: [
+      q("s2u11q1", "To say something happened EARLIER than your story, use:", [
+        "had + past participle",
+        "was + -ing",
+        "have + past participle",
+      ], 0),
+      q("s2u11q2", "I've worked there ___ 2021.", ["since", "for", "from"], 0),
+      q("s2u11q3", "In my job I'm responsible ___ the schedule.", ["for", "of", "about"], 0),
+      q("s2u11q4", "An opinion is stronger when you anchor it in:", [
+        "a specific personal example",
+        "a general statement",
+        "a longer sentence",
+      ], 0),
+      q("s2u11q5", "If a word is missing mid-sentence, the best move is to:", [
+        "describe it in other words and keep going",
+        "stop and translate",
+        "start the turn again",
+      ], 0),
+    ],
+  },
+  "s2-u12": {
+    unit: "s2-u12",
+    num: 12,
+    title: "Putting It Together (B1)",
+    questions: [
+      q("s2u12q1", "I ___ there twice, but I didn't go last year.", ["'ve been", "went", "was going"], 0),
+      q("s2u12q2", "If I ___ you, I'd ask for more.", ["were", "was going to be", "am"], 0),
+      q("s2u12q3", "She asked me ___ I had finished.", ["if", "that", "do"], 0),
+      q("s2u12q4", "The office ___ renovated last year.", ["was", "is", "has"], 0),
+      q("s2u12q5", "The B1 rubric scores Fluency, Coherence, Accuracy, Range and:", [
+        "Interaction",
+        "Vocabulary size",
+        "Accent",
+      ], 0),
+    ],
+  },
+};
+
+const ALL_QUIZZES: Record<string, UnitQuiz> = { ...QUIZZES, ...STAGE1_QUIZZES, ...STAGE2_QUIZZES };
 
 export function getQuiz(unitKey: string): UnitQuiz | null {
   return ALL_QUIZZES[unitKey] ?? null;
 }
 
-/** Stage-qualified quiz key. Stage 0 keeps its legacy "uN" keys; Stage 1 uses "s1-uN". */
+/** Stage-qualified quiz key. Stage 0 keeps its legacy "uN" keys; later stages use "sN-uM". */
 export function quizKey(stageId: string, unitId: string): string {
   return stageId === "s0" ? unitId : `${stageId}-${unitId}`;
 }

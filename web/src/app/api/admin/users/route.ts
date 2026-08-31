@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { getUsers, saveUsers, findUserByEmail, type User } from "@/lib/store";
 import { hashPassword } from "@/lib/auth";
+import { isStageId } from "@/lib/lessons";
 
-const KNOWN_STAGES = new Set(["s0", "s1"]);
-
+// Derived from the shipped stage manifest rather than a second hardcoded list,
+// so a new stage cannot become grantable in the UI but unrecognised here.
 function cleanStages(value: unknown): string[] | undefined {
   if (!Array.isArray(value)) return undefined;
-  const stages = [...new Set(value.map(String).filter((s) => KNOWN_STAGES.has(s)))];
+  const stages = [...new Set(value.map(String).filter(isStageId))];
   return stages.length ? stages : undefined;
 }
 

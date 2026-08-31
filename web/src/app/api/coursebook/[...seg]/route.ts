@@ -24,6 +24,7 @@ import { isTeacher } from "@/lib/store";
 const FILES: Record<string, Record<string, string>> = {
   s0: { student: "eec-stage0-student.pdf", teacher: "eec-stage0-teacher.pdf" },
   s1: { student: "eec-stage1-student.pdf", teacher: "eec-stage1-teacher.pdf" },
+  s2: { student: "eec-stage2-student.pdf", teacher: "eec-stage2-teacher.pdf" },
 };
 
 function resolve(seg: string[]): { stage: string; edition: string } | null {
