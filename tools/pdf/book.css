@@ -104,6 +104,14 @@ blockquote p { margin: 3pt 0; }
 .teacher-note blockquote { background: #fff; border-inline-start-color: var(--gold-400); }
 
 hr { border: 0; border-top: 0.75pt solid var(--line); margin: 12pt 0; }
+/* Pin the monospace stack. Every lesson sets its blueprint citation in a code
+   span, and an unset font-family here resolves to whatever generic monospace the
+   build machine happens to provide — so the same markdown produced different
+   books on different machines. Name the font instead of inheriting the
+   environment; setup-env.sh installs it. */
+code, pre, kbd, samp {
+  font-family: "DejaVu Sans Mono", "Noto Sans Mono", "Liberation Mono", monospace;
+}
 code { background: var(--soft); padding: 1pt 4pt; border-radius: 3pt; font-size: 9.5pt; }
 ul, ol { margin: 5pt 0; padding-inline-start: 20pt; }
 li { margin: 2pt 0; }
