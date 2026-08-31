@@ -10,21 +10,33 @@ npm run all                      # drift, then anatomy, then bidi
 
 | Script | What it answers | Why it exists |
 |---|---|---|
-| `npm run drift` | Is `web/src/content/materials-stage0.ts` still exactly the markdown in `materials/stage0/`? | That file is banner-marked "AUTO-GENERATED … do not edit by hand", but no generator was committed. The portal serves the embed, the PDF reads the markdown — so drift means the two ship **different lessons** with nothing failing. |
+| `npm run drift` | Are the two generated files still exactly what `materials/stage0/` implies — the portal embed and the Stage-0 glossary? | The embed is banner-marked "AUTO-GENERATED … do not edit by hand", but no generator was committed. The portal serves the embed, the PDF reads the markdown — so drift means the two ship **different lessons** with nothing failing. |
 | `npm run anatomy` | Does every lesson match `materials/_style/lesson-anatomy.md`? | The blueprint citation, mandatory sections, section order, Arabic sub-labels, Teacher overlay, record task and sign-off are the definition of "done". Checking by hand across 55 lessons does not scale. |
 | `npm run bidi` | Does any line render its closing punctuation on the wrong side? | The Arabic locale sets `dir="rtl"` on `<html>`. Lesson prose inherited it, so **796 lines** of English rendered as `?Can you repeat, please`. The PDF stylesheet had already solved this; the portal had not. |
 
-## Regenerating the portal embed
+## Regenerating after a content edit
 
-After editing any file under `materials/stage0/`:
+After editing anything under `materials/stage0/`:
 
 ```bash
-node tools/audit/generate-portal-embed.mjs
+cd tools/audit && npm run generate     # glossary, then the portal embed
+npm run all                            # then verify
 ```
 
-`--check` verifies without writing and exits non-zero, naming the lessons that
-differ. The generator reproduces the previously committed embed byte-for-byte,
-which is how it was validated.
+Order matters: the glossary is itself content that gets embedded, so generate it
+before the embed.
+
+**`generate-portal-embed.mjs`** rebuilds `web/src/content/materials-stage0.ts` —
+55 lessons plus 13 wrapper pages (stage front matter, glossary, and each unit's
+front matter). It was validated by reproducing the previously committed embed
+byte-for-byte. `--check` verifies without writing and names what differs.
+
+**`generate-stage0-glossary.mjs`** rebuilds `materials/stage0/stage0-glossary.md`
+from the **Your Arsenal** tables of all 55 lessons. It is derived rather than
+written so it cannot teach a word the lessons no longer use. Deliberately not
+alphabetised: many rows are grouped sets (`bank / pharmacy / hospital` glossed
+`بنك / صيدلية / مستشفى`) and splitting them to sort risks pairing an English word
+with the wrong Arabic gloss.
 
 ## Notes on the bidi probe
 

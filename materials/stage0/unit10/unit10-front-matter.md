@@ -51,4 +51,4 @@ before/after proof built in.
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم بنَت قلعة.*
+*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم بنَت قلعة*

@@ -53,4 +53,4 @@ consolidation + the **Stage-0 summative** + your **graduation "after" speaking s
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم.*
+*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم*

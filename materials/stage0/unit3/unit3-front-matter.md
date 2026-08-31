@@ -54,4 +54,4 @@ present simple · telling the time · frequency adverbs — describe your typica
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم.*
+*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم*

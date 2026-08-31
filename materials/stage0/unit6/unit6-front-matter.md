@@ -53,4 +53,4 @@ adjectives · colours · have got · appearance — describe a person.
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم.*
+*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم*

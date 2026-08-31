@@ -53,4 +53,4 @@ greet · give your name, country, and job · record your first full self-introdu
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · welcome to your Empire.*
+*Empire English 👑 · Stage 0 · Recruit rank · welcome to your Empire*

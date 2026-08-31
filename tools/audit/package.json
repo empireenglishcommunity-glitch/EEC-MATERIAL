@@ -8,8 +8,10 @@
     "bidi": "node bidi-render-probe.mjs",
     "bidi:verbose": "node bidi-render-probe.mjs --verbose",
     "embed": "node generate-portal-embed.mjs",
-    "drift": "node generate-portal-embed.mjs --check",
+    "glossary": "node generate-stage0-glossary.mjs",
+    "drift": "node generate-portal-embed.mjs --check && node generate-stage0-glossary.mjs --check",
     "anatomy": "node check-lesson-anatomy.mjs",
+    "generate": "npm run glossary && npm run embed",
     "all": "npm run drift && npm run anatomy && npm run bidi"
   },
   "dependencies": {

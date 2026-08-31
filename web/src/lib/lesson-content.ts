@@ -1,6 +1,6 @@
 import { marked } from "marked";
 import { STAGE0_UNIT_MD } from "@/content/stage0-content";
-import { FINISHED_LESSON_MD } from "@/content/materials-stage0";
+import { FINISHED_LESSON_MD, WRAPPER_MD } from "@/content/materials-stage0";
 
 // Renders lesson content for the portal. Prefers FINISHED material (materials/… — the
 // Empire Student's/Teacher's single source) when it exists for a lesson; otherwise falls
@@ -89,4 +89,31 @@ export async function renderLessonHtml(lessonId: string): Promise<string | null>
   if (md == null) return null;
   const html = await marked.parse(md);
   return html;
+}
+
+/* ---------------------------------------------------------------------------
+ * Wrapper pages — the stage front matter, the glossary, and each unit's
+ * campaign front matter.
+ *
+ * These are part of the coursebook and always were: the PDF opens every unit
+ * with its wrapper. They were simply never wired into the portal, so a student
+ * on the site got the lessons without the framing the book gives them.
+ * ------------------------------------------------------------------------- */
+
+/** e.g. "unit3-front-matter", "stage0-glossary". */
+export function hasWrapperPage(pageId: string): boolean {
+  return !!WRAPPER_MD[pageId];
+}
+
+export async function renderWrapperHtml(pageId: string): Promise<string | null> {
+  const raw = WRAPPER_MD[pageId];
+  if (!raw) return null;
+  // Same Student's-Edition rule as lessons: the teacher overlay never ships.
+  return await marked.parse(stripTeacherBlocks(raw));
+}
+
+/** Unit front matter for a dashboard unit key ("u3" -> "unit3-front-matter"). */
+export function unitFrontMatterId(unitKey: string): string | null {
+  const m = unitKey.match(/^u(\d+)$/i);
+  return m ? `unit${m[1]}-front-matter` : null;
 }

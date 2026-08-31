@@ -5,15 +5,15 @@ PDF coursebooks** — two editions from one source:
 
 | Edition | Contents | Output |
 |---|---|---|
-| **Student's Edition** | lessons with the `> [!TEACHER]` overlay **stripped** | `web/public/coursebook/eec-stage<N>-student.pdf` |
-| **Teacher's Edition** | same lessons + overlay rendered as gold callout boxes | `web/public/coursebook/eec-stage<N>-teacher.pdf` |
+| **Student's Edition** | lessons with the `> [!TEACHER]` overlay **stripped** | `web/private/coursebook/eec-stage<N>-student.pdf` |
+| **Teacher's Edition** | same lessons + overlay rendered as gold callout boxes | `web/private/coursebook/eec-stage<N>-teacher.pdf` |
 
 Output lives under `web/public/`, so the books are served by the live site and are
 downloadable / send-ready at:
 
 ```
-https://empireenglish.online/coursebook/eec-stage0-student.pdf
-https://empireenglish.online/coursebook/eec-stage0-teacher.pdf
+https://empireenglish.online/api/coursebook/student   # signed-in learners
+https://empireenglish.online/api/coursebook/teacher   # teachers only
 ```
 
 The Student's Edition is also linked from the learner portal dashboard.
@@ -76,7 +76,7 @@ face. It was caught only by diffing the embedded font list, and the files were
 reverted. **Check the fonts, not the exit code:**
 
 ```bash
-strings ../../web/public/coursebook/eec-stage0-student.pdf \
+strings ../../web/private/coursebook/eec-stage0-student.pdf \
   | grep -oE '(Cinzel|SourceSans3|NotoNaskhArabic|NotoSans|DejaVuSans)[A-Za-z-]*' | sort -u
 ```
 
@@ -86,8 +86,9 @@ rebuild — do not commit the result.
 ## Notes
 
 - `node_modules/`, `.chromium/` and `_fonttest.*` are gitignored; the generated PDFs
-  in `web/public/coursebook/` are committed so they ship with the site.
+  in `web/private/coursebook/` are committed so they ship with the site.
 - Verified output (Stage 0): Student ≈ 190 pp, Teacher ≈ 208 pp, A4.
-- Anything in `web/public/` is served publicly and ungated, including the **Teacher's
-  Edition**. That is a deliberate decision to make or revisit, not an accident of the
-  build — see `audits/2026-08-31-repo-audit.md` §3.
+- Output goes to `web/private/`, **never** `web/public/`. Anything under `public/` is
+  served ungated at a guessable URL — which is exactly how the Teacher's Edition used to
+  be downloadable by anyone. Both editions are now served by `/api/coursebook/[edition]`
+  behind auth. If you point the output back at `public/`, you re-open that hole.

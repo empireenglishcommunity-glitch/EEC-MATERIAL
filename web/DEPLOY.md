@@ -72,8 +72,8 @@ git fetch origin
 git checkout spec/eec-learning-ecosystem
 git pull
 
-# 2) refresh the app copy (preserves /opt/eec-web/.env, which is not in the repo)
-cp -r /opt/EEC-MATERIAL/web/. /opt/eec-web/
+# 2) refresh the app copy — MIRROR it, do not merge into it
+rsync -a --delete --exclude '.env' /opt/EEC-MATERIAL/web/ /opt/eec-web/
 
 # 3) rebuild + restart
 cd /opt/eec-web
@@ -81,20 +81,70 @@ docker compose up -d --build
 docker compose ps            # eec-web should be "Up"
 ```
 
+> ### ⚠️ Use `rsync --delete`, never `cp -r`
+>
+> `cp -r` only adds and overwrites — it **cannot remove a file the repo deleted**. A file
+> dropped from the repo therefore survives in `/opt/eec-web` forever and is baked straight
+> back into the next image.
+>
+> That is not hypothetical here. The coursebook PDFs moved out of `web/public/` precisely
+> because everything under `public/` is world readable. With `cp -r`, the old
+> `/opt/eec-web/public/coursebook/*.pdf` would stay on disk, the Dockerfile's
+> `COPY … /app/public ./public` would bake them in again, and **the Teacher's Edition
+> would still be downloadable at the old URL** — a deploy that reports success while
+> changing nothing about the problem it was meant to fix.
+>
+> `--delete` is safe here: `.env` is excluded, and student data lives in the `leads_data`
+> **Docker volume**, not in this directory. Nothing in `/opt/eec-web` is precious.
+>
+> If `rsync` is missing on the box, delete the tracked directories first:
+> ```bash
+> rm -rf /opt/eec-web/public /opt/eec-web/private /opt/eec-web/src
+> cp -r /opt/EEC-MATERIAL/web/. /opt/eec-web/
+> ```
+
 Verify the new build on the box:
 ```bash
-curl -I http://127.0.0.1:8080/ar                                  # 200 (site)
-curl -I http://127.0.0.1:8080/coursebook/eec-stage0-student.pdf   # 200, application/pdf
+curl -I http://127.0.0.1:8080/ar                             # 200 (site)
+curl -I http://127.0.0.1:8080/api/coursebook/student         # 401 — gated, and that is correct
+curl -I http://127.0.0.1:8080/api/coursebook/teacher \
+     -H "x-admin-token: $ADMIN_TOKEN"                        # 200, application/pdf
+curl -I http://127.0.0.1:8080/coursebook/eec-stage0-teacher.pdf   # 404 — must NOT be public
 ```
 
+A `401` on `/api/coursebook/student` is the gate working. A `503` means the PDFs are
+missing from the image — check that the Dockerfile still copies `private/`.
+
+Then confirm it from **outside** the box, because the point of the change is what the
+public can reach:
+```bash
+for u in /coursebook/eec-stage0-teacher.pdf /coursebook/eec-stage0-student.pdf \
+         /api/coursebook/teacher /api/coursebook/student /en ; do
+  printf '%-42s %s\n' "$u" "$(curl -s -o /dev/null -w '%{http_code}' https://empireenglish.online$u)"
+done
+# expected: 404, 404, 404, 401, 200
+```
+A `200` on either `/coursebook/*.pdf` means step 2 was done with `cp -r` and the stale
+files are still in the image. Redo step 2 with `--delete` and rebuild.
+
 ### What ships in this build
-- **55 finished Stage-0 lessons** embedded in the portal (both editions from one source).
-- The **Empire Coursebook PDFs** are baked into the image (Dockerfile copies `public/`)
-  and served at `/coursebook/eec-stage0-student.pdf` and `/coursebook/eec-stage0-teacher.pdf`.
-  The Student's Edition is also linked from the portal dashboard.
-- Regenerate the PDFs anytime with the pipeline in `tools/pdf/` (see its README), then
-  redeploy. They are committed under `web/public/coursebook/`, so a fresh `git pull` +
-  `docker compose up -d --build` publishes the current books automatically.
+- **55 finished Stage-0 lessons**, the **11 unit front-matter wrappers**, the **Stage-0
+  front matter** and the **glossary**, all embedded in the portal from one source.
+- The **Empire Coursebook PDFs** are baked into the image and served **behind auth** by
+  `/api/coursebook/[edition]`:
+  - `student` — any signed-in learner. Linked from the portal dashboard.
+  - `teacher` — a user with `role: "teacher"`, or a caller sending the `ADMIN_TOKEN`
+    header. The dashboard shows this card only to teachers.
+- They live in **`web/private/coursebook/`**, not `public/`. Anything under `public/` is
+  world readable at a guessable URL, which is how the Teacher's Edition — answer keys,
+  timings, delivery notes — used to be downloadable by anyone. The Dockerfile copies
+  `private/` explicitly, because Next's standalone output does not.
+- Regenerate the PDFs with the pipeline in `tools/pdf/` (**run `setup-env.sh` first** —
+  see its README for why a successful build can still be wrong), then redeploy. They are
+  committed, so a fresh `git pull` + `docker compose up -d --build` publishes them.
+- To promote someone to teacher, set `"role": "teacher"` on their object in
+  `$DATA_DIR/users.json` and restart, or pass `"role":"teacher"` when creating them via
+  `POST /api/admin/users`.
 
 ## Resource note
 Capped at 512MB / 0.75 CPU in `docker-compose.yml` — comfortable alongside n8n on the
