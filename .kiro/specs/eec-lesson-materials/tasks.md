@@ -7,36 +7,37 @@
 
 ## STATUS — 2026-08-31 (read this, not the checkboxes)
 
-**Stage 0 is COMPLETE and shipping — content, portal and PDF. Everything still open is
-either a founder review or Phase 5.**
+**Stages 0 and 1 are COMPLETE and shipping — content, portal and PDF. Everything still
+open is either a founder review or the upper stages (5.2–5.4).**
 
-Phases 1–4 are finished: 55 lessons, the 11 unit wrappers, the Stage-0 front matter and
-the glossary, all rendered in both the portal and both PDF editions. The three remaining
-checkpoints (2.4, 3.4, 4.4) need the founder to look and approve; nothing is blocked on
-building. Phase 5 (Stages 1–4, 220 lessons) has not started.
+Stage 0 (55 lessons) and Stage 1 (50 lessons) are both finished: every lesson, every
+unit wrapper, each stage's front matter and generated glossary, all rendered in the
+portal and both PDF editions. Stage 1 is wired into the portal as a first-class stage
+under `/portal/stages/s1`, with its own unit quizzes and Accent Lab drills. The three
+Stage-0 founder checkpoints (2.4, 3.4, 4.4) still need the founder to look and approve;
+nothing is blocked on building. Phase 5 continues with Stages 2–4 (160 lessons).
 
-The checkboxes below had drifted badly: every box in Phases 3–6 was unticked while
-the PDF pipeline, both coursebook editions and all 55 lessons were already committed
-and wired into the portal. They have been corrected against the repository, and each
-claim now names the evidence that proves it. Re-derive rather than trust:
+Each claim names the evidence that proves it. Re-derive rather than trust:
 
 | Claim | Evidence | Command |
 |---|---|---|
-| 55 finished lessons, Stage 0 Units 0–10 | `materials/stage0/unit{0..10}/s0-u*-l*.md` | `find materials -name 's0-*-l*.md' \| wc -l` → 55 |
+| 105 finished lessons (Stage 0: 55, Stage 1: 50) | `materials/stage{0,1}/unit*/s*-u*-l*.md` | `find materials -name 's[01]-*-l*.md' \| wc -l` → 105 |
 | 275 lesson blueprints exist across all 5 stages | `curriculum/stage{0..4}/` | `grep -rhoE 'S[0-9]-U[0-9]+-L[0-9]+' curriculum/ \| sort -u \| wc -l` → 275 |
-| **20% of the programme is finished material** | 55 of 275 | Stages 1–4 have **no** `materials/` directory at all |
-| Stage-0 wrapper exists | `stage0-front-matter.md`, `stage0-glossary.md`, 11 × `unit*-front-matter.md` | `ls materials/stage0/stage0-*.md` |
-| Glossary matches the lessons it came from | generated from every **Your Arsenal** table | `cd tools/audit && npm run drift` → 128 entries in sync |
-| Portal serves the finished material, not the blueprint | `web/src/lib/lesson-content.ts` | `npm run drift` → 55 lessons + 13 wrapper pages in sync |
-| Every lesson meets the anatomy standard | `materials/_style/lesson-anatomy.md` | `npm run anatomy` → 55/55 |
-| Both PDF editions are built and shipped | `web/private/coursebook/eec-stage0-{student,teacher}.pdf` | 204 pp / 222 pp; all 6 font families embedded |
-| Coursebooks are not world-downloadable | `/api/coursebook/[edition]` | anon → 401/404 · student → 200/404 · teacher → 200/200 |
-| Portal + PDF render bilingual text correctly | `globals.css` + `book.css` | `npm run bidi` → 0 failures, 0 advisories over 68 pages |
+| **~38% of the programme is finished material** | 105 of 275 | Stages 2–4 have **no** `materials/` directory at all |
+| Stage wrappers exist | `stage{0,1}-front-matter.md`, `stage{0,1}-glossary.md`, 21 × `unit*-front-matter.md` | `ls materials/stage{0,1}/stage*-*.md` |
+| Each glossary matches its lessons | generated from every **Your Arsenal** table | `cd tools/audit && npm run drift` → 128 + 269 entries in sync |
+| Portal serves the finished material, not the blueprint | `web/src/lib/lesson-content.ts`, stage-aware | `npm run drift` → s0 55L/13W + s1 50L/12W in sync |
+| Every lesson meets the anatomy standard | `materials/_style/lesson-anatomy.md` | `npm run anatomy` → 105/105 |
+| Every gated lesson hits its blueprint Arabic dial | per-lesson `~N%` targets, ±2 pts | `npm run dial` → all Stage 1 on target (Stage 0 grandfathered) |
+| All four PDF editions are built and shipped | `web/private/coursebook/eec-stage{0,1}-{student,teacher}.pdf` | s0 204/222 pp · s1 269/309 pp; all 6 font families + emoji embedded |
+| Coursebooks are not world-downloadable | `/api/coursebook/[...seg]` (s0 aliases + `/s1/…`) | anon → 401/404 · student → 200/404 · teacher → 200/200 |
+| Portal + PDF render bilingual text correctly | `globals.css` + `book.css` | `npm run bidi` → 0 failures, 0 advisories over 130 pages |
+| Stage 1 is wired into the portal | `/portal/stages/s1` route tree + `web/src/content/materials-stage1.ts` | `cd web && npx next build` → green, all routes registered |
 
 **Genuinely open, in priority order:**
 1. **2.4 / 3.4 / 4.4 — three founder checkpoints.** Nothing is blocked on building;
    these need the founder to look and say yes.
-2. **Phase 5 — 220 remaining lessons.** Not started. Build just ahead of the cohort.
+2. **Phase 5 — Stages 2–4, 160 remaining lessons.** Not started. Build just ahead of the cohort.
 
 **Deploy note:** merging does not deploy this repo's site. See `web/DEPLOY.md`. The
 coursebook PDFs are served behind auth from `web/private/`, and **`tools/pdf/setup-env.sh`
@@ -84,11 +85,11 @@ drops every emoji and arrow.
 
 ## Phase 5 — Roll out upper stages (in order)
 
-**Not started.** All 220 blueprints exist in `curriculum/`; none has been built into finished
-material. Counts below are derived, not planned:
+**Stage 1 done; Stages 2–4 not started.** 160 blueprints remain in `curriculum/`,
+unbuilt. Counts below are derived, not planned:
 `grep -rhoE 'S[0-9]-U[0-9]+-L[0-9]+' curriculum/stageN/ | sort -u | wc -l`.
 
-- [ ] 5.1 **Stage 1 (A2)** — Units 1–10, both editions, front-matter, PDFs. *(Arabic dial fades per blueprint.)* — **50 lessons**
+- [x] 5.1 **Stage 1 (A2)** — Units 1–10, both editions, front-matter, PDFs, portal. *(Arabic dial fades per blueprint.)* — **50 lessons** ✅ *`find materials/stage1 -name 's1-*-l*.md' | wc -l` → 50; 10 unit wrappers + `stage1-front-matter.md` + generated `stage1-glossary.md` (269 entries); PDFs `eec-stage1-{student,teacher}.pdf` (269/309 pp, 6 font families + emoji); portal `/portal/stages/s1`; `cd tools/audit && npm run all` green; `cd web && npx next build` green. Dial per lesson: U1 40/40/40/35 · U2 40/35/35/35 · U3 35/35/30/30 · U4 35/30/30/30 · U5 35/30/30/30 · U6 35/30/30/30 · U7 30/30/30/25 · U8 30/30/30/25 · U9 25/25/25/20 · U10 20/20/20/15, all within ±2.*
 - [ ] 5.2 **Stage 2 (B1)** — Units 1–12, both editions, front-matter, PDFs. — **60 lessons**
 - [ ] 5.3 **Stage 3 (B2)** — Units 1–12, both editions, front-matter, PDFs; the **"Coronation"** graduation wrapper. — **60 lessons**
 - [ ] 5.4 **Stage 4 (C1)** — Units 1–10, both editions, front-matter, PDFs. — **50 lessons**
@@ -97,7 +98,7 @@ material. Counts below are derived, not planned:
 
 ## Phase 6 — Wrap-up
 - [ ] 6.1 Full library QA pass against the "done" checklist; consistency + honesty audit. *Stage 0 passed on 2026-08-31 and the checklist is now automated (`cd tools/audit && npm run all`); this stays open until every stage exists to audit.*
-- [ ] 6.2 Master coursebook PDFs per stage (student + teacher), send-ready. *Stage 0 done; Stages 1–4 pending their content.*
+- [ ] 6.2 Master coursebook PDFs per stage (student + teacher), send-ready. *Stages 0 and 1 done; Stages 2–4 pending their content.*
 - [ ] 6.3 Update the master spec + this plan to reflect completion.
 
 ---
