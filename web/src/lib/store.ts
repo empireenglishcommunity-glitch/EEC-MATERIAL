@@ -18,6 +18,8 @@ async function writeJson(name: string, data: unknown): Promise<void> {
   await writeFile(file, JSON.stringify(data, null, 2));
 }
 
+export type UserRole = "student" | "teacher";
+
 export type User = {
   id: string;
   email: string;
@@ -25,7 +27,18 @@ export type User = {
   passwordHash: string;
   level: string;
   createdAt: string;
+  /**
+   * Absent on every account created before roles existed, which is why it is
+   * optional and why `isTeacher` treats absence as "student". Grant it
+   * deliberately — it unlocks the Teacher's Edition, answer keys and all.
+   */
+  role?: UserRole;
 };
+
+/** Fails closed: anything that is not explicitly a teacher is treated as a student. */
+export function isTeacher(user: Pick<User, "role"> | null | undefined): boolean {
+  return user?.role === "teacher";
+}
 
 // userId -> list of completed lesson ids
 export type Progress = Record<string, string[]>;

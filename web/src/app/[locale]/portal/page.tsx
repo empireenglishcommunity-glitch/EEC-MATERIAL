@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getCurrentUser } from "@/lib/auth";
-import { getUserProgress, getUserQuizResults, getUserAccentPractice } from "@/lib/store";
+import { getUserProgress, getUserQuizResults, getUserAccentPractice, isTeacher } from "@/lib/store";
 import { STAGE0, TOTAL_LESSONS } from "@/lib/lessons";
 import { QUIZZES } from "@/content/quizzes";
 import { ACCENT_DRILLS } from "@/content/accent-drills";
@@ -51,8 +51,33 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
         </span>
       </Link>
 
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Link
+          href={`/${locale}/portal/start`}
+          className="rounded-2xl bg-white p-5 ring-1 ring-royal-100 transition-transform hover:scale-[1.01]"
+        >
+          <p className="font-bold text-royal-900">🧭 {ar ? "ابدأ من هنا" : "Start here"}</p>
+          <p className="mt-1 text-sm text-ink/70">
+            {ar
+              ? "رُتبتك، خريطة المرحلة، وإزاي تذاكر الكتاب صح."
+              : "Your rank, the stage roadmap, and how to study the book."}
+          </p>
+        </Link>
+        <Link
+          href={`/${locale}/portal/glossary`}
+          className="rounded-2xl bg-white p-5 ring-1 ring-royal-100 transition-transform hover:scale-[1.01]"
+        >
+          <p className="font-bold text-royal-900">🗡️ {ar ? "الذخيرة" : "Glossary"}</p>
+          <p className="mt-1 text-sm text-ink/70">
+            {ar
+              ? "كل كلمات المرحلة في مكان واحد، مرتّبة بالوحدة."
+              : "Every word in the stage, in one place, by unit."}
+          </p>
+        </Link>
+      </div>
+
       <a
-        href="/coursebook/eec-stage0-student.pdf"
+        href="/api/coursebook/student"
         target="_blank"
         rel="noopener noreferrer"
         className="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-gold-500/50 bg-gradient-to-r from-cream to-white p-5 transition-transform hover:scale-[1.01]"
@@ -70,13 +95,42 @@ export default async function PortalDashboard({ params }: { params: Promise<{ lo
         </span>
       </a>
 
+      {isTeacher(user) && (
+        <a
+          href="/api/coursebook/teacher"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 flex items-center justify-between gap-4 rounded-2xl border border-royal-300 bg-royal-900 p-5 text-white transition-transform hover:scale-[1.01]"
+        >
+          <div>
+            <p className="text-lg font-bold">🎓 {ar ? "نسخة المدرّس — Stage 0" : "Teacher's Edition — Stage 0"}</p>
+            <p className="mt-1 text-sm text-royal-100/90">
+              {ar
+                ? "نفس الكتاب + التوقيتات، الإجابات، وملاحظات التدريس. للمدرّسين فقط."
+                : "The same book plus timings, answers and delivery notes. Teachers only."}
+            </p>
+          </div>
+          <span className="shrink-0 rounded-lg bg-white/15 px-3 py-1.5 text-sm font-semibold">
+            {ar ? "تحميل PDF" : "Download PDF"}
+          </span>
+        </a>
+      )}
+
       <div className="mt-8 space-y-6">
         {STAGE0.map((u) => (
           <div key={u.id} className="rounded-2xl bg-white p-6 ring-1 ring-royal-100">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="font-bold text-royal-900">
-                {ar ? "الوحدة" : "Unit"} {u.num} — {u.title}
+                <Link href={`/${locale}/portal/units/${u.id}`} className="hover:text-royal-700">
+                  {ar ? "الوحدة" : "Unit"} {u.num} — {u.title}
+                </Link>
               </h2>
+              <Link
+                href={`/${locale}/portal/units/${u.id}`}
+                className="text-xs font-semibold text-royal-600 hover:text-royal-900"
+              >
+                {ar ? "نظرة عامة على الوحدة ›" : "Unit overview ›"}
+              </Link>
               {QUIZZES[u.id] && (
                 <Link
                   href={`/${locale}/portal/quiz/${u.id}`}

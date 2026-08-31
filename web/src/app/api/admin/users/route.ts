@@ -10,8 +10,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
   try {
-    const { email, password, name, level } = (await req.json()) as {
-      email?: string; password?: string; name?: string; level?: string;
+    const { email, password, name, level, role } = (await req.json()) as {
+      email?: string; password?: string; name?: string; level?: string; role?: string;
     };
     if (!email || !password || !name) {
       return NextResponse.json({ ok: false, error: "missing" }, { status: 400 });
@@ -27,12 +27,15 @@ export async function POST(req: Request) {
       passwordHash: await hashPassword(String(password)),
       level: String(level || "A1 — Foundations"),
       createdAt: new Date().toISOString(),
+      // Only ever "teacher" when asked for explicitly — it unlocks the
+      // Teacher's Edition and its answer keys.
+      ...(role === "teacher" ? { role: "teacher" as const } : {}),
     };
     users.push(user);
     await saveUsers(users);
     return NextResponse.json({
       ok: true,
-      user: { id: user.id, email: user.email, name: user.name, level: user.level },
+      user: { id: user.id, email: user.email, name: user.name, level: user.level, role: user.role ?? "student" },
     });
   } catch {
     return NextResponse.json({ ok: false, error: "server_error" }, { status: 500 });
