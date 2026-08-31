@@ -98,6 +98,10 @@ const STAGE_RULES = {
     "stage-finale": ["s1-u10-l05"], // A2 summative + separate standard milestone sample
     review: ["s1-u10-l01", "s1-u10-l02", "s1-u10-l04"], // retrieval reviews + full mock
   },
+  2: {
+    "stage-finale": ["s2-u12-l05"], // B1 summative + separate standard milestone sample
+    review: ["s2-u12-l01", "s2-u12-l02", "s2-u12-l03", "s2-u12-l04"], // retrieval, clinic, mock
+  },
 };
 
 /** Lesson types, most specific first. */
