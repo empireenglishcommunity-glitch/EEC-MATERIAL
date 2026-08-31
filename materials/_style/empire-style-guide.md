@@ -57,6 +57,50 @@ A label may carry a **parenthetical qualifier** — `هدفك (milestone)`, `ا�
 decorate the label set, never a single lesson's copy of it.)*
 
 ## 3. Visual standard
+
+> **⚠️ PALETTE CHANGED 2026-08-31 — two palettes are live during the transition.**
+> The public brand is now **obsidian + antique gold**, matching
+> `assessment.empireenglish.online` (owner decision, 2026-08-31). The royal-blue
+> palette below remains correct for the **portal/web** (`web/`) and the coursebook
+> PDFs **until they are rethemed**, which is tracked but not scheduled. Check which
+> surface you are designing for before picking a palette.
+
+### Public brand — obsidian + antique gold (new, canonical for public surfaces)
+Used by `assessment.empireenglish.online` and `empire-agora` (the sales site).
+Tokens are defined in `empire-agora/src/app/globals.css`; derived by measuring the
+live assessment app rather than from description.
+
+| Role | Token | Hex |
+|--|--|--|
+| Page base | `obsidian` | `#0a0a0a` |
+| Raised surface | `obsidian-2` | `#111118` |
+| Card / elevated panel | `midnight` | `#1a1a2e` |
+| Primary accent | `gold` | `#c9a84c` |
+| Gradient highlight | `gold-bright` | `#e8d48b` |
+| Tertiary accent | `bronze` | `#cd7f32` |
+| Primary text on dark | `parchment` | `#e8e0d0` |
+| Secondary text | `bronze-muted` | `#a08a68` |
+
+Signature treatments: gold **gradient text fill** on display headings, a
+gold-gradient primary button with a soft outer glow, an outlined-gold secondary,
+hairline gold rules above section eyebrows, card borders at gold 20% alpha, and a
+radial vignette as page atmosphere.
+
+> **Accessibility, non-negotiable:** the assessment app's secondary text
+> `#8b7355` on `#0a0a0a` measures **4.43:1** — *below* the WCAG AA 4.5:1 floor for
+> body text. Use **`#a08a68`** (≈6.2:1) for anything at body size. `#8b7355` is
+> permitted only for large display text and decorative rules, where AA Large (3:1)
+> applies. Matching the feel of a surface never means inheriting its defects.
+
+> **Not part of the brand:** the assessment app's cinematic **entry gate**, its
+> **ambient audio**, and its **scroll-reveal-gated content** (section content sits
+> at `opacity: 0` until an IntersectionObserver fires, so there is no content
+> without JavaScript). None of these may be reproduced on a commercial or
+> student-facing page: an interstitial between a reader and the offer costs
+> conversions, and content that requires JS is invisible to crawlers and to a slow
+> Egyptian mobile connection.
+
+### Portal / coursebook — royal-blue + gold (still current for `web/` and PDFs)
 - **Palette:** royal-blue (`royal-900/950`) + gold (`gold-500`) — matches the live portal/web. Premium, uncluttered, **academy not influencer.**
 - Consistent heading hierarchy, callout boxes, and a fixed **Accent Lab card** + **vocab table** + **self-check** look.
 - Arabic + Latin type pairing; generous spacing; mobile-first; **RTL-correct**.
@@ -64,6 +108,27 @@ decorate the label set, never a single lesson's copy of it.)*
 
 ## 4. Bilingual convention
 - **Egyptian colloquial Arabic** (Arabic script) for explanation, instruction, and motivation; **English** for target language, examples, and the learner's own output.
+
+> **Register on COMMERCIAL surfaces differs by market (added 2026-08-31).**
+> The rule above governs **lesson and learning content**, whose audience is
+> Egyptian. On **sales and marketing** surfaces the audience is split, and the
+> register follows the currency the visitor is being sold in:
+>
+> | Path | Register | Why |
+> |--|--|--|
+> | EGP (inside Egypt) | **Egyptian colloquial**, as above | Same audience as the lessons; warmth and familiarity convert |
+> | USD (Gulf & diaspora) | **Light MSA** — clean, warm, no heavy Egyptian idiom | Heavy Egyptian colloquial reads as *foreign* to a Gulf buyer, and the Gulf tier is priced ~3× higher, so it is the segment least able to absorb friction |
+>
+> This costs nothing to implement: the sales site already shows exactly one
+> currency per visitor session, so the register follows a decision that has
+> already been made. **Arabic remains the default and canonical path in both
+> cases** — English is a secondary surface, never the primary sales language.
+> Selling English lessons *in English* filters out the beginners who are the
+> largest winnable segment.
+>
+> This is a narrow extension of this section, not an exception to it. It was
+> written into the guide rather than applied behind its back — see
+> `empire-agora/.kiro/specs/eec-commercial-and-sales-page/requirements.md` R9.5.
 - **Arabic volume per stage = the blueprint's fade level** (Stage 0 heavy ~70% → immersion by B2–C1). The **format shows the fade**: many Arabic callouts/glosses early; fewer later; by B2 the page is English-only.
 - **Layout for mixed content:** use tables (English | Arabic) or an English line immediately followed by an Arabic gloss/explanation. Keep RTL Arabic and LTR English cleanly separated (don't interleave within a single run).
 - Grammar terms: gloss in plain Arabic (e.g., "الـ *to be* — فعل الكينونة").
