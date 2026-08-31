@@ -7,8 +7,13 @@
 
 ## STATUS — 2026-08-31 (read this, not the checkboxes)
 
-**Stage 0 is content-complete and shipping. Phases 1–4 are done except two founder
-checkpoints and the Stage-0 wrapper. Phase 5 has not started.**
+**Stage 0 is COMPLETE and shipping — content, portal and PDF. Everything still open is
+either a founder review or Phase 5.**
+
+Phases 1–4 are finished: 55 lessons, the 11 unit wrappers, the Stage-0 front matter and
+the glossary, all rendered in both the portal and both PDF editions. The three remaining
+checkpoints (2.4, 3.4, 4.4) need the founder to look and approve; nothing is blocked on
+building. Phase 5 (Stages 1–4, 220 lessons) has not started.
 
 The checkboxes below had drifted badly: every box in Phases 3–6 was unticked while
 the PDF pipeline, both coursebook editions and all 55 lessons were already committed
@@ -20,23 +25,23 @@ claim now names the evidence that proves it. Re-derive rather than trust:
 | 55 finished lessons, Stage 0 Units 0–10 | `materials/stage0/unit{0..10}/s0-u*-l*.md` | `find materials -name 's0-*-l*.md' \| wc -l` → 55 |
 | 275 lesson blueprints exist across all 5 stages | `curriculum/stage{0..4}/` | `grep -rhoE 'S[0-9]-U[0-9]+-L[0-9]+' curriculum/ \| sort -u \| wc -l` → 275 |
 | **20% of the programme is finished material** | 55 of 275 | Stages 1–4 have **no** `materials/` directory at all |
-| Portal serves the finished material, not the blueprint | `web/src/lib/lesson-content.ts` | `cd tools/audit && npm run drift` → 55 in sync |
-| Every lesson meets the anatomy standard | `materials/_style/lesson-anatomy.md` | `cd tools/audit && npm run anatomy` → 55/55 |
-| Both PDF editions are built and shipped | `web/public/coursebook/eec-stage0-{student,teacher}.pdf` | `du -h` → 4.4M / 5.3M, committed |
-| Portal + PDF render bilingual text correctly | `globals.css` + `book.css` | `cd tools/audit && npm run bidi` → 0 failures |
+| Stage-0 wrapper exists | `stage0-front-matter.md`, `stage0-glossary.md`, 11 × `unit*-front-matter.md` | `ls materials/stage0/stage0-*.md` |
+| Glossary matches the lessons it came from | generated from every **Your Arsenal** table | `cd tools/audit && npm run drift` → 128 entries in sync |
+| Portal serves the finished material, not the blueprint | `web/src/lib/lesson-content.ts` | `npm run drift` → 55 lessons + 13 wrapper pages in sync |
+| Every lesson meets the anatomy standard | `materials/_style/lesson-anatomy.md` | `npm run anatomy` → 55/55 |
+| Both PDF editions are built and shipped | `web/private/coursebook/eec-stage0-{student,teacher}.pdf` | 204 pp / 222 pp; all 6 font families embedded |
+| Coursebooks are not world-downloadable | `/api/coursebook/[edition]` | anon → 401/404 · student → 200/404 · teacher → 200/200 |
+| Portal + PDF render bilingual text correctly | `globals.css` + `book.css` | `npm run bidi` → 0 failures, 0 advisories over 68 pages |
 
 **Genuinely open, in priority order:**
 1. **2.4 / 3.4 / 4.4 — three founder checkpoints.** Nothing is blocked on building;
    these need the founder to look and say yes.
-2. **4.2 — the Stage-0 wrapper**: stage cover + "Recruit" rank page + roadmap, and the
-   Stage-0 glossary. The 11 **unit** front-matter files exist; the **stage**-level ones
-   were never written. This is the last content gap in Stage 0.
-3. **Unit front matter is missing from the portal.** It is in the PDF only — the embed
-   carries 55 lesson keys and 0 front-matter keys, so portal students never see the
-   campaign wrapper the PDF opens each unit with.
-4. **Phase 5 — 220 remaining lessons.** Not started. Build just ahead of the cohort.
+2. **Phase 5 — 220 remaining lessons.** Not started. Build just ahead of the cohort.
 
-**Deploy note:** merging does not deploy this repo's site. See `web/DEPLOY.md`.
+**Deploy note:** merging does not deploy this repo's site. See `web/DEPLOY.md`. The
+coursebook PDFs are served behind auth from `web/private/`, and **`tools/pdf/setup-env.sh`
+must be run before rebuilding them** — a build with the wrong fonts succeeds silently and
+drops every emoji and arrow.
 
 ---
 
@@ -71,10 +76,11 @@ claim now names the evidence that proves it. Re-derive rather than trust:
 
 ## Phase 4 — Roll out Stage 0 (remaining units)
 - [x] 4.1 Units 0 and 2–10 of Stage 0 — both editions, from blueprints, format locked. ✅ *55 lessons across Units 0–10; every one cites its blueprint and passes `npm run anatomy`.*
-- [ ] 4.2 Stage 0 front-matter (stage cover, "Recruit" rank, roadmap) + Stage-0 glossary. **← the last content gap in Stage 0.** The 11 *unit* front-matter files exist (`materials/stage0/unit*/unit*-front-matter.md`); the *stage*-level cover/rank/roadmap and the glossary were never written.
-- [x] 4.3 Regenerate the Stage 0 Student + Teacher coursebook PDFs. ✅ *Both committed; rebuild with `cd tools/pdf && npm run build`.*
-- [ ] **4.4 CHECKPOINT — Stage 0 complete** (portal + PDF). This is the founding-cohort teaching set. *Blocked only by 4.2.*
-- [ ] 4.5 Surface **unit front matter in the portal.** It currently reaches the PDF only: the embed holds 55 lesson keys and 0 front-matter keys, so a portal student never sees the campaign wrapper each unit opens with in the book. *(Added 2026-08-31 — a real gap between the two outputs, not in the original plan.)*
+- [x] 4.2 Stage 0 front-matter (stage cover, "Recruit" rank, roadmap) + Stage-0 glossary. ✅ *`materials/stage0/stage0-front-matter.md` — rank, the 11-unit roadmap, grammar spine, a "how to use this book" map of all 12 section labels, assessment placement and an explicit honesty section. `stage0-glossary.md` — **128 entries**, generated from every lesson's **Your Arsenal** table by `tools/audit/generate-stage0-glossary.mjs` so it cannot drift from what the lessons teach. Both render in the portal and in both PDF editions.*
+- [x] 4.3 Regenerate the Stage 0 Student + Teacher coursebook PDFs. ✅ *204 pp student / 222 pp teacher, both including the new wrapper. Rebuild with `cd tools/pdf && ./setup-env.sh && npm run build`, then verify the embedded font list — see that README.*
+- [ ] **4.4 CHECKPOINT — Stage 0 complete** (portal + PDF). This is the founding-cohort teaching set. *No longer blocked — 4.2 is done. Awaiting founder review.*
+- [x] 4.5 Surface **unit front matter in the portal.** ✅ *(Added 2026-08-31 — a real gap between the two outputs, not in the original plan.)* The embed now carries **13 wrapper pages** alongside the 55 lessons, and three portal routes render them: `/portal/units/[unit]` (the unit campaign wrapper, linked from every unit heading on the dashboard), `/portal/start` (the stage front matter) and `/portal/glossary`.
+- [x] 4.6 Serve the coursebook PDFs **behind authentication.** ✅ *(Added 2026-08-31 from the audit.)* They were in `web/public/`, so both editions — including the Teacher's Edition with its answer keys, timings and delivery notes — were downloadable by anyone who guessed the path. Moved to `web/private/` and served by `/api/coursebook/[edition]`: the student edition needs a session, the teacher edition needs `role: "teacher"` or the `ADMIN_TOKEN` header. Verified against a running server across all eight access paths.
 
 ## Phase 5 — Roll out upper stages (in order)
 
@@ -90,7 +96,7 @@ material. Counts below are derived, not planned:
 - [ ] (Each sub-phase: build just ahead of the cohort per master design §3.4; checkpoint per stage.)
 
 ## Phase 6 — Wrap-up
-- [ ] 6.1 Full library QA pass against the "done" checklist; consistency + honesty audit. *Stage 0 passed on 2026-08-31 and the checklist is now automated (`tools/audit`); this stays open until every stage exists to audit.*
+- [ ] 6.1 Full library QA pass against the "done" checklist; consistency + honesty audit. *Stage 0 passed on 2026-08-31 and the checklist is now automated (`cd tools/audit && npm run all`); this stays open until every stage exists to audit.*
 - [ ] 6.2 Master coursebook PDFs per stage (student + teacher), send-ready. *Stage 0 done; Stages 1–4 pending their content.*
 - [ ] 6.3 Update the master spec + this plan to reflect completion.
 
