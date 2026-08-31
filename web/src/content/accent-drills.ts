@@ -1,3 +1,5 @@
+import type { StageId } from "@/lib/lessons";
+
 // Accent Lab — Stage-0 record-and-compare drills.
 // Source of truth: curriculum/03-accent-lab-syllabus.md (cards C1–C9, V1).
 // Honesty guardrail (GC-5): target = clear, confident, neutral American accent + high
@@ -5,7 +7,7 @@
 
 export type AccentDrill = {
   id: string;
-  stage: "s0" | "s1";
+  stage: StageId;
   unit?: number;
   sound: string; // e.g. "/p/ vs /b/"
   titleEn: string;
@@ -267,11 +269,187 @@ export const STAGE1_ACCENT_DRILLS: AccentDrill[] = [
   },
 ];
 
-export const ACCENT_DRILLS: AccentDrill[] = [...STAGE0_ACCENT_DRILLS, ...STAGE1_ACCENT_DRILLS];
+// Stage-2 Accent Lab drills — one per unit, drawn from each unit's Accent Lab.
+// Stage 2 is where the focus stops being individual sounds and becomes RHYTHM:
+// linking, weak forms, reductions, intonation and the American beat. A learner
+// whose segments are all fine can still be tiring to follow if every word gets
+// equal weight, and that is what these drills attack.
+//
+// On `titleAr`/`cueAr`: these are the ARABIC-LOCALE UI strings, chosen by the
+// site's locale, not by the stage's Arabic-support level. Stage 2's lessons fade
+// to full immersion by Unit 12; an Arabic-locale learner still gets an Arabic
+// interface, because the portal chrome is localisation, not lesson scaffolding.
+export const STAGE2_ACCENT_DRILLS: AccentDrill[] = [
+  {
+    id: "s2-u1-ve-s-contractions",
+    stage: "s2",
+    unit: 1,
+    sound: "'ve / 's (present, never dropped)",
+    titleEn: "The contractions that carry the perfect",
+    titleAr: "الاختصارات اللي شايلة الـ present perfect",
+    cueEn: "Squeeze 've and 's to almost nothing, but never lose them — \"I visited\" and \"I've visited\" are different meanings. Link \"have you ever\" into one shape: /həvjuːˈevə/.",
+    cueAr: "خفّف 've و 's لأقصى درجة، لكن ماتشيلهاش أبداً — لأن المعنى بيتغير. واربط \"have you ever\" كأنها كلمة واحدة.",
+    phrase: "I've been there, and she's tried it too.",
+    words: ["I've", "you've", "we've", "he's", "she's"],
+    pairs: ["I visited / I've visited", "she tried / she's tried"],
+    signature: true,
+  },
+  {
+    id: "s2-u2-weak-for",
+    stage: "s2",
+    unit: 2,
+    sound: "weak for /fə/ · 've been linking",
+    titleEn: "Weak \u201cfor\u201d and a clear \u201cyet\u201d",
+    titleAr: "الـ for الخفيفة والـ yet الواضحة",
+    cueEn: "\u201cfor\u201d in a duration is weak: /fə/, not /fɔːr/ like the number four. \u201cyet\u201d sits at the end and keeps a clear final /t/. Link \"I've been\" into one run.",
+    cueAr: "الـ for في المدة بتيجي خفيفة /fə/، مش زي الرقم four. والـ yet في الآخر لازم تقفل بـ /t/ واضحة.",
+    phrase: "I've been here for about three years, but I haven't finished yet.",
+    words: ["for", "since", "just", "already", "yet"],
+    pairs: ["for /fə/ (weak)", "four /fɔːr/", "yet (clear /t/)"],
+  },
+  {
+    id: "s2-u3-weak-was-were",
+    stage: "s2",
+    unit: 3,
+    sound: "weak was /wəz/ · were /wə/ · -ing linking",
+    titleEn: "A scene without a heavy \u201cwas\u201d",
+    titleAr: "المشهد من غير was تقيلة",
+    cueEn: "In a narrative, \u201cwas\u201d and \u201cwere\u201d are weak: /wəz/ and /wə/. Present, but never stressed. Then let the -ing run straight into the next word with no gap.",
+    cueAr: "في الحكي، was و were بتيجي خفيفة. موجودة بس مش مضغوطة. وخلي الـ -ing تكمل على الكلمة اللي بعدها من غير وقفة.",
+    phrase: "I was working when she was cooking dinner.",
+    words: ["was", "were", "working", "waiting", "used to"],
+    pairs: ["was /wəz/ (weak)", "WAS (correcting)", "used to /juːstə/"],
+  },
+  {
+    id: "s2-u4-weak-ll",
+    stage: "s2",
+    unit: 4,
+    sound: "weak 'll · stressed won't",
+    titleEn: "A surviving \u201c'll\u201d and a loud \u201cwon't\u201d",
+    titleAr: "الـ 'll اللي ماتضيعش والـ won't المضغوطة",
+    cueEn: "\u201c'll\u201d is tiny but must survive — drop it and a future turns into a present. \u201cwon't\u201d is the opposite: stress it, or a negative gets heard as a positive.",
+    cueAr: "الـ 'll صغيرة لكن لازم تسمع — لو ضاعت، المستقبل بيبقى حاضر. والـ won't بالعكس: اضغط عليها بوضوح.",
+    phrase: "If it rains, I'll stay home \u2014 I won't drive in that.",
+    words: ["I'll", "we'll", "it'll", "won't", "unless"],
+    pairs: ["I stay / I'll stay", "will / won't"],
+  },
+  {
+    id: "s2-u5-would-d",
+    stage: "s2",
+    unit: 5,
+    sound: "'d reduction · 'll vs 'd",
+    titleEn: "The \u201c'd\u201d that changes reality",
+    titleAr: "الـ 'd اللي بتغيّر الواقع",
+    cueEn: "\u201c'd\u201d reduces to a single /d/ on the pronoun, but it is the only thing separating a real plan from an imagined one. Hear the pair: \u201cI'll ask\u201d against \u201cI'd ask\u201d.",
+    cueAr: "الـ 'd بتتحول لـ /d/ واحدة على الضمير، وهي الفرق الوحيد بين خطة حقيقية وحاجة متخيّلة.",
+    phrase: "If I were you, I'd ask for more.",
+    words: ["I'd", "he'd", "they'd", "would", "were"],
+    pairs: ["I'll ask", "I'd ask"],
+    signature: true,
+  },
+  {
+    id: "s2-u6-clause-groups",
+    stage: "s2",
+    unit: 6,
+    sound: "intonation groups at clause boundaries",
+    titleEn: "One clause, one breath group",
+    titleAr: "كل عبارة مجموعة نغمية واحدة",
+    cueEn: "Say a relative clause as ONE intonation group with a slight lift at its edge, then continue. The relative pronoun itself is unstressed \u2014 who, which and that are all weak.",
+    cueAr: "قول العبارة الوصفية كمجموعة نغمية واحدة، وارفع صوتك شوية عند حدّها، وبعدين كمّل. وضمير الوصل نفسه مش مضغوط.",
+    phrase: "The man who lives next door | works at the hospital.",
+    words: ["who", "which", "that", "where", "whose"],
+    pairs: ["whose /huːz/", "who's /huːz/"],
+  },
+  {
+    id: "s2-u7-weak-that",
+    stage: "s2",
+    unit: 7,
+    sound: "weak that /\u00f0\u0259t/ · told him \u2192 /t\u0259\u028aldɪm/",
+    titleEn: "Reporting frames at speed",
+    titleAr: "جمل النقل بسرعتها الطبيعية",
+    cueEn: "\u201cthat\u201d in a reporting frame is weak: /\u00f0\u0259t/, not the pointing THAT. In \u201ctold him\u201d the /h/ disappears and the two words become one. \u201casked\u201d is one cluster: /\u00e6skt/.",
+    cueAr: "الـ that في النقل خفيفة، مش زي that بمعنى الإشارة. وفي told him الـ /h/ بتختفي والكلمتين بيبقوا حاجة واحدة.",
+    phrase: "She said that she'd already told him.",
+    words: ["that", "said", "told", "asked", "told him"],
+    pairs: ["that /\u00f0\u0259t/ (weak)", "THAT one (pointing)"],
+  },
+  {
+    id: "s2-u8-passive-be",
+    stage: "s2",
+    unit: 8,
+    sound: "weak is/are/was/were + surviving participles",
+    titleEn: "The passive \u201cbe\u201d you can still hear",
+    titleAr: "الـ be في المبني للمجهول: خفيفة وواضحة",
+    cueEn: "The be-form is unstressed, but it is what makes the sentence passive \u2014 drop it and the meaning collapses. Keep the participle's final cluster alive: built, grown, chosen, made.",
+    cueAr: "الـ be مش مضغوطة، لكن هي اللي بتخلي الجملة مبنية للمجهول — لو ضاعت، المعنى بيقع. وخلي آخر التصريف الثالث واضح.",
+    phrase: "The bridge was built in 1998 and is repaired every year.",
+    words: ["is", "are", "was", "were", "built", "grown"],
+    pairs: ["they built it", "it was built"],
+  },
+  {
+    id: "s2-u9-list-contrast",
+    stage: "s2",
+    unit: 9,
+    sound: "list intonation · contrast stress",
+    titleEn: "Rise, rise, fall \u2014 and the contrast",
+    titleAr: "يرتفع، يرتفع، ينزل — والمقابلة",
+    cueEn: "In a list, each item rises and the LAST one falls \u2014 that fall is how a listener knows you have finished. In a contrast, stress BOTH contrasted words, and give \u201chowever\u201d a full stop before it and a comma after.",
+    cueAr: "في القايمة، كل عنصر يرتفع والأخير ينزل — والنزول هو اللي بيقول للسامع إنك خلصت. وفي المقابلة، اضغط على الكلمتين المتقابلتين.",
+    phrase: "It's cheaper, quicker, and much less stressful. However, it's further away.",
+    words: ["firstly", "secondly", "finally", "however", "although"],
+    pairs: ["flat list", "rise-rise-fall"],
+  },
+  {
+    id: "s2-u10-agreement-tune",
+    stage: "s2",
+    unit: 10,
+    sound: "agreement warmth · the softening rise",
+    titleEn: "Disagreeing without sounding cold",
+    titleAr: "تعترض من غير ما تبان جامد",
+    cueEn: "Agreement needs a warm, moving tune \u2014 flat agreement sounds like boredom. Disagreement needs a slight RISE and a hedge, or the same words become an attack. \u201cbut\u201d stays unstressed.",
+    cueAr: "الموافقة محتاجة نغمة دافية متحركة — الموافقة المسطحة بتبان زهق. والاعتراض محتاج ارتفاع بسيط، وإلا نفس الكلام بيبقى هجوم.",
+    phrase: "I see your point, but I'm not sure I'd go that far.",
+    words: ["absolutely", "exactly", "maybe", "it depends", "sort of"],
+    pairs: ["flat \u201cI agree\u201d", "warm \u201cI agree\u201d"],
+  },
+  {
+    id: "s2-u11-american-beat",
+    stage: "s2",
+    unit: 11,
+    sound: "stress-timing \u2014 the American beat",
+    titleEn: "The beat across a long turn",
+    titleAr: "الإيقاع في كلام طويل",
+    cueEn: "Content words carry the beat; function words get squeezed between them. Tap the table on the stressed words only. This is what makes a long turn easy rather than tiring to follow.",
+    cueAr: "الكلمات الأساسية شايلة الإيقاع، والكلمات الوظيفية بتتزنق بينها. دقّ على الترابيزة على المضغوط بس.",
+    phrase: "I've been WORKing there fər aBOUT three YEARS, and it's CHANGED a LOT.",
+    words: ["for", "to", "of", "and", "can"],
+    pairs: ["every word equal", "content words stressed"],
+    signature: true,
+  },
+  {
+    id: "s2-u12-self-monitor",
+    stage: "s2",
+    unit: 12,
+    sound: "clarity + self-monitoring (clinic recap)",
+    titleEn: "Notice it, repair it, keep going",
+    titleAr: "لاحظ، صلّح، وكمّل",
+    cueEn: "The transferable skill is hearing a slip in your own speech and repairing the PHRASE, not the word, without stopping. Record a first and a final attempt \u2014 improvement you cannot compare is only a feeling.",
+    cueAr: "المهارة اللي بتفضل معاك هي إنك تسمع الغلطة في كلامك وتصلّح العبارة كلها وتكمل من غير ما توقف. سجّل أول وآخر محاولة.",
+    phrase: "It's cheaper \u2014 sorry, cheaper but SLOWer \u2014 than the other one.",
+    words: ["however", "although", "I'd", "I've", "was"],
+    pairs: ["stop and restart", "repair and continue"],
+  },
+];
+
+export const ACCENT_DRILLS: AccentDrill[] = [
+  ...STAGE0_ACCENT_DRILLS,
+  ...STAGE1_ACCENT_DRILLS,
+  ...STAGE2_ACCENT_DRILLS,
+];
 
 export const ACCENT_DRILL_IDS = ACCENT_DRILLS.map((d) => d.id);
 
-export function getStageAccentDrills(stageId: "s0" | "s1"): AccentDrill[] {
+export function getStageAccentDrills(stageId: StageId): AccentDrill[] {
   return ACCENT_DRILLS.filter((d) => d.stage === stageId);
 }
 

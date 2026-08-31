@@ -7,13 +7,14 @@
  *
  * Stage 0 deliberately keeps its legacy positional parser and exact rendered
  * bytes: its 128-entry glossary is already approved and embedded in the live
- * portal. Stage 1 uses header-aware parsing because its Arsenal sections also
- * contain pronunciation, rule, and functional-language tables. Unknown Stage-1
- * schemas fail closed instead of silently putting English in the Arabic column.
+ * portal. Stages 1 and up use header-aware parsing because their Arsenal
+ * sections also contain pronunciation, rule, and functional-language tables.
+ * An unrecognised schema fails closed instead of silently putting English in
+ * the Arabic column.
  *
  * Usage:
  *   node generate-stage-glossary.mjs --stage 0
- *   node generate-stage-glossary.mjs --stage 1 --check
+ *   node generate-stage-glossary.mjs --stage 2 --check
  * ========================================================================== */
 
 import fs from "node:fs";
@@ -69,6 +70,30 @@ const STAGES = {
       10: "Putting It Together (A2)",
     },
   },
+  2: {
+    title: "Stage 2",
+    rank: "Legionary",
+    cefr: "B1",
+    lessonCount: 60,
+    unitCount: 12,
+    generatedBy: "tools/audit/generate-stage-glossary.mjs --stage 2",
+    arabicIntro: "ذخيرتك في المرحلة كلها، مرتبة بترتيب الوحدات والدروس. الوحدات الأخيرة إنجليزي بالكامل.",
+    footer: "*Empire English 👑 · Stage 2 — Intermediate · من دراسة الإنجليزي لاستخدامه.*",
+    unitTitles: {
+      1: "Present Perfect (1) — Experiences",
+      2: "Present Perfect (2) — Recent & Unfinished",
+      3: "Narrative Past — Continuous & Used To",
+      4: "First Conditional & Future Time",
+      5: "Hypotheticals — Second Conditional",
+      6: "Relative Clauses",
+      7: "Reported Speech",
+      8: "The Passive",
+      9: "Connecting Ideas & Opinions",
+      10: "Discussion Skills",
+      11: "Storytelling & Real-World Topics",
+      12: "Putting It Together (B1)",
+    },
+  },
 };
 
 function tableCells(line) {
@@ -112,33 +137,34 @@ function schemaKey(header) {
   return header.map((cell) => cell.replace(/\*+/g, "").trim().toLowerCase()).join("|");
 }
 
-/** Normalize every authored Stage-1 Arsenal schema into the glossary columns. */
-function stage1Rows(md, source) {
+/**
+ * Every Arsenal table schema the authored corpus actually uses, mapped onto the
+ * glossary's three columns. Two-column tables label a JOB and give the language
+ * for it, so the label becomes the Example and the language becomes the English
+ * entry — there is no Arabic gloss to invent, and inventing one is precisely the
+ * failure this map exists to prevent.
+ *
+ * Adding a schema here is a deliberate act. Do not add one to silence an error
+ * without checking which column genuinely holds the Arabic.
+ */
+const ARSENAL_SCHEMAS = {
+  "english|بالعربي|example": (r) => ({ en: r[0] ?? "", ar: r[1] ?? "", ex: r[2] ?? "" }),
+  "rule|english|بالعربي|example": (r) => ({ en: r[1] ?? "", ar: r[2] ?? "", ex: r[3] ?? "" }),
+  "group|sound|verbs": (r) => ({ en: r[2] ?? "", ar: "", ex: `${r[0] ?? ""}: ${r[1] ?? ""}` }),
+  "job|language": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+  "job|frame": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+  "move|frame": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+  "function|lines": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+  "when you notice…|do this": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+};
+
+/** Normalize an authored Arsenal table into the glossary columns. Fails closed. */
+function headerAwareRows(md, source) {
   const table = arsenalTable(md);
   if (!table) return [];
-  const key = schemaKey(table.header);
-  const rows = table.rows;
-
-  if (key === "english|بالعربي|example") {
-    return rows.map((r) => ({ en: r[0] ?? "", ar: r[1] ?? "", ex: r[2] ?? "" }));
-  }
-  if (key === "rule|english|بالعربي|example") {
-    return rows.map((r) => ({ en: r[1] ?? "", ar: r[2] ?? "", ex: r[3] ?? "" }));
-  }
-  if (key === "group|sound|verbs") {
-    return rows.map((r) => ({ en: r[2] ?? "", ar: "", ex: `${r[0] ?? ""}: ${r[1] ?? ""}` }));
-  }
-  if (key === "job|language") {
-    return rows.map((r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }));
-  }
-  if (key === "move|frame") {
-    return rows.map((r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }));
-  }
-  if (key === "when you notice…|do this") {
-    return rows.map((r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }));
-  }
-
-  throw new Error(`Unknown Your Arsenal table schema in ${source}: ${table.header.join(" | ")}`);
+  const map = ARSENAL_SCHEMAS[schemaKey(table.header)];
+  if (!map) throw new Error(`Unknown Your Arsenal table schema in ${source}: ${table.header.join(" | ")}`);
+  return table.rows.map(map);
 }
 
 function collect(stage, config) {
@@ -168,7 +194,7 @@ function collect(stage, config) {
       const lesson = file.match(/-l(\d+)\./)[1];
       const relative = path.join("materials", `stage${stage}`, dir, file);
       const md = fs.readFileSync(path.join(base, dir, file), "utf8");
-      const rows = stage === 0 ? legacyStage0Rows(md) : stage1Rows(md, relative);
+      const rows = stage === 0 ? legacyStage0Rows(md) : headerAwareRows(md, relative);
       for (const row of rows) entries.push({ lesson, ...row });
     }
     if (entries.length) units.push({ num: unit, entries });
@@ -251,7 +277,7 @@ export function runGlossaryGenerator(stage, { check = process.argv.includes("--c
 
 function stageArgument() {
   const index = process.argv.indexOf("--stage");
-  if (index < 0 || !process.argv[index + 1]) throw new Error("Missing required --stage 0|1 argument");
+  if (index < 0 || !process.argv[index + 1]) throw new Error("Missing required --stage 0|1|2 argument");
   return parseInt(process.argv[index + 1], 10);
 }
 

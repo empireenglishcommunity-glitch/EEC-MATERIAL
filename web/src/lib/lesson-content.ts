@@ -8,17 +8,23 @@ import {
   FINISHED_LESSON_MD as STAGE1_LESSONS,
   WRAPPER_MD as STAGE1_WRAPPERS,
 } from "@/content/materials-stage1";
-import type { StageId } from "@/lib/lessons";
+import {
+  FINISHED_LESSON_MD as STAGE2_LESSONS,
+  WRAPPER_MD as STAGE2_WRAPPERS,
+} from "@/content/materials-stage2";
+import { isStageId, type StageId } from "@/lib/lessons";
 
 marked.setOptions({ gfm: true });
 
 const LESSONS: Record<StageId, Record<string, string>> = {
   s0: STAGE0_LESSONS,
   s1: STAGE1_LESSONS,
+  s2: STAGE2_LESSONS,
 };
 const WRAPPERS: Record<StageId, Record<string, string>> = {
   s0: STAGE0_WRAPPERS,
   s1: STAGE1_WRAPPERS,
+  s2: STAGE2_WRAPPERS,
 };
 
 function stripTeacherBlocks(md: string): string {
@@ -41,7 +47,7 @@ function stripTeacherBlocks(md: string): string {
 function stageForLesson(lessonId: string): StageId | null {
   const match = /^(s\d+)-u\d+-l\d+$/i.exec(lessonId);
   const stage = match?.[1].toLowerCase();
-  return stage === "s0" || stage === "s1" ? stage : null;
+  return stage && isStageId(stage) ? stage : null;
 }
 
 function getFinishedStudentMarkdown(lessonId: string): string | null {
@@ -56,7 +62,7 @@ function stage0UnitKeyForLesson(lessonId: string): string | null {
   return match ? match[1].toLowerCase() : null;
 }
 
-/** Stage-0 blueprint fallback retained for unfinished legacy material. Stage 1 is complete. */
+/** Stage-0 blueprint fallback retained for unfinished legacy material. Stages 1–2 are complete. */
 export function getLessonMarkdown(lessonId: string): string | null {
   const key = stage0UnitKeyForLesson(lessonId);
   if (!key) return null;

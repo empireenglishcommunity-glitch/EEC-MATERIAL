@@ -1,7 +1,7 @@
 // Multi-stage lesson manifest for portal navigation and validation.
 // Lesson content remains generated from materials/; this file is the structured index.
 
-export type StageId = "s0" | "s1";
+export type StageId = "s0" | "s1" | "s2";
 export type Lesson = { id: string; title: string };
 export type Unit = { id: string; num: number; title: string; lessons: Lesson[] };
 export type Stage = {
@@ -98,13 +98,74 @@ export const STAGE1: Unit[] = [
     L("s1",10,5,"Stage-1 summative + A2 milestone") ] },
 ];
 
+export const STAGE2: Unit[] = [
+  { id: "u1", num: 1, title: "Present Perfect (1) — Experiences", lessons: [
+    L("s2",1,1,"Present perfect form: have/has + past participle"), L("s2",1,2,"Past participles: the third column"),
+    L("s2",1,3,"Have you ever…? + ever/never"), L("s2",1,4,"Been vs gone"),
+    L("s2",1,5,"Life experiences") ] },
+  { id: "u2", num: 2, title: "Present Perfect (2) — Recent & Unfinished", lessons: [
+    L("s2",2,1,"just, already, yet"), L("s2",2,2,"for & since — How long have you…?"),
+    L("s2",2,3,"Present perfect vs past simple — the hinge"), L("s2",2,4,"News & recent events"),
+    L("s2",2,5,"What you've done lately") ] },
+  { id: "u3", num: 3, title: "Narrative Past — Continuous & Used To", lessons: [
+    L("s2",3,1,"Past continuous: I was doing…"), L("s2",3,2,"while / when — interrupted actions"),
+    L("s2",3,3,"used to — past habits & states"), L("s2",3,4,"Setting a scene in a story"),
+    L("s2",3,5,"A memorable moment") ] },
+  { id: "u4", num: 4, title: "First Conditional & Future Time", lessons: [
+    L("s2",4,1,"First conditional: if + present, will"), L("s2",4,2,"Future time clauses: when, as soon as, until"),
+    L("s2",4,3,"unless / if not"), L("s2",4,4,"Real plans & promises"),
+    L("s2",4,5,"Plans & consequences") ] },
+  { id: "u5", num: 5, title: "Hypotheticals — Second Conditional", lessons: [
+    L("s2",5,1,"Second conditional: if + past, would"), L("s2",5,2,"Real vs unreal: 1st vs 2nd conditional"),
+    L("s2",5,3,"If I were you… — hypothetical advice"), L("s2",5,4,"I wish…"),
+    L("s2",5,5,"If I could… / my dreams") ] },
+  { id: "u6", num: 6, title: "Relative Clauses", lessons: [
+    L("s2",6,1,"who / which / that — people & things"), L("s2",6,2,"where / whose"),
+    L("s2",6,3,"Leaving out the relative pronoun"), L("s2",6,4,"Defining people, places & things in detail"),
+    L("s2",6,5,"Describe a person or place who/that…") ] },
+  { id: "u7", num: 7, title: "Reported Speech", lessons: [
+    L("s2",7,1,"say vs tell"), L("s2",7,2,"Reported statements (backshift)"),
+    L("s2",7,3,"Reported questions"), L("s2",7,4,"Reporting advice & requests — asked me to…"),
+    L("s2",7,5,"Report a conversation") ] },
+  { id: "u8", num: 8, title: "The Passive", lessons: [
+    L("s2",8,1,"Present simple passive"), L("s2",8,2,"Past simple passive"),
+    L("s2",8,3,"by + agent — when to include it"), L("s2",8,4,"Processes, facts & news: active ↔ passive"),
+    L("s2",8,5,"Describe how something is made") ] },
+  { id: "u9", num: 9, title: "Connecting Ideas & Opinions", lessons: [
+    L("s2",9,1,"because, so, so that — reason & result"), L("s2",9,2,"although, but, however — contrast"),
+    L("s2",9,3,"Adding & sequencing ideas"), L("s2",9,4,"Expressing & justifying an opinion"),
+    L("s2",9,5,"Give your opinion on…") ] },
+  { id: "u10", num: 10, title: "Discussion Skills", lessons: [
+    L("s2",10,1,"Agreeing & adding"), L("s2",10,2,"Disagreeing politely"),
+    L("s2",10,3,"Hedging & softening"), L("s2",10,4,"A short structured discussion"),
+    L("s2",10,5,"Discuss a topic with a partner") ] },
+  { id: "u11", num: 11, title: "Storytelling & Real-World Topics", lessons: [
+    L("s2",11,1,"Telling a detailed story (tense mix)"), L("s2",11,2,"Talking about work & study"),
+    L("s2",11,3,"Technology, media & city life"), L("s2",11,4,"Handling an unexpected topic"),
+    L("s2",11,5,"Detailed story + discuss a topic") ] },
+  { id: "u12", num: 12, title: "Putting It Together (B1)", lessons: [
+    L("s2",12,1,"Big review 1: perfect + narrative past"), L("s2",12,2,"Big review 2: conditionals, relatives, reported, passive"),
+    L("s2",12,3,"Discussion clinic"), L("s2",12,4,"B1 mock discussion (8–12 min)"),
+    L("s2",12,5,"Stage-2 summative + B1 milestone") ] },
+];
+
 export const STAGES: Record<StageId, Stage> = {
   s0: { id: "s0", num: 0, title: "Foundations", rank: "Recruit", cefr: "Pre-A1 → A1", entry: "True beginner", units: STAGE0 },
   s1: { id: "s1", num: 1, title: "Elementary", rank: "Citizen", cefr: "A2", entry: "A1 achieved or placement evidence", units: STAGE1 },
+  s2: { id: "s2", num: 2, title: "Intermediate", rank: "Legionary", cefr: "B1", entry: "A2 achieved or placement evidence", units: STAGE2 },
 };
 
+/**
+ * Single source of truth for "is this string a stage we ship?". Everything that
+ * used to hardcode `id === "s0" || id === "s1"` reads this instead, so adding a
+ * stage to STAGES cannot leave a stale guard silently rejecting it.
+ */
+export function isStageId(id: string): id is StageId {
+  return Object.prototype.hasOwnProperty.call(STAGES, id);
+}
+
 export function getStage(id: string): Stage | null {
-  return id === "s0" || id === "s1" ? STAGES[id] : null;
+  return isStageId(id) ? STAGES[id] : null;
 }
 
 export function getStageLessonIds(stageId: StageId): string[] {

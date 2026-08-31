@@ -1,8 +1,8 @@
-import { getStageLessonIds, type StageId } from "@/lib/lessons";
+import { getStageLessonIds, isStageId, type StageId } from "@/lib/lessons";
 import { isTeacher, getUserProgress, type User } from "@/lib/store";
 
 // Stage progression order. A stage's prerequisite is the stage before it.
-const STAGE_ORDER: StageId[] = ["s0", "s1"];
+const STAGE_ORDER: StageId[] = ["s0", "s1", "s2"];
 
 /** True when every lesson of a stage is marked complete. */
 export function hasCompletedStage(stageId: StageId, doneLessonIds: string[]): boolean {
@@ -58,10 +58,14 @@ export async function userCanAccessStage(
 export function stageOfLessonId(lessonId: string): StageId | null {
   const m = /^(s\d+)-u\d+-l\d+$/i.exec(lessonId);
   const s = m?.[1].toLowerCase();
-  return s === "s0" || s === "s1" ? s : null;
+  return s && isStageId(s) ? s : null;
 }
 
-/** Stage a quiz key belongs to ("s1-u3" -> "s1"; legacy "u3" -> "s0"). */
+/**
+ * Stage a quiz key belongs to ("s2-u3" -> "s2"). Stage 0 keeps its legacy
+ * unqualified "uN" keys, so anything without a recognised stage prefix is s0.
+ */
 export function stageOfQuizKey(quizKey: string): StageId {
-  return quizKey.startsWith("s1-") ? "s1" : "s0";
+  const s = /^(s\d+)-u\d+$/i.exec(quizKey)?.[1].toLowerCase();
+  return s && isStageId(s) ? s : "s0";
 }

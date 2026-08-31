@@ -21,7 +21,12 @@ const REPO = path.resolve(__dirname, "..", "..");
 const CHECK = process.argv.includes("--check");
 const stageIndex = process.argv.indexOf("--stage");
 const STAGE = stageIndex >= 0 ? Number(process.argv[stageIndex + 1]) : 0;
-const EXPECTED = { 0: { lessons: 55, wrappers: 13 }, 1: { lessons: 50, wrappers: 12 } };
+// Wrappers = the stage front matter + the stage glossary + one front matter per unit.
+const EXPECTED = {
+  0: { lessons: 55, wrappers: 13 },
+  1: { lessons: 50, wrappers: 12 },
+  2: { lessons: 60, wrappers: 14 },
+};
 
 if (!Number.isInteger(STAGE) || !(STAGE in EXPECTED)) {
   console.error(`✗ unsupported or missing stage: ${process.argv[stageIndex + 1] ?? STAGE}`);
