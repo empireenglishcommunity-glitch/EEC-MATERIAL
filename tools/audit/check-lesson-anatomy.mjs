@@ -102,6 +102,10 @@ const STAGE_RULES = {
     "stage-finale": ["s2-u12-l05"], // B1 summative + separate standard milestone sample
     review: ["s2-u12-l01", "s2-u12-l02", "s2-u12-l03", "s2-u12-l04"], // retrieval, clinic, mock
   },
+  3: {
+    "stage-finale": ["s3-u12-l05"], // B2 flagship benchmark + separate graduation sample
+    review: ["s3-u12-l01", "s3-u12-l02", "s3-u12-l03", "s3-u12-l04"], // retrieval x2, clinic, full mock
+  },
 };
 
 /** Lesson types, most specific first. */

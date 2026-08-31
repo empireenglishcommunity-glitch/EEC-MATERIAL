@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getUserQuizResults } from "@/lib/store";
 import { getStage } from "@/lib/lessons";
 import { userCanAccessStage } from "@/lib/access";
-import { getUnitQuiz } from "@/content/quizzes";
+import { getUnitQuiz, publicQuestion } from "@/content/quizzes";
 import { stageNav } from "@/lib/portal-nav";
 import { Section } from "@/components/ui";
 import QuizRunner from "@/components/QuizRunner";
@@ -32,7 +32,8 @@ export default async function StageQuizPage({
   const ar = locale === "ar";
   const nav = stageNav(locale, meta.id);
 
-  const publicQuestions = quiz.questions.map((q) => ({ id: q.id, prompt: q.prompt, options: q.options }));
+  // Answer key stripped and options rotated — see publicQuestion().
+  const publicQuestions = quiz.questions.map(publicQuestion);
 
   return (
     <Section className="py-10 sm:py-14">

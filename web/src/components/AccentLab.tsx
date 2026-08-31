@@ -66,7 +66,7 @@ export default async function AccentLab({
         {drills.map((d) => (
           <div key={d.id} className="rounded-2xl bg-white p-6 ring-1 ring-royal-100">
             <div className="flex flex-wrap items-center gap-3">
-              <h2 className="text-lg font-bold text-royal-900">{ar ? d.titleAr : d.titleEn}</h2>
+              <h2 className="text-lg font-bold text-royal-900">{ar && d.titleAr ? d.titleAr : d.titleEn}</h2>
               <span className="rounded bg-royal-100 px-2 py-0.5 font-mono text-sm text-royal-700">{d.sound}</span>
               {d.unit != null && (
                 <span className="rounded bg-royal-50 px-2 py-0.5 text-xs font-semibold text-royal-600">
@@ -80,7 +80,7 @@ export default async function AccentLab({
               )}
             </div>
 
-            <p className="mt-3 text-sm leading-relaxed text-ink/80">{ar ? d.cueAr : d.cueEn}</p>
+            <p className="mt-3 text-sm leading-relaxed text-ink/80">{ar && d.cueAr ? d.cueAr : d.cueEn}</p>
 
             <p className="mt-3 text-lg font-semibold text-royal-900">&ldquo;{d.phrase}&rdquo;</p>
 

@@ -31,11 +31,8 @@
  * ========================================================================== */
 
 import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { citation, declaredTarget, lessons } from "./arabic-target.mjs";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO = path.resolve(__dirname, "..", "..");
 const REPORT_ONLY = process.argv.includes("--report");
 
 /** Percentage points a lesson may sit either side of its declared target. */
@@ -90,68 +87,6 @@ export function arabicNeededFor(targetPct, latinChars) {
   return Math.round((targetPct / 100) * latinChars / (1 - targetPct / 100));
 }
 
-/** The blueprint path and lesson id a finished lesson cites in its header. */
-function citation(md) {
-  const m = /Built from: `([^`]+)` · \*\*([A-Z0-9-]+)\*\*/.exec(md);
-  return m ? { blueprint: m[1], id: m[2] } : null;
-}
-
-/** The `~N%` the blueprint declares for that specific lesson. */
-const blueprintCache = new Map();
-function declaredTarget(blueprintRel, lessonId) {
-  if (!blueprintCache.has(blueprintRel)) {
-    const p = path.join(REPO, blueprintRel);
-    blueprintCache.set(blueprintRel, fs.existsSync(p) ? fs.readFileSync(p, "utf8") : null);
-  }
-  const src = blueprintCache.get(blueprintRel);
-  if (!src) return null;
-
-  // Each lesson is a "## <ID> — ..." section; read the Arabic line inside it.
-  const sections = src.split(/^## /m);
-  const section = sections.find((s) => s.startsWith(lessonId));
-  const scope = section ?? src; // unit-level fallback for a lesson with no block
-  const line = /\*\*Arabic support:\*\*[^\n]*/.exec(scope)?.[0];
-  if (!line) return null;
-
-  // The curriculum writes the level three ways, and all three are a real target:
-  //   "~15%"  the usual case
-  //   "0%"    the Stage-2/3 finales — no tilde, because zero is exact, not approximate
-  //   "none"  the immersion units from B1 onward — semantically 0%
-  // Requiring the tilde silently ungated every lesson written the other two ways
-  // (Stage 2 Unit 12 alone is five lessons), which is the worst outcome for a gate:
-  // it reports "no target" and passes rather than failing.
-  if (/\bnone\b/i.test(line)) return 0;
-  const m = /~?(\d+)\s*%/.exec(line);
-  return m ? parseInt(m[1], 10) : null;
-}
-
-function lessons() {
-  const root = path.join(REPO, "materials");
-  const out = [];
-  for (const s of fs
-    .readdirSync(root)
-    .filter((d) => /^stage\d+$/.test(d))
-    .sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)))) {
-    const base = path.join(root, s);
-    for (const u of fs
-      .readdirSync(base)
-      .filter((d) => /^unit\d+$/.test(d) && fs.statSync(path.join(base, d)).isDirectory())
-      .sort((a, b) => parseInt(a.slice(4)) - parseInt(b.slice(4)))) {
-      for (const f of fs
-        .readdirSync(path.join(base, u))
-        .filter((f) => /^s\d+-u\d+-l\d+\.md$/.test(f))
-        .sort((a, b) => parseInt(a.match(/-l(\d+)\./)[1]) - parseInt(b.match(/-l(\d+)\./)[1]))) {
-        out.push({
-          stage: parseInt(s.slice(5)),
-          id: f.replace(/\.md$/, ""),
-          p: path.join(base, u, f),
-        });
-      }
-    }
-  }
-  return out;
-}
-
 const rows = [];
 for (const l of lessons()) {
   const md = fs.readFileSync(l.p, "utf8");
@@ -186,7 +121,17 @@ for (const [stage, list] of [...byStage.entries()].sort((a, b) => a[0] - b[0])) 
 
   for (const r of list) {
     if (r.target == null) {
-      console.log(`      ?  ${r.id}  ${r.measured.toFixed(1)}%  — no target found in its blueprint`);
+      // An undiscoverable target is a FAILURE, not a note. This used to print a
+      // "?" and pass, which is the worst behaviour a gate can have: a mistyped
+      // citation, a renamed blueprint or a stage that declares its level once per
+      // unit all became invisible, and the run still said PASS. Stage 0 stays
+      // report-only along with the rest of its grandfathering.
+      if (!grandfathered) failures++;
+      console.log(
+        `      ${grandfathered ? "·" : "✗"}  ${r.id}  ${r.measured.toFixed(1)}%  — NO TARGET FOUND. ` +
+          `Its blueprint declares no "**Arabic support:**" level for this lesson or its unit, ` +
+          `or the header cites the wrong blueprint. An unmeasured lesson must not pass silently.`,
+      );
       continue;
     }
     const delta = r.measured - r.target;

@@ -7,27 +7,58 @@
 
 ## STATUS — 2026-08-31 (read this, not the checkboxes)
 
-**Stages 0, 1 and 2 are COMPLETE, MERGED and LIVE — content, portal and PDF. Everything
-still open is either a founder review or the upper stages (5.3–5.4).**
+**Stages 0, 1, 2 and 3 are COMPLETE — content, portal and PDF. Stage 3 is the FLAGSHIP
+GRADUATION stage, so the programme's headline promise now has material behind it end to end.
+Everything still open is either a founder review or Stage 4 / the Exam Track (5.4–5.5).**
 
-Stage 0 (55 lessons), Stage 1 (50) and Stage 2 (60) are all finished: every lesson, every
-unit wrapper, each stage's front matter and generated glossary, all rendered in the portal
-and in both PDF editions. Stages 1 and 2 are wired in as first-class stages under
-`/portal/stages/s1` and `/portal/stages/s2`, each with its own unit quizzes and Accent Lab
-drills, behind the stage-access gate. The three Stage-0 founder checkpoints (2.4, 3.4, 4.4)
-still need the founder to look and approve; nothing is blocked on building. Phase 5
-continues with Stages 3–4 (110 lessons).
+Stage 0 (55 lessons), Stage 1 (50), Stage 2 (60) and Stage 3 (60) are finished: every lesson,
+every unit wrapper, each stage's front matter and generated glossary, all rendered in the
+portal and in both PDF editions. Stages 1–3 are wired in as first-class stages under
+`/portal/stages/s{1,2,3}`, each with its own unit quizzes and Accent Lab drills, behind the
+stage-access gate. Stages 0–2 are merged and live; Stage 3 is on `materials/stage3-b2` awaiting
+review. The three Stage-0 founder checkpoints (2.4, 3.4, 4.4) still need the founder to look
+and approve; nothing is blocked on building. Phase 5 continues with Stage 4 (50 lessons).
+
+**Three integrity defects were found and fixed while building Stage 3. All three had passed
+every existing gate, and each is now gated:**
+
+1. **The Arabic dial was not measuring Stages 3–4 at all.** Its unit-level fallback only fired
+   when a lesson's blueprint section was missing *entirely*. Stages 0–2 restate the Arabic level
+   per lesson; Stages 3–4 declare immersion once per unit — so all 110 upper-stage lessons
+   resolved to "no target", printed `?`, and **passed**. Fixed, and an undiscoverable target now
+   fails instead of passing. Verified by capturing all 135 readings before and after: exactly 2
+   changed, both previously unmeasured.
+2. **30 of the 60 Stage-3 lessons shipped with an Arabic gloss column** in `Your Arsenal` —
+   3,326 Arabic characters inside a stage declared 0% / full immersion in all twelve units. The
+   dial could not see it, correctly: it scores only `Decode it` and `Why this matters` with table
+   rows stripped, because vocabulary tables are English by design at every stage. New
+   `check-immersion.mjs` uses the opposite scope — at 0% it reads the whole page and permits
+   Arabic only in section headings.
+3. **The unit quizzes were solvable without reading them.** Options render in array order and
+   were never shuffled, while the authored answer sat at index 0 almost everywhere: Stage 2
+   scored **100%** and Stage 1 **98%** against "always pick the first option", both live. Options
+   are now rotated to `hash(question.id) % n`, computed in one place shared by the pages and the
+   grading route. Verified end to end against a running server, not by inspection.
+
+**A methodological note that cost real time and is worth keeping.** `check-quiz-integrity.mjs`
+initially counted options as "top-level commas + 1"; the multi-line option arrays carry a
+trailing comma, so it read every 3-option item as 4-option, computed the wrong expected
+position for 64 items, and reported **PASS**. It was caught only by grading real submissions
+through the live API. Likewise `strings book.pdf | grep "At a glance"` returns 0 for *both*
+coursebook editions, because Chromium subsets the fonts — so it reads as a pass on the one
+question where a false pass previously meant publishing answer keys. **A green check is
+evidence only once you have shown the check can fail.**
 
 Each claim names the evidence that proves it. Re-derive rather than trust:
 
 | Claim | Evidence | Command |
 |---|---|---|
-| 165 finished lessons (Stage 0: 55, Stage 1: 50, Stage 2: 60) | `materials/stage{0,1,2}/unit*/s*-u*-l*.md` | `find materials -name 's[012]-*-l*.md' \| wc -l` → 165 |
+| 225 finished lessons (Stage 0: 55, Stage 1: 50, Stage 2: 60, Stage 3: 60) | `materials/stage{0,1,2,3}/unit*/s*-u*-l*.md` | `find materials -name 's[0-9]-u*-l*.md' \| wc -l` → 225 |
 | 275 lesson blueprints exist across all 5 stages | `curriculum/stage{0..4}/` | `grep -rhoE 'S[0-9]-U[0-9]+-L[0-9]+' curriculum/ \| sort -u \| wc -l` → 275 |
-| **60% of the programme is finished material** | 165 of 275 | Stages 3–4 have **no** `materials/` directory at all |
-| Stage wrappers exist | `stage{0,1,2}-front-matter.md`, `stage{0,1,2}-glossary.md`, 33 × `unit*-front-matter.md` | `ls materials/stage*/unit*/unit*-front-matter.md \| wc -l` → 33 |
-| Each glossary matches its lessons | generated from every **Your Arsenal** table | `cd tools/audit && npm run drift` → 128 + 269 + 385 entries in sync |
-| Portal serves the finished material, not the blueprint | `web/src/lib/lesson-content.ts`, stage-aware | `npm run drift` → s0 55L/13W + s1 50L/12W + s2 60L/14W in sync |
+| **82% of the programme is finished material** | 225 of 275 | only Stage 4 has **no** `materials/` directory |
+| Stage wrappers exist | `stage{0,1,2,3}-front-matter.md`, `stage{0,1,2,3}-glossary.md`, 45 × `unit*-front-matter.md` | `find materials -name 'unit*-front-matter.md' \| wc -l` → 45 |
+| Each glossary matches its lessons | generated from every **Your Arsenal** table | `cd tools/audit && npm run drift` → 128 + 269 + 385 + 487 entries in sync |
+| Portal serves the finished material, not the blueprint | `web/src/lib/lesson-content.ts`, stage-aware | `npm run drift` → s0 55L/13W + s1 50L/12W + s2 60L/14W + s3 60L/14W in sync |
 | Every lesson meets the anatomy standard | `materials/_style/lesson-anatomy.md` | `npm run anatomy` → 165/165 |
 | Every gated lesson hits its blueprint Arabic dial | per-lesson targets, ±2 pts | `npm run dial` → all Stage 1 + Stage 2 on target (Stage 0 grandfathered) |
 | All six PDF editions are built and shipped | `web/private/coursebook/eec-stage{0,1,2}-{student,teacher}.pdf` | s0 204/222 pp · s1 269/309 pp · s2 353/414 pp; all 6 font families + emoji embedded |
@@ -112,14 +143,14 @@ unbuilt. Counts below are derived, not planned:
 
 - [x] 5.1 **Stage 1 (A2)** — Units 1–10, both editions, front-matter, PDFs, portal. *(Arabic dial fades per blueprint.)* — **50 lessons** ✅ *`find materials/stage1 -name 's1-*-l*.md' | wc -l` → 50; 10 unit wrappers + `stage1-front-matter.md` + generated `stage1-glossary.md` (269 entries); PDFs `eec-stage1-{student,teacher}.pdf` (269/309 pp, 6 font families + emoji); portal `/portal/stages/s1`; `cd tools/audit && npm run all` green; `cd web && npx next build` green. Dial per lesson: U1 40/40/40/35 · U2 40/35/35/35 · U3 35/35/30/30 · U4 35/30/30/30 · U5 35/30/30/30 · U6 35/30/30/30 · U7 30/30/30/25 · U8 30/30/30/25 · U9 25/25/25/20 · U10 20/20/20/15, all within ±2.*
 - [x] 5.2 **Stage 2 (B1)** — Units 1–12, both editions, front-matter, PDFs, portal. *(Arabic dial fades to full immersion.)* — **60 lessons** ✅ *`find materials/stage2 -name 's2-*-l*.md' | wc -l` → 60; 12 unit wrappers + `stage2-front-matter.md` + generated `stage2-glossary.md` (385 entries); PDFs `eec-stage2-{student,teacher}.pdf` (353/414 pp, same 6 font families + emoji as Stages 0–1); portal `/portal/stages/s2` with `STAGE2_QUIZZES` (12 units) and `STAGE2_ACCENT_DRILLS` (12); `cd tools/audit && npm run all` green (drift in sync ×3 stages, anatomy 165/165, dial PASS, bidi 204 pages 0/0); `cd web && npx next build` green. Dial per lesson (unit header, then L01–L04): U1 15/15,15,15,15 · U2 15/15,15,15,15 · U3 15/15,15,15,10 · U4 15/15,15,15,10 · U5 15/15,15,15,15 · U6–U8 12/12,12,12,12 · U9 10/10,10,10,10 · U10–U11 5/5,5,5,5 · U12 **0**/0,0,0,0 — all within ±2. Each L05 is a unit-task/finale lesson with no `Decode it` or `Why this matters`, so it is unmeasured by design (same as Stage 1).*
-- [ ] 5.3 **Stage 3 (B2)** — Units 1–12, both editions, front-matter, PDFs; the **"Coronation"** graduation wrapper. — **60 lessons**
-- [ ] 5.4 **Stage 4 (C1)** — Units 1–10, both editions, front-matter, PDFs. — **50 lessons**
+- [x] 5.3 **Stage 3 (B2)** — Units 1–12, both editions, front-matter, PDFs; the flagship graduation wrapper. — **60 lessons** ✅ *`find materials/stage3 -name 's3-*-l*.md' | wc -l` → 60; 12 unit wrappers + `stage3-front-matter.md` + generated `stage3-glossary.md` (487 entries); PDFs `eec-stage3-{student,teacher}.pdf` (459/531 pp, all 7 font families incl. emoji); portal `/portal/stages/s3` with `STAGE3_QUIZZES` (12 units) and `STAGE3_ACCENT_DRILLS` (12); `cd tools/audit && npm run all` green (drift in sync ×4 stages, wrappers ✓, anatomy 225/225, dial PASS, immersion 65/65, quiz PASS, bidi 276 pages 0/0); `cd web && npx tsc --noEmit && npx next build` green. **Arabic dial: 0% in every one of the twelve units — full immersion — and all 60 lessons measure 0.4–0.6%, the floor imposed by the mandatory Arabic section sub-labels.** The blueprint declares immersion once per unit rather than per lesson, which is exactly what the dial's fallback bug hid; see the STATUS block. Each L05 is a unit-task or finale lesson with no `Decode it` or `Why this matters`, so it is unmeasured by design (same as Stages 1–2). **Verified as a signed-in learner against a running server**, not just at build time: `/portal/stages/s3`, `.../start`, `.../glossary`, `.../accent-lab`, `.../units/u12`, `.../quiz/u12` and lessons `s3-u1-l01`, `s3-u12-l03`, `s3-u12-l05` all 200 with their expected content; teacher overlay absent for a student; the only Arabic in a rendered Stage-3 lesson is the 12 section labels plus the site's own language switcher. `tools/pdf/verify-editions.mjs` extracts the real PDF text layer and confirms the student edition carries no teacher overlay (622k chars read, zero markers) while the teacher edition does — run over all four stages, all clean.*
+- [ ] 5.4 **Stage 4 (C1)** — Units 1–10, both editions, front-matter, PDFs. — **50 lessons** *(the only stage with no `materials/` directory)*
 - [ ] 5.5 **Exam Track** — TOEFL + IELTS modules turned into finished teacher+student practice material.
 - [ ] (Each sub-phase: build just ahead of the cohort per master design §3.4; checkpoint per stage.)
 
 ## Phase 6 — Wrap-up
-- [ ] 6.1 Full library QA pass against the "done" checklist; consistency + honesty audit. *Stage 0 passed on 2026-08-31 and the checklist is now automated (`cd tools/audit && npm run all`); this stays open until every stage exists to audit.*
-- [ ] 6.2 Master coursebook PDFs per stage (student + teacher), send-ready. *Stages 0, 1 and 2 done; Stages 3–4 pending their content.*
+- [ ] 6.1 Full library QA pass against the "done" checklist; consistency + honesty audit. *Stages 0–3 pass and the checklist is automated (`cd tools/audit && npm run all` — drift, wrappers, anatomy, dial, immersion, quiz, bidi); this stays open until Stage 4 exists to audit.*
+- [ ] 6.2 Master coursebook PDFs per stage (student + teacher), send-ready. *Stages 0–3 done (204/222, 269/309, 353/414, 459/531 pp); Stage 4 pending its content.*
 - [ ] 6.3 Update the master spec + this plan to reflect completion.
 
 ---

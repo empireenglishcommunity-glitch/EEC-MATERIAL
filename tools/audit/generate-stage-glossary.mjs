@@ -32,7 +32,8 @@ const STAGES = {
     lessonCount: 55,
     unitCount: 11,
     generatedBy: "tools/audit/generate-stage0-glossary.mjs",
-    arabicIntro: "ذخيرتك كلها في مكان واحد. الترتيب بالوحدة والدرس، عشان تراجع بنفس ترتيب الكتاب.",
+    intro: "ذخيرتك كلها في مكان واحد. الترتيب بالوحدة والدرس، عشان تراجع بنفس ترتيب الكتاب.",
+    glossColumn: "بالعربي",
     footer: "*Empire English 👑 · Stage 0 — Foundations · لبنة كل يوم.*",
     unitTitles: {
       0: "Welcome & Sounds",
@@ -55,7 +56,8 @@ const STAGES = {
     lessonCount: 50,
     unitCount: 10,
     generatedBy: "tools/audit/generate-stage-glossary.mjs --stage 1",
-    arabicIntro: "ذخيرتك في المرحلة كلها، مرتبة بنفس ترتيب الوحدات والدروس عشان ترجع للسياق مش تحفظ قايمة.",
+    intro: "ذخيرتك في المرحلة كلها، مرتبة بنفس ترتيب الوحدات والدروس عشان ترجع للسياق مش تحفظ قايمة.",
+    glossColumn: "بالعربي",
     footer: "*Empire English 👑 · Stage 1 — Elementary · من دراسة الإنجليزي لاستخدامه.*",
     unitTitles: {
       1: "The Past (1) — Was & Were",
@@ -77,7 +79,8 @@ const STAGES = {
     lessonCount: 60,
     unitCount: 12,
     generatedBy: "tools/audit/generate-stage-glossary.mjs --stage 2",
-    arabicIntro: "ذخيرتك في المرحلة كلها، مرتبة بترتيب الوحدات والدروس. الوحدات الأخيرة إنجليزي بالكامل.",
+    intro: "ذخيرتك في المرحلة كلها، مرتبة بترتيب الوحدات والدروس. الوحدات الأخيرة إنجليزي بالكامل.",
+    glossColumn: "بالعربي",
     footer: "*Empire English 👑 · Stage 2 — Intermediate · من دراسة الإنجليزي لاستخدامه.*",
     unitTitles: {
       1: "Present Perfect (1) — Experiences",
@@ -92,6 +95,35 @@ const STAGES = {
       10: "Discussion Skills",
       11: "Storytelling & Real-World Topics",
       12: "Putting It Together (B1)",
+    },
+  },
+  3: {
+    title: "Stage 3",
+    rank: "Confident",
+    cefr: "B2",
+    lessonCount: 60,
+    unitCount: 12,
+    generatedBy: "tools/audit/generate-stage-glossary.mjs --stage 3",
+    // English, and no gloss column: Stage 3 declares 0% Arabic in every unit,
+    // and check-immersion.mjs enforces that in the lessons this is built from.
+    intro:
+      "Your whole Stage-3 arsenal, in the order you met it — and in English only, like the stage itself. " +
+      "There is no translation column here because there was none in the lessons.",
+    glossColumn: null,
+    footer: "*Empire English 👑 · Stage 3 — Confident ⭐ · from studying English to living in it.*",
+    unitTitles: {
+      1: "Perfect Aspect Mastery",
+      2: "Past Perfect & Narrative Mastery",
+      3: "Future Forms (Advanced)",
+      4: "Third & Mixed Conditionals",
+      5: "Modals of Deduction & Speculation",
+      6: "The Passive (Advanced)",
+      7: "Relative Clauses (Advanced)",
+      8: "Reported Speech (Advanced)",
+      9: "Register & Nuance",
+      10: "Professional Communication",
+      11: "Abstract Topics & Debate",
+      12: "Putting It Together (B2) ⭐",
     },
   },
 };
@@ -156,6 +188,17 @@ const ARSENAL_SCHEMAS = {
   "move|frame": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
   "function|lines": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
   "when you notice…|do this": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+
+  // Stage 3 (full immersion) — no gloss column exists to read, by design.
+  // "english|example" is what the bilingual three-column table becomes once the
+  // Arabic is removed: an English frame plus a full example sentence.
+  "english|example": (r) => ({ en: r[0] ?? "", ar: "", ex: r[1] ?? "" }),
+  "structure|language": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+  "move|language": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+  "function|language": (r) => ({ en: r[1] ?? "", ar: "", ex: r[0] ?? "" }),
+  // A register-pair table: both cells are English, so the informal form is the
+  // entry a learner looks up and the formal one is what they came for.
+  "informal|formal": (r) => ({ en: r[0] ?? "", ar: "", ex: `formal: ${r[1] ?? ""}` }),
 };
 
 /** Normalize an authored Arsenal table into the glossary columns. Fails closed. */
@@ -215,7 +258,7 @@ function render(stage, config, units) {
   lines.push(`*Generated from the **Your Arsenal** tables of all ${config.lessonCount} Stage-${stage} lessons by*`);
   lines.push(`*\`${config.generatedBy}\` — do not edit by hand.*`);
   lines.push("");
-  lines.push(`> ${config.arabicIntro}`);
+  lines.push(`> ${config.intro}`);
   lines.push("");
   lines.push(
     `Every word here is taught somewhere in the book, and the lesson it comes from is named, so you can` +
@@ -236,10 +279,21 @@ function render(stage, config, units) {
     lines.push("");
     lines.push(`## Unit ${unit.num} — ${config.unitTitles[unit.num] ?? ""}`);
     lines.push("");
-    lines.push("| Lesson | English | بالعربي | Example |");
-    lines.push("|---|---|---|---|");
-    for (const entry of unit.entries) {
-      lines.push(`| L${entry.lesson} | ${entry.en} | ${entry.ar} | ${entry.ex} |`);
+    // A stage with no Arabic gets no Arabic column. Rendering an empty بالعربي
+    // column across 400 rows would advertise support the stage does not offer
+    // and cannot offer, since there is nothing in the lessons to fill it from.
+    if (config.glossColumn === null) {
+      lines.push("| Lesson | English | Example |");
+      lines.push("|---|---|---|");
+      for (const entry of unit.entries) {
+        lines.push(`| L${entry.lesson} | ${entry.en} | ${entry.ex} |`);
+      }
+    } else {
+      lines.push(`| Lesson | English | ${config.glossColumn} | Example |`);
+      lines.push("|---|---|---|---|");
+      for (const entry of unit.entries) {
+        lines.push(`| L${entry.lesson} | ${entry.en} | ${entry.ar} | ${entry.ex} |`);
+      }
     }
   }
 
@@ -277,7 +331,7 @@ export function runGlossaryGenerator(stage, { check = process.argv.includes("--c
 
 function stageArgument() {
   const index = process.argv.indexOf("--stage");
-  if (index < 0 || !process.argv[index + 1]) throw new Error("Missing required --stage 0|1|2 argument");
+  if (index < 0 || !process.argv[index + 1]) throw new Error("Missing required --stage 0|1|2|3 argument");
   return parseInt(process.argv[index + 1], 10);
 }
 

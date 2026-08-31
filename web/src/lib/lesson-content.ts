@@ -12,6 +12,10 @@ import {
   FINISHED_LESSON_MD as STAGE2_LESSONS,
   WRAPPER_MD as STAGE2_WRAPPERS,
 } from "@/content/materials-stage2";
+import {
+  FINISHED_LESSON_MD as STAGE3_LESSONS,
+  WRAPPER_MD as STAGE3_WRAPPERS,
+} from "@/content/materials-stage3";
 import { isStageId, type StageId } from "@/lib/lessons";
 
 marked.setOptions({ gfm: true });
@@ -20,11 +24,13 @@ const LESSONS: Record<StageId, Record<string, string>> = {
   s0: STAGE0_LESSONS,
   s1: STAGE1_LESSONS,
   s2: STAGE2_LESSONS,
+  s3: STAGE3_LESSONS,
 };
 const WRAPPERS: Record<StageId, Record<string, string>> = {
   s0: STAGE0_WRAPPERS,
   s1: STAGE1_WRAPPERS,
   s2: STAGE2_WRAPPERS,
+  s3: STAGE3_WRAPPERS,
 };
 
 function stripTeacherBlocks(md: string): string {

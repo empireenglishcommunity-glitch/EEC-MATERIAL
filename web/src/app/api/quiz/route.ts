@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getQuizResults, saveQuizResults, type QuizResult } from "@/lib/store";
-import { getQuiz } from "@/content/quizzes";
+import { getQuiz, correctDisplayIndex, isCorrectChoice } from "@/content/quizzes";
 import { stageOfQuizKey, userCanAccessStage } from "@/lib/access";
 
 // Grade a unit's formative quiz server-side (never trust client scoring).
 // Body: { unit: "u1", answers: number[] }
-// Returns: { ok, score, total, corrections: number[] (correct index per question), best }
+// Returns: { ok, score, total, corrections: number[] (correct DISPLAY index per question), best }
 export async function POST(req: Request) {
   const user = await getCurrentUser();
   if (!user) {
@@ -25,10 +25,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "invalid_answers" }, { status: 400 });
     }
 
+    // Grade against the DISPLAY order the learner actually saw. The rotation is
+    // derived from the question id, so it is identical here and in the page —
+    // grading against the authored index would mark every rotated item wrong.
     let score = 0;
     const corrections = quiz.questions.map((question, i) => {
-      if (answers[i] === question.answer) score++;
-      return question.answer;
+      if (isCorrectChoice(question, answers[i])) score++;
+      return correctDisplayIndex(question);
     });
     const total = quiz.questions.length;
 

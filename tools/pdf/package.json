@@ -12,11 +12,16 @@
     "student:stage1": "node build-book.mjs --stage 1 --edition student",
     "teacher:stage1": "node build-book.mjs --stage 1 --edition teacher",
     "build:stage2": "node build-book.mjs --stage 2 --edition both",
+    "build:stage3": "node build-book.mjs --stage 3 --edition both",
+    "student:stage3": "node build-book.mjs --stage 3 --edition student",
+    "teacher:stage3": "node build-book.mjs --stage 3 --edition teacher",
     "student:stage2": "node build-book.mjs --stage 2 --edition student",
-    "teacher:stage2": "node build-book.mjs --stage 2 --edition teacher"
+    "teacher:stage2": "node build-book.mjs --stage 2 --edition teacher",
+    "verify": "node verify-editions.mjs"
   },
   "dependencies": {
     "marked": "^16.4.2",
+    "pdfjs-dist": "^4.10.38",
     "puppeteer": "^24.10.0"
   }
 }

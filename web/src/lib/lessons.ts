@@ -1,7 +1,7 @@
 // Multi-stage lesson manifest for portal navigation and validation.
 // Lesson content remains generated from materials/; this file is the structured index.
 
-export type StageId = "s0" | "s1" | "s2";
+export type StageId = "s0" | "s1" | "s2" | "s3";
 export type Lesson = { id: string; title: string };
 export type Unit = { id: string; num: number; title: string; lessons: Lesson[] };
 export type Stage = {
@@ -149,10 +149,62 @@ export const STAGE2: Unit[] = [
     L("s2",12,5,"Stage-2 summative + B1 milestone") ] },
 ];
 
+export const STAGE3: Unit[] = [
+  { id: "u1", num: 1, title: "Perfect Aspect Mastery", lessons: [
+    L("s3",1,1,"Present perfect continuous: have been + -ing"), L("s3",1,2,"Perfect continuous vs simple perfect"),
+    L("s3",1,3,"How long have you been…? — duration with precision"), L("s3",1,4,"Ongoing projects: the status update"),
+    L("s3",1,5,"What you've been working on") ] },
+  { id: "u2", num: 2, title: "Past Perfect & Narrative Mastery", lessons: [
+    L("s3",2,1,"Past perfect: the past before the past"), L("s3",2,2,"Past perfect continuous: the cause behind the past"),
+    L("s3",2,3,"Sequencing a complex narrative — all four past tenses"), L("s3",2,4,"Causes & backstory: answering why with depth"),
+    L("s3",2,5,"A turning point in your life") ] },
+  { id: "u3", num: 3, title: "Future Forms (Advanced)", lessons: [
+    L("s3",3,1,"Future continuous: will be + -ing"), L("s3",3,2,"Future perfect: done before a deadline"),
+    L("s3",3,3,"Arrangements, plans & predictions — choosing your future"), L("s3",3,4,"Degrees of certainty: hedged predictions"),
+    L("s3",3,5,"Where you'll be in five years") ] },
+  { id: "u4", num: 4, title: "Third & Mixed Conditionals", lessons: [
+    L("s3",4,1,"Third conditional: if I'd known, I would have…"), L("s3",4,2,"Third conditional in use: regret, criticism, hypothesis"),
+    L("s3",4,3,"Mixed conditionals — when the past is still happening"), L("s3",4,4,"I wish I'd… / if only… — naming a regret"),
+    L("s3",4,5,"A decision you'd change") ] },
+  { id: "u5", num: 5, title: "Modals of Deduction & Speculation", lessons: [
+    L("s3",5,1,"Present deduction: must be, might be, can't be"), L("s3",5,2,"Past deduction: must have, might have, can't have"),
+    L("s3",5,3,"Speculating about people & situations"), L("s3",5,4,"Evidence & conclusions: reasoning out loud"),
+    L("s3",5,5,"Solve the mystery") ] },
+  { id: "u6", num: 6, title: "The Passive (Advanced)", lessons: [
+    L("s3",6,1,"The passive across every tense"), L("s3",6,2,"Modal & perfect passives: should have been checked"),
+    L("s3",6,3,"The reporting passive: it is said that…"), L("s3",6,4,"The causative: have / get something done"),
+    L("s3",6,5,"Describe a system or service") ] },
+  { id: "u7", num: 7, title: "Relative Clauses (Advanced)", lessons: [
+    L("s3",7,1,"Non-defining relative clauses: adding detail with commas"), L("s3",7,2,"Defining or non-defining — the comma that changes the meaning"),
+    L("s3",7,3,"Reduced relative clauses: the report written by X"), L("s3",7,4,"Prepositions + which / whom, and which for a whole idea"),
+    L("s3",7,5,"Describe someone or something with rich detail") ] },
+  { id: "u8", num: 8, title: "Reported Speech (Advanced)", lessons: [
+    L("s3",8,1,"Beyond said: the reporting-verb range"), L("s3",8,2,"Patterns 1 — verb + -ing and verb + that"),
+    L("s3",8,3,"Patterns 2 — verb + to and verb + object + to"), L("s3",8,4,"Reporting a meeting or negotiation accurately"),
+    L("s3",8,5,"Report a discussion") ] },
+  { id: "u9", num: 9, title: "Register & Nuance", lessons: [
+    L("s3",9,1,"Formal or informal: saying the same thing two ways"), L("s3",9,2,"Diplomacy & softening: politeness under pressure"),
+    L("s3",9,3,"Collocations: the words that go together"), L("s3",9,4,"Reading the room: adapting register to the situation"),
+    L("s3",9,5,"Same message, two registers") ] },
+  { id: "u10", num: 10, title: "Professional Communication", lessons: [
+    L("s3",10,1,"Meetings: contribute, interrupt, clarify"), L("s3",10,2,"Giving a short presentation: structure & signposting"),
+    L("s3",10,3,"Negotiating: propose, concede, bargain"), L("s3",10,4,"Professional calls & follow-ups"),
+    L("s3",10,5,"Present + field questions") ] },
+  { id: "u11", num: 11, title: "Abstract Topics & Debate", lessons: [
+    L("s3",11,1,"Handling abstract topics: frameworks instead of panic"), L("s3",11,2,"Building a structured argument"),
+    L("s3",11,3,"Defending & conceding under challenge"), L("s3",11,4,"Small talk → deep talk"),
+    L("s3",11,5,"Debate a professional topic") ] },
+  { id: "u12", num: 12, title: "Putting It Together (B2)", lessons: [
+    L("s3",12,1,"Big review 1: tenses, conditionals & deduction"), L("s3",12,2,"Big review 2: passive, relatives, reported & register"),
+    L("s3",12,3,"Accent & fluency clinic: naturalness and self-monitoring"), L("s3",12,4,"Full B2 mock conversation (20–30 min)"),
+    L("s3",12,5,"B2 flagship benchmark + graduation sample") ] },
+];
+
 export const STAGES: Record<StageId, Stage> = {
   s0: { id: "s0", num: 0, title: "Foundations", rank: "Recruit", cefr: "Pre-A1 → A1", entry: "True beginner", units: STAGE0 },
   s1: { id: "s1", num: 1, title: "Elementary", rank: "Citizen", cefr: "A2", entry: "A1 achieved or placement evidence", units: STAGE1 },
   s2: { id: "s2", num: 2, title: "Intermediate", rank: "Legionary", cefr: "B1", entry: "A2 achieved or placement evidence", units: STAGE2 },
+  s3: { id: "s3", num: 3, title: "Confident", rank: "Confident", cefr: "B2", entry: "B1 achieved or placement evidence", units: STAGE3 },
 };
 
 /**

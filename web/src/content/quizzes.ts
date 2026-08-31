@@ -23,6 +23,74 @@ const q = (id: string, prompt: string, options: string[], answer: number): QuizQ
   answer,
 });
 
+/* ==========================================================================
+ * OPTION ORDER — why these quizzes are rotated before they are shown
+ * --------------------------------------------------------------------------
+ * Options are rendered in array order and were never shuffled, while the
+ * authored `answer` sat at index 0 almost everywhere. Measured over the
+ * committed item banks:
+ *
+ *   stage 0:  26/44 answers at index 0  -> "always pick the first option" = 59%
+ *   stage 1:  40/41                     ->                                  98%
+ *   stage 2:  54/54                     ->                                 100%
+ *
+ * Stage 1 and Stage 2 are live. Their unit quizzes were fully solvable without
+ * reading the question, which makes them worthless as the formative evidence
+ * they are supposed to feed into the review queue and the stage determination.
+ * The answer key itself was never leaked — the pages strip it correctly — so
+ * this was purely a positional tell, and the cheapest way to score well was to
+ * ignore the English entirely.
+ *
+ * The fix is structural rather than 139 hand edits, because hand edits would
+ * drift again the moment somebody authored a new unit by copying an old one.
+ * Each question's options are ROTATED so that the correct answer lands at a
+ * position derived from a hash of the question id:
+ *
+ *   target t = hash(id) mod n          (uniform by construction, not by care)
+ *   display[i] = options[(answer + i - t) mod n]
+ *
+ * Properties that matter:
+ *   - Deterministic, so a reload never reorders what a learner is mid-way
+ *     through, and no per-user state has to be stored.
+ *   - Rotation preserves the authored cyclic order, so option lists that were
+ *     written as a progression still read sensibly.
+ *   - It is computed in ONE place and used by both the pages and the grading
+ *     route, so a display order and a grade can never disagree.
+ *
+ * This is obfuscation of a tell, not security: the item bank is authored in the
+ * repo and a determined learner can always share answers. It closes the gap
+ * where a learner could score 100% while learning nothing, which is the part
+ * that corrupts the evidence.
+ * ========================================================================== */
+
+/** FNV-1a. Small, stable across processes, and good enough to spread positions. */
+function hashId(id: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
+
+/** The display position the correct answer occupies for this question. */
+export function correctDisplayIndex(question: QuizQuestion): number {
+  return hashId(question.id) % question.options.length;
+}
+
+/** The question as the learner sees it: options rotated, answer key removed. */
+export function publicQuestion(question: QuizQuestion): { id: string; prompt: string; options: string[] } {
+  const n = question.options.length;
+  const t = correctDisplayIndex(question);
+  const options = Array.from({ length: n }, (_, i) => question.options[(question.answer + i - t + n * n) % n]);
+  return { id: question.id, prompt: question.prompt, options };
+}
+
+/** True when the learner's chosen DISPLAY index is the correct one. */
+export function isCorrectChoice(question: QuizQuestion, chosenDisplayIndex: number): boolean {
+  return chosenDisplayIndex === correctDisplayIndex(question);
+}
+
 export const QUIZZES: Record<string, UnitQuiz> = {
   u0: {
     unit: "u0",
@@ -533,7 +601,303 @@ export const STAGE2_QUIZZES: Record<string, UnitQuiz> = {
   },
 };
 
-const ALL_QUIZZES: Record<string, UnitQuiz> = { ...QUIZZES, ...STAGE1_QUIZZES, ...STAGE2_QUIZZES };
+/**
+ * Stage-3 (B2) per-unit formative quizzes.
+ *
+ * Every item targets a documented RESIDUAL error from the unit it belongs to —
+ * the ones collected in the Unit 12 review tables — rather than testing whether
+ * the learner can recognise a structure they have just read about. At B2 the
+ * interesting question is which form survives under speed.
+ *
+ * Correct-answer positions are spread deliberately (see the note on
+ * ANSWER_POSITION_SPREAD below). Options are rendered in source order and are
+ * never shuffled, so a predictable position is a free pass.
+ */
+export const STAGE3_QUIZZES: Record<string, UnitQuiz> = {
+  "s3-u1": {
+    unit: "s3-u1",
+    num: 1,
+    title: "Perfect Aspect Mastery",
+    questions: [
+      q("s3u1q1", "I ___ here since March.", ["work", "am working", "have been working"], 2),
+      q("s3u1q2", "Which sentence is wrong?", [
+        "I've been writing three reports this week.",
+        "I've written three reports this week.",
+        "I've been writing all week.",
+      ], 0),
+      q("s3u1q3", "The perfect continuous emphasises:", ["the result", "the activity and its duration", "a single completed event"], 1),
+      q("s3u1q4", "Choose the natural status update.", [
+        "I work on the migration since two months.",
+        "I have worked on the migration two months.",
+        "I've been working on the migration for about two months.",
+      ], 2),
+      q("s3u1q5", "How long ___ you ___ waiting?", ["have / been", "did / be", "are / been"], 0),
+    ],
+  },
+  "s3-u2": {
+    unit: "s3-u2",
+    num: 2,
+    title: "Past Perfect & Narrative Mastery",
+    questions: [
+      q("s3u2q1", "By the time I arrived, they ___.", ["left", "had left", "were leaving"], 1),
+      q("s3u2q2", "The past perfect marks:", [
+        "every verb in a past story",
+        "the most recent past event",
+        "the event that happened earlier than the main past event",
+      ], 2),
+      q("s3u2q3", "She was exhausted — she ___ since dawn.", ["had been driving", "has been driving", "was driving"], 0),
+      q("s3u2q4", "Which is the over-use error?", [
+        "I got home, made dinner and went to bed.",
+        "I had got home, had made dinner and had gone to bed.",
+        "I got home. I'd already eaten, so I went straight to bed.",
+      ], 1),
+      q("s3u2q5", "In *she'd been working all night*, the missing sound learners drop is:", ["/s/", "/t/", "/d/"], 2),
+    ],
+  },
+  "s3-u3": {
+    unit: "s3-u3",
+    num: 3,
+    title: "Future Forms (Advanced)",
+    questions: [
+      q("s3u3q1", "This time tomorrow I ___ on a plane.", ["will have sat", "will be sitting", "will sit"], 1),
+      q("s3u3q2", "___ Friday I'll have finished the report.", ["Until", "Since", "By"], 2),
+      q("s3u3q3", "The future perfect nearly always needs:", ["a *by* boundary", "a *since* phrase", "a continuous form"], 0),
+      q("s3u3q4", "Which expresses a decision made right now?", [
+        "I'll be getting it.",
+        "I'll get it.",
+        "I'll have got it.",
+      ], 1),
+      q("s3u3q5", "The most hedged prediction is:", [
+        "It'll rain.",
+        "It's going to rain.",
+        "It might well rain, though I wouldn't count on it.",
+      ], 2),
+    ],
+  },
+  "s3-u4": {
+    unit: "s3-u4",
+    num: 4,
+    title: "Third & Mixed Conditionals",
+    questions: [
+      q("s3u4q1", "Which is correct?", [
+        "If I'd have known, I'd have come.",
+        "If I'd known, I'd have come.",
+        "If I would have known, I'd have came.",
+      ], 1),
+      q("s3u4q2", "*If I'd taken that job, I'd be in Dubai now* is a:", ["third conditional", "mixed conditional", "second conditional"], 1),
+      q("s3u4q3", "A mixed conditional result almost always carries:", [
+        "a *by* phrase",
+        "a passive verb",
+        "a present time word such as *now* or *still*",
+      ], 2),
+      q("s3u4q4", "*would of* is:", ["formal", "never correct — it is *would have*", "correct in speech only"], 1),
+      q("s3u4q5", "Regret about the past is:", ["I wish I'd said it.", "I wish I said it.", "I wish I say it."], 0),
+    ],
+  },
+  "s3-u5": {
+    unit: "s3-u5",
+    num: 5,
+    title: "Modals of Deduction & Speculation",
+    questions: [
+      q("s3u5q1", "Negative certainty about the present is:", ["mustn't be", "can't be", "shouldn't be"], 1),
+      q("s3u5q2", "He ___ got the email — he replied an hour ago.", ["must have", "must has", "must had"], 0),
+      q("s3u5q3", "Which is wrong?", [
+        "It must have gone wrong somewhere.",
+        "It might have gone wrong somewhere.",
+        "It must have went wrong somewhere.",
+      ], 2),
+      q("s3u5q4", "A deduction without a clue attached is:", ["a hedge", "a concession", "an assertion"], 2),
+      q("s3u5q5", "*They can't have had approval* means:", [
+        "I'm certain they didn't.",
+        "I think perhaps they didn't.",
+        "They weren't allowed to.",
+      ], 0),
+    ],
+  },
+  "s3-u6": {
+    unit: "s3-u6",
+    num: 6,
+    title: "The Passive (Advanced)",
+    questions: [
+      q("s3u6q1", "The file ___ before it went out.", ["should have checked", "should have been checked", "should been checked"], 1),
+      q("s3u6q2", "It ___ done before Friday.", ["must", "must be", "must been"], 1),
+      q("s3u6q3", "Which reporting passive is correct?", [
+        "He is thought that he left in March.",
+        "He is thought to have left in March.",
+        "He is thought he has left in March.",
+      ], 1),
+      q("s3u6q4", "*I had my hair cut* means:", [
+        "I cut my own hair.",
+        "Someone cut my hair for me.",
+        "My hair was cut by accident.",
+      ], 1),
+      q("s3u6q5", "Which *by* phrase should be deleted?", [
+        "The report was written by the consultants.",
+        "The decision was taken by the board.",
+        "The window was broken by someone.",
+      ], 2),
+    ],
+  },
+  "s3-u7": {
+    unit: "s3-u7",
+    num: 7,
+    title: "Relative Clauses (Advanced)",
+    questions: [
+      q("s3u7q1", "*My sister, who lives in Dubai, is visiting* tells you:", [
+        "I have several sisters.",
+        "I have one sister.",
+        "Nothing about how many sisters I have.",
+      ], 1),
+      q("s3u7q2", "Which is wrong?", [
+        "The man who called me was helpful.",
+        "The man whom I called was helpful.",
+        "The colleague whom called me was helpful.",
+      ], 2),
+      q("s3u7q3", "The reduced form of *the report which was written last year* is:", [
+        "the report writing last year",
+        "the report written last year",
+        "the report wrote last year",
+      ], 1),
+      q("s3u7q4", "He arrived late, ___ annoyed everyone.", ["what", "that", "which"], 2),
+      q("s3u7q5", "***that*** can never be used:", [
+        "with a non-defining clause",
+        "for things",
+        "as an object pronoun",
+      ], 0),
+    ],
+  },
+  "s3-u8": {
+    unit: "s3-u8",
+    num: 8,
+    title: "Reported Speech (Advanced)",
+    questions: [
+      q("s3u8q1", "He suggested ___ the launch.", ["to postpone", "postponing", "postpone"], 1),
+      q("s3u8q2", "She insisted ___ until the end.", ["me to stay", "that I stay", "me staying"], 1),
+      q("s3u8q3", "He denied ___ the documents.", ["taking", "to take", "take"], 0),
+      q("s3u8q4", "Which reported question is correct?", [
+        "He asked me what did I want.",
+        "He asked me what I wanted.",
+        "He asked me what do I want.",
+      ], 1),
+      q("s3u8q5", "You choose a reporting verb mainly for its:", [
+        "length",
+        "formality",
+        "stance — how the speaker held the claim",
+      ], 2),
+    ],
+  },
+  "s3-u9": {
+    unit: "s3-u9",
+    num: 9,
+    title: "Register & Nuance",
+    questions: [
+      q("s3u9q1", "The formal equivalent of *put off* is:", ["postpone", "put away", "delay off"], 0),
+      q("s3u9q2", "Which collocation is correct?", ["make a research", "do a research", "do some research"], 2),
+      q("s3u9q3", "The costliest register error in a long conversation is:", [
+        "one occasional slang word",
+        "using a single register for everything",
+        "a formal word in a formal email",
+      ], 1),
+      q("s3u9q4", "*The individual to whom I reported* at a family dinner is:", [
+        "impressive",
+        "correct but wrong for the room",
+        "grammatically wrong",
+      ], 1),
+      q("s3u9q5", "Formal register in speech is mainly:", ["louder", "faster", "slower and flatter"], 2),
+    ],
+  },
+  "s3-u10": {
+    unit: "s3-u10",
+    num: 10,
+    title: "Professional Communication",
+    questions: [
+      q("s3u10q1", "The most usable way to interrupt in a meeting is:", [
+        "Stop — I want to speak.",
+        "Sorry, can I just come in on that?",
+        "Excuse me, you are wrong.",
+      ], 1),
+      q("s3u10q2", "Signposting a presentation means:", [
+        "saying out loud where you are and where you are going",
+        "using more formal vocabulary",
+        "speaking more slowly throughout",
+      ], 0),
+      q("s3u10q3", "In a negotiation, a concession is strongest when it is:", [
+        "vague and general",
+        "repeated twice",
+        "specific, and paired with what you are holding",
+      ], 2),
+      q("s3u10q4", "Which checks understanding without sounding aggressive?", [
+        "You didn't explain that.",
+        "Just so I've got it right — you'd like the draft by Thursday?",
+        "What do you mean by that?",
+      ], 1),
+      q("s3u10q5", "A follow-up call summary should:", [
+        "restate every detail discussed",
+        "confirm the actions, the owners and the dates",
+        "avoid repeating anything already said",
+      ], 1),
+    ],
+  },
+  "s3-u11": {
+    unit: "s3-u11",
+    num: 11,
+    title: "Abstract Topics & Debate",
+    questions: [
+      q("s3u11q1", "A topic framework is useful because it:", [
+        "generates content when you have no opinion ready",
+        "makes your grammar more accurate",
+        "shortens your answer",
+      ], 0),
+      q("s3u11q2", "The part of an argument learners most often drop is:", ["the claim", "the example", "the conclusion"], 1),
+      q("s3u11q3", "Put these in order: claim, conclusion, evidence, example.", [
+        "claim → conclusion → evidence → example",
+        "evidence → claim → example → conclusion",
+        "claim → evidence → example → conclusion",
+      ], 2),
+      q("s3u11q4", "The strongest response to a challenge that genuinely lands is:", [
+        "repeating your position more firmly",
+        "changing the subject politely",
+        "naming what survives of your position and revising the rest",
+      ], 2),
+      q("s3u11q5", "*That's a fair point* is weaker than:", [
+        "That's a fair point about the sample size.",
+        "That's a very fair point indeed.",
+        "That's a fair point, but no.",
+      ], 0),
+    ],
+  },
+  "s3-u12": {
+    unit: "s3-u12",
+    num: 12,
+    title: "Putting It Together (B2)",
+    questions: [
+      q("s3u12q1", "Which is correct?", [
+        "If I'd have known, I'd be there now.",
+        "If I'd known, I'd be there now.",
+        "If I knew, I'd have been there now.",
+      ], 1),
+      q("s3u12q2", "The email ___ before it was sent.", ["should have checked", "should be checked", "should have been checked"], 2),
+      q("s3u12q3", "He ___ got the message — he answered immediately.", ["can't have", "must have", "mustn't have"], 1),
+      q("s3u12q4", "The five B2 rubric dimensions are Fluency, Accuracy, Range/Coherence, Pronunciation and:", [
+        "Interaction",
+        "Vocabulary size",
+        "Accent",
+      ], 0),
+      q("s3u12q5", "The B2 determination requires the defined minimum:", [
+        "as an average across the five dimensions",
+        "in every one of the five dimensions",
+        "in at least three of the five dimensions",
+      ], 1),
+    ],
+  },
+};
+
+const ALL_QUIZZES: Record<string, UnitQuiz> = {
+  ...QUIZZES,
+  ...STAGE1_QUIZZES,
+  ...STAGE2_QUIZZES,
+  ...STAGE3_QUIZZES,
+};
 
 export function getQuiz(unitKey: string): UnitQuiz | null {
   return ALL_QUIZZES[unitKey] ?? null;
