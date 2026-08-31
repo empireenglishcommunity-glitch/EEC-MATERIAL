@@ -184,6 +184,27 @@ for (const { id, p } of lessons()) {
       );
   }
 
+  // 6a. No mixed-script section labels.
+  //
+  // A single wrong-script character inside a heading — a Latin "t" inside
+  // "افتكر", an Arabic "م" inside "Warm-up" — is invisible to checks 2, 3 and 6
+  // above, because those find a section with `head.includes(label)`. A corrupted
+  // label simply does not match, so the section is treated as ABSENT: it is
+  // reported only if it happens to be mandatory, and silently ignored otherwise.
+  // Every non-mandatory section (Warm-up, Your Arsenal, Train, Remember) can
+  // therefore be corrupted while the lesson still reports as conforming — which
+  // is exactly how four of these shipped past a "145/145 conforming" run.
+  // Adjacent Latin and Arabic characters never occur legitimately: the corpus
+  // always separates the two scripts with a space, an em dash or punctuation.
+  for (const head of heads) {
+    const bad = /[A-Za-z][\u0600-\u06FF]|[\u0600-\u06FF][A-Za-z]/.exec(head);
+    if (bad)
+      problems.push(
+        `mixed-script section label — a Latin and an Arabic character are adjacent in "${head}"` +
+          ` (near "${bad[0]}"). One of them is a typo, and it makes the section invisible to this check.`,
+      );
+  }
+
   // 4. teacher overlay
   const teacherBlocks = (md.match(/^>\s*\[!TEACHER\]/gm) || []).length;
   if (!teacherBlocks) problems.push("no Teacher overlay blocks");
