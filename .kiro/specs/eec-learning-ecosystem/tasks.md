@@ -1,12 +1,31 @@
 # EEC Learning Ecosystem — Implementation Plan
 
 > **Spec:** EEC Learning Ecosystem
-> **Version:** 1.0 (draft for approval)
+> **Version:** 1.0
 > **Reads with:** `requirements.md` and `design.md`
 > **How to use:** Execute phases in order. Each task is a discrete, reviewable deliverable (documents,
 > materials, **and — from Phase 3C — our own platform code**). Check items off as completed.
 > `Req:` tags trace each task to requirements. Phases 0–4 get EEC to a proven, revenue-generating
 > founding cohort; Phases 5–6 scale.
+
+## STATUS — 2026-08-31
+
+**Everything buildable is built. What remains is running the business, not writing it.**
+30 of 42 boxes are ticked and, unlike the sub-spec's, they were checked against the
+repository and found **accurate**: Phases 0–3 (method, brand, curriculum, programme,
+content, operations, platform) are done, and the 12 open items are Phase 4–6 delivery
+and scale — deliver the founding cohort, run the assessments, publish results, decide
+go/scale, launch the membership, run cohort #2. None of those is a coding task.
+
+Two things a reader should not be misled about:
+
+- **The curriculum is complete; the finished teaching material is 20% complete.** Phases
+  1.3/5.2/6.1/6.2 produced all **275 lesson blueprints** across five stages. Only Stage 0's
+  **55** have been turned into Student's/Teacher's Edition material. Status and evidence:
+  [`../eec-lesson-materials/tasks.md`](../eec-lesson-materials/tasks.md) — read its status
+  block, not its checkboxes.
+- **This repo also contains the live root-domain site** (`web/`, Next.js) and the coursebook
+  PDF pipeline (`tools/pdf/`). Merging does not deploy either; see `web/DEPLOY.md`.
 
 ---
 
