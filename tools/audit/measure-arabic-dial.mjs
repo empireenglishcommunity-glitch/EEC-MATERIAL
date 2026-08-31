@@ -76,10 +76,18 @@ function explanationText(md) {
     .replace(/^\|.*\|$/gm, "");
 }
 
-function arabicShare(text) {
+function counts(text) {
   const ar = (text.match(/[\u0600-\u06FF]/g) || []).length;
   const la = (text.match(/[A-Za-z]/g) || []).length;
-  return ar + la === 0 ? null : (ar / (ar + la)) * 100;
+  return ar + la === 0 ? null : { ar, la, share: (ar / (ar + la)) * 100 };
+}
+
+/**
+ * Arabic characters needed for a target share, given the Latin already present.
+ * Useful when drafting: aim for this from the first pass instead of tuning.
+ */
+export function arabicNeededFor(targetPct, latinChars) {
+  return Math.round((targetPct / 100) * latinChars / (1 - targetPct / 100));
 }
 
 /** The blueprint path and lesson id a finished lesson cites in its header. */
@@ -136,11 +144,11 @@ function lessons() {
 const rows = [];
 for (const l of lessons()) {
   const md = fs.readFileSync(l.p, "utf8");
-  const measured = arabicShare(explanationText(md));
-  if (measured === null) continue; // no explanation section (task/finale lessons)
+  const c = counts(explanationText(md));
+  if (c === null) continue; // no explanation section (task/finale lessons)
   const cite = citation(md);
   const target = cite ? declaredTarget(cite.blueprint, cite.id) : null;
-  rows.push({ ...l, measured, target });
+  rows.push({ ...l, measured: c.share, ar: c.ar, la: c.la, target });
 }
 
 let failures = 0;
@@ -174,9 +182,19 @@ for (const [stage, list] of [...byStage.entries()].sort((a, b) => a[0] - b[0])) 
     const ok = Math.abs(delta) <= TOLERANCE;
     if (!ok && !grandfathered) failures++;
     const mark = ok ? "✓" : grandfathered ? "·" : "✗";
+    // The actionable part: how much Arabic to add or cut to land on target.
+    // Without this an author oscillates around the number for several passes.
+    let hint = "";
+    if (!ok) {
+      const wantAr = Math.round((r.target / 100) * r.la / (1 - r.target / 100));
+      const d = wantAr - r.ar;
+      hint =
+        `  →  ${d >= 0 ? "ADD" : "CUT"} ~${Math.abs(d)} Arabic chars ` +
+        `(~${Math.max(1, Math.round(Math.abs(d) / 4.6))} words)`;
+    }
     console.log(
       `      ${mark}  ${r.id}  ${r.measured.toFixed(1)}%  target ${r.target}%  ` +
-        `(${delta >= 0 ? "+" : ""}${delta.toFixed(1)})`,
+        `(${delta >= 0 ? "+" : ""}${delta.toFixed(1)})${hint}`,
     );
   }
   console.log("");
