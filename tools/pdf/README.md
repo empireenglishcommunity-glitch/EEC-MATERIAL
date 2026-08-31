@@ -52,11 +52,42 @@ node build-book.mjs --stage 0 --edition student --unit 3   # a single unit
 
 ## Regenerate after editing a lesson
 
-Edit any `materials/stage0/**/*.md`, then re-run `npm run build`. Re-embed the portal
-copy separately (see repo root) if the portal-rendered lessons also changed.
+```bash
+./setup-env.sh                                  # REQUIRED on a fresh machine — see below
+npm run build                                   # rebuild both editions
+node ../audit/generate-portal-embed.mjs         # re-embed the portal copy
+cd ../audit && npm run all                      # drift + anatomy + bidi
+```
+
+The portal reads a generated embed, not these markdown files, so a lesson edit must be
+re-embedded or the site and the book will ship **different lessons with nothing
+failing**. `npm run drift` catches exactly that.
+
+## ⚠️ Never build without `setup-env.sh` — a successful build can still be wrong
+
+`setup-env.sh` installs `dejavu-sans-fonts` (arrows and symbols: `→ ↗ ↘`) and a
+colour-emoji font (the Empire section markers `🎯 🔁 👂 👑`). Without them Chromium
+still renders, the script still prints `✓`, and the PDF is still produced — just with
+missing glyphs on every page.
+
+This happened during the 2026-08-31 audit: a rebuild on a machine with no emoji or
+DejaVu faces dropped the student edition from 4.4M to 4.1M and lost every `DejaVuSans`
+face. It was caught only by diffing the embedded font list, and the files were
+reverted. **Check the fonts, not the exit code:**
+
+```bash
+strings ../../web/public/coursebook/eec-stage0-student.pdf \
+  | grep -oE '(Cinzel|SourceSans3|NotoNaskhArabic|NotoSans|DejaVuSans)[A-Za-z-]*' | sort -u
+```
+
+All five families must appear. If `DejaVuSans` is absent, run `setup-env.sh` and
+rebuild — do not commit the result.
 
 ## Notes
 
 - `node_modules/`, `.chromium/` and `_fonttest.*` are gitignored; the generated PDFs
   in `web/public/coursebook/` are committed so they ship with the site.
 - Verified output (Stage 0): Student ≈ 190 pp, Teacher ≈ 208 pp, A4.
+- Anything in `web/public/` is served publicly and ungated, including the **Teacher's
+  Edition**. That is a deliberate decision to make or revisit, not an accident of the
+  build — see `audits/2026-08-31-repo-audit.md` §3.
