@@ -94,6 +94,10 @@ const STAGE_RULES = {
     "stage-finale": ["s0-u10-l05"], // assessment script + graduation recording
     review: ["s0-u10-l01", "s0-u10-l02", "s0-u10-l04"], // consolidation across ten units
   },
+  1: {
+    "stage-finale": ["s1-u10-l05"], // A2 summative + separate standard milestone sample
+    review: ["s1-u10-l01", "s1-u10-l02", "s1-u10-l04"], // retrieval reviews + full mock
+  },
 };
 
 /** Lesson types, most specific first. */
