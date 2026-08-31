@@ -12,7 +12,7 @@
  *
  * Usage:
  *   node build-book.mjs [--stage 0] [--edition student|teacher|both] [--unit N]
- * Output: web/public/coursebook/eec-stage<N>-<edition>.pdf
+ * Output: web/private/coursebook/eec-stage<N>-<edition>.pdf (served behind auth)
  * ========================================================================== */
 
 import { marked } from "marked";
@@ -95,6 +95,26 @@ function firstHeading(md) {
 // ==========================================================================
 // Gather Stage units in order.
 // ==========================================================================
+/**
+ * Stage-level wrapper pages: the stage front matter that opens the book and the
+ * generated glossary that closes it. Both are optional — a stage that has not
+ * been given a wrapper yet still builds — and both are skipped for a
+ * single-unit render, where a stage cover and a whole-stage glossary would be
+ * noise around one unit.
+ */
+function loadStageExtras(stage) {
+  if (ONLY_UNIT != null) return { frontMatter: null, glossary: null };
+  const base = path.join(REPO, "materials", `stage${stage}`);
+  const read = (f) => {
+    const p = path.join(base, f);
+    return fs.existsSync(p) ? fs.readFileSync(p, "utf8") : null;
+  };
+  return {
+    frontMatter: read(`stage${stage}-front-matter.md`),
+    glossary: read(`stage${stage}-glossary.md`),
+  };
+}
+
 function loadStage(stage) {
   const base = path.join(REPO, "materials", `stage${stage}`);
   const unitDirs = fs
@@ -131,7 +151,7 @@ function loadStage(stage) {
 // ==========================================================================
 // Assemble the full HTML document for one edition.
 // ==========================================================================
-function buildHtml(stage, edition, units) {
+function buildHtml(stage, edition, units, extras = { frontMatter: null, glossary: null }) {
   const meta = STAGE_META[stage] || { rank: "", cefr: "", title: `Stage ${stage}`, arabic: "" };
   const css = fs.readFileSync(path.join(__dirname, "book.css"), "utf8");
   const editionLabel = edition === "teacher" ? "Teacher's Edition" : "Student's Edition";
@@ -153,6 +173,9 @@ function buildHtml(stage, edition, units) {
 
   // ---- Table of contents ----
   let toc = `<section class="toc"><h1>Contents &mdash; &#1601;&#1607;&#1585;&#1587; &#1575;&#1604;&#1605;&#1581;&#1578;&#1608;&#1609;</h1>`;
+  if (extras.frontMatter) {
+    toc += `<div class="unit-row">${escapeHtml(firstHeading(extras.frontMatter)) || `Stage ${stage}`}</div>`;
+  }
   for (const u of units) {
     const unitTitle = u.frontMatter ? firstHeading(u.frontMatter) : `Unit ${u.num}`;
     toc += `<div class="unit-row">${escapeHtml(unitTitle)}</div>`;
@@ -160,10 +183,21 @@ function buildHtml(stage, edition, units) {
       toc += `<div class="lesson-row"><span class="id">${l.id}</span>${escapeHtml(firstHeading(l.md))}</div>`;
     }
   }
+  if (extras.glossary) {
+    toc += `<div class="unit-row">${escapeHtml(firstHeading(extras.glossary)) || "Glossary"}</div>`;
+  }
   toc += `</section>`;
 
-  // ---- Units + lessons ----
+  // ---- Stage front matter (opens the book, before Unit 0) ----
   let bodyHtml = "";
+  if (extras.frontMatter) {
+    bodyHtml += `<section class="page front-matter stage-front-matter">${renderContent(
+      extras.frontMatter,
+      edition,
+    )}</section>`;
+  }
+
+  // ---- Units + lessons ----
   for (const u of units) {
     const unitTitle = u.frontMatter ? firstHeading(u.frontMatter) : `Unit ${u.num}`;
     bodyHtml += `
@@ -179,6 +213,18 @@ function buildHtml(stage, edition, units) {
     for (const l of u.lessons) {
       bodyHtml += `<section class="page lesson">${renderContent(l.md, edition)}</section>`;
     }
+  }
+
+  // ---- Glossary (closes the book, after the last unit) ----
+  if (extras.glossary) {
+    bodyHtml += `
+    <section class="unit-divider">
+      <div class="crest">&#128081;</div>
+      <div class="num">Stage ${stage}</div>
+      <div class="rule"></div>
+      <h2>Glossary</h2>
+    </section>`;
+    bodyHtml += `<section class="page glossary">${renderContent(extras.glossary, edition)}</section>`;
   }
 
   return `<!doctype html>
@@ -218,15 +264,17 @@ function escapeHtml(s) {
 // ==========================================================================
 // Render one edition to PDF.
 // ==========================================================================
-async function renderPdf(browser, stage, edition, units) {
-  const html = buildHtml(stage, edition, units);
+async function renderPdf(browser, stage, edition, units, extras) {
+  const html = buildHtml(stage, edition, units, extras);
   const page = await browser.newPage();
   await page.setContent(html, { waitUntil: "networkidle0", timeout: 120000 });
   try {
     await page.evaluateHandle("document.fonts.ready");
   } catch {}
 
-  const outDir = path.join(REPO, "web", "public", "coursebook");
+  // `web/private/` — NOT `web/public/`. These are served by
+  // /api/coursebook/[edition] behind auth; anything in public/ is world readable.
+  const outDir = path.join(REPO, "web", "private", "coursebook");
   fs.mkdirSync(outDir, { recursive: true });
   const suffix = ONLY_UNIT != null ? `-unit${ONLY_UNIT}` : "";
   const outPath = path.join(outDir, `eec-stage${stage}-${edition}${suffix}.pdf`);
@@ -251,11 +299,15 @@ async function renderPdf(browser, stage, edition, units) {
 // ==========================================================================
 (async () => {
   const units = loadStage(STAGE);
+  const extras = loadStageExtras(STAGE);
   const lessonCount = units.reduce((n, u) => n + u.lessons.length, 0);
+  const wrapper = [extras.frontMatter && "stage front matter", extras.glossary && "glossary"]
+    .filter(Boolean)
+    .join(" + ");
   console.log(
     `Empire coursebook — Stage ${STAGE}: ${units.length} unit(s), ${lessonCount} lesson(s)${
-      ONLY_UNIT != null ? ` (unit ${ONLY_UNIT} only)` : ""
-    }`
+      wrapper ? `, ${wrapper}` : ""
+    }${ONLY_UNIT != null ? ` (unit ${ONLY_UNIT} only)` : ""}`
   );
 
   const editions = EDITION === "both" ? ["student", "teacher"] : [EDITION];
@@ -266,7 +318,7 @@ async function renderPdf(browser, stage, edition, units) {
   try {
     for (const ed of editions) {
       console.log(`Rendering ${ed}'s edition…`);
-      await renderPdf(browser, STAGE, ed, units);
+      await renderPdf(browser, STAGE, ed, units, extras);
     }
   } finally {
     await browser.close();
