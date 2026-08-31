@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getCurrentUser } from "@/lib/auth";
-import { getStage } from "@/lib/lessons";
+import { getStage, stageWrapperPageId } from "@/lib/lessons";
 import { userCanAccessStage } from "@/lib/access";
 import { stageNav } from "@/lib/portal-nav";
 import CoursebookPage from "@/components/CoursebookPage";
@@ -25,7 +25,7 @@ export default async function StageGlossaryPage({
     <CoursebookPage
       locale={locale}
       stageId={meta.id}
-      pageId={`${meta.id}-glossary`}
+      pageId={stageWrapperPageId(meta.id, "glossary")}
       eyebrow={locale === "ar" ? `ذخيرتك · Stage ${meta.num}` : `Glossary · Stage ${meta.num}`}
       backHref={stageNav(locale, meta.id).dashboard}
     />
