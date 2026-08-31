@@ -110,7 +110,18 @@ function declaredTarget(blueprintRel, lessonId) {
   const sections = src.split(/^## /m);
   const section = sections.find((s) => s.startsWith(lessonId));
   const scope = section ?? src; // unit-level fallback for a lesson with no block
-  const m = /\*\*Arabic support:\*\*[^\n]*?~(\d+)%/.exec(scope);
+  const line = /\*\*Arabic support:\*\*[^\n]*/.exec(scope)?.[0];
+  if (!line) return null;
+
+  // The curriculum writes the level three ways, and all three are a real target:
+  //   "~15%"  the usual case
+  //   "0%"    the Stage-2/3 finales — no tilde, because zero is exact, not approximate
+  //   "none"  the immersion units from B1 onward — semantically 0%
+  // Requiring the tilde silently ungated every lesson written the other two ways
+  // (Stage 2 Unit 12 alone is five lessons), which is the worst outcome for a gate:
+  // it reports "no target" and passes rather than failing.
+  if (/\bnone\b/i.test(line)) return 0;
+  const m = /~?(\d+)\s*%/.exec(line);
   return m ? parseInt(m[1], 10) : null;
 }
 
