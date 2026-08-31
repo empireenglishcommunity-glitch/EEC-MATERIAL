@@ -35,12 +35,12 @@
 ### Section labels (Student's Edition) — label · function · Arabic
 | Order | Empire label | Function | Arabic |
 |--|--|--|--|
-| 1 | **Your Conquest** | Objectives | هدفك من الدرس |
+| 1 | **Your Conquest** | Objectives | هدفك |
 | 2 | **Why this matters** | Motivation hook | ليه ده مهم |
-| 3 | **Warm-up** | Recall/retrieval | سخّن (افتكر) |
+| 3 | **Warm-up** | Recall/retrieval | سخّن |
 | 4 | **Watch & Listen** | Input | اسمع وشوف |
-| 5 | **Decode it** | Grammar/pattern (in Arabic) | القاعدة — افهمها صح |
-| 6 | **Your Arsenal** | Vocabulary | ذخيرتك من الكلمات |
+| 5 | **Decode it** | Grammar/pattern (in Arabic) | القاعدة |
+| 6 | **Your Arsenal** | Vocabulary | ذخيرتك |
 | 7 | **Accent Lab** | Pronunciation (signature) | معمل النطق |
 | 8 | **Train** | Guided practice | تدرّب |
 | 9 | **Your Turn** | Free output + record task | دورك |
@@ -48,7 +48,13 @@
 | 11 | **Remember** | Review + spaced-review note | افتكر |
 | 12 | **Self-check** | Answer key (learn-alone) | صحّح لنفسك |
 
-*(Emoji/icon per section is allowed for scannability but must stay consistent across all lessons.)*
+A label may carry a **parenthetical qualifier** — `هدفك (milestone)`, `القاعدة (have / has)`,
+`سخّن (سلسلة)` — but the label itself is fixed. Non-teaching lessons use a small set of accepted
+**alternative** labels (`النموذج`, `عيادة النطق`, `التسجيل`, `الطريقة`); the full table lives in
+`lesson-anatomy.md` §1b and is enforced by `tools/audit/check-lesson-anatomy.mjs`.
+
+*(Emoji/icon per section is allowed for scannability but must stay consistent across all lessons — so
+decorate the label set, never a single lesson's copy of it.)*
 
 ## 3. Visual standard
 - **Palette:** royal-blue (`royal-900/950`) + gold (`gold-500`) — matches the live portal/web. Premium, uncluttered, **academy not influencer.**
@@ -61,6 +67,13 @@
 - **Arabic volume per stage = the blueprint's fade level** (Stage 0 heavy ~70% → immersion by B2–C1). The **format shows the fade**: many Arabic callouts/glosses early; fewer later; by B2 the page is English-only.
 - **Layout for mixed content:** use tables (English | Arabic) or an English line immediately followed by an Arabic gloss/explanation. Keep RTL Arabic and LTR English cleanly separated (don't interleave within a single run).
 - Grammar terms: gloss in plain Arabic (e.g., "الـ *to be* — فعل الكينونة").
+- **Bidi rule — a line should not start in one script and be mostly the other.** Renderers pick a line's
+  base direction from its **first strong character**, so a line that opens in Arabic but is mostly English
+  (or the reverse) has no correct place to put its closing `.` or `?` — the punctuation lands at the wrong
+  end and reads as a typo. Prefer a table row, or two lines, or an Arabic line that closes in Arabic. Both
+  renderers set `unicode-bidi: plaintext` (`tools/pdf/book.css`, `web/src/app/globals.css`), which handles
+  every line whose direction is unambiguous; these mixed-opening lines are the residue only an editor can
+  fix. Find them with `cd tools/audit && npm run bidi:verbose`.
 
 ## 5. Cultural relevance
 - Names, jobs, places, and situations are **real for the audience**: Egyptian + Gulf/diaspora (Cairo, Alexandria, family, work, university, InstaPay, travel to the Gulf). Never generic "John and Mary in London."

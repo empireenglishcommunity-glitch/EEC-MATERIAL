@@ -1,0 +1,19 @@
+{
+  "name": "eec-audit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Empire English content-integrity checks: portal/PDF bidi rendering, embed drift, and lesson-anatomy conformance.",
+  "scripts": {
+    "bidi": "node bidi-render-probe.mjs",
+    "bidi:verbose": "node bidi-render-probe.mjs --verbose",
+    "embed": "node generate-portal-embed.mjs",
+    "drift": "node generate-portal-embed.mjs --check",
+    "anatomy": "node check-lesson-anatomy.mjs",
+    "all": "npm run drift && npm run anatomy && npm run bidi"
+  },
+  "dependencies": {
+    "marked": "^16.4.2",
+    "puppeteer": "^24.10.0"
+  }
+}
