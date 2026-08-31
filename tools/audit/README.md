@@ -13,6 +13,11 @@ npm run all                      # drift, then anatomy, then bidi
 | `npm run drift` | Are the two generated files still exactly what `materials/stage0/` implies — the portal embed and the Stage-0 glossary? | The embed is banner-marked "AUTO-GENERATED … do not edit by hand", but no generator was committed. The portal serves the embed, the PDF reads the markdown — so drift means the two ship **different lessons** with nothing failing. |
 | `npm run anatomy` | Does every lesson match `materials/_style/lesson-anatomy.md`? | The blueprint citation, mandatory sections, section order, Arabic sub-labels, Teacher overlay, record task and sign-off are the definition of "done". Checking by hand across 55 lessons does not scale. |
 | `npm run bidi` | Does any line render its closing punctuation on the wrong side? | The Arabic locale sets `dir="rtl"` on `<html>`. Lesson prose inherited it, so **796 lines** of English rendered as `?Can you repeat, please`. The PDF stylesheet had already solved this; the portal had not. |
+| `npm run dial` | How much of each stage's explanation is actually in Arabic? | `lesson-anatomy.md` §3 sets a support level per stage (~70% → ~40% → ~15% → none) but never defined how to measure it, so it could not be checked. Reports only — the right level is editorial. |
+
+`anatomy` and `bidi` cover **every** stage under `materials/`. The embed and glossary
+generators are Stage-0 scoped on purpose: the portal serves Stage 0, and generalising them
+before a stage is actually wired in would be guessing.
 
 ## Regenerating after a content edit
 

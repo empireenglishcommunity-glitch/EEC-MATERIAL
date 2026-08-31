@@ -109,6 +109,33 @@ Rules:
 
 The **format visibly reflects** this (fewer Arabic callouts as stages rise).
 
+### 3a. How the dial is measured — and why the numbers above are a direction, not a promise
+
+The percentages in §3 were never operationally defined, which made them unverifiable.
+`tools/audit/measure-arabic-dial.mjs` (`npm run dial`) now defines them:
+
+> **Arabic share** = Arabic letters ÷ (Arabic + Latin letters), over the
+> **student-visible explanation only** — the *Decode it* and *Why this matters*
+> sections, with the Teacher overlay, code spans and table rows removed.
+
+Vocabulary tables, target language and examples are English **by design** at every
+stage, so counting the whole page measures the curriculum rather than the support level
+— and gives roughly half these figures. Arabic script also omits short vowels, so it is
+denser per character than English: a 50% character share is nearer parity in words than
+it sounds.
+
+Measured that way, the corpus sits **consistently below** the documented targets:
+
+| Stage | Documented | Measured |
+|--|--|--|
+| 0 (Recruit) | ~70% | **52.8%** |
+| 1 (Citizen) | ~40% | **26.2%** |
+
+Stage 0 is founder-approved and shipping at 52.8%, so the honest conclusion is that the
+targets never described this measure. **Judge a new stage against the ratio to the stage
+before it, not against the absolute number.** Stage 0 → Stage 1 measures **×0.50** against
+a documented intent of ×0.57 — the fade is real and close to plan.
+
 ## 4. Per-lesson "Done" checklist (the quality gate)
 
 A lesson ships only when **all** are true:

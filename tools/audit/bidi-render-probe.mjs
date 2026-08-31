@@ -81,25 +81,31 @@ function stripTeacherBlocks(md) {
  * would have missed the stage wrapper entirely.
  */
 function lessonFiles() {
-  const base = path.join(REPO, "materials", "stage0");
+  const root = path.join(REPO, "materials");
   const out = [];
   const add = (id, p) => {
     if (LESSON && id !== LESSON) return;
     out.push({ id, p });
   };
 
-  for (const f of fs.readdirSync(base).filter((f) => /^stage\d+-.*\.md$/.test(f)).sort()) {
-    add(f.replace(/\.md$/, ""), path.join(base, f));
-  }
-  for (const d of fs
-    .readdirSync(base)
-    .filter((d) => /^unit\d+$/.test(d))
-    .sort((a, b) => parseInt(a.slice(4)) - parseInt(b.slice(4)))) {
-    for (const f of fs
-      .readdirSync(path.join(base, d))
-      .filter((f) => f.endsWith(".md"))
-      .sort()) {
-      add(f.replace(/\.md$/, ""), path.join(base, d, f));
+  for (const s of fs
+    .readdirSync(root)
+    .filter((d) => /^stage\d+$/.test(d))
+    .sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)))) {
+    const base = path.join(root, s);
+    for (const f of fs.readdirSync(base).filter((f) => /^stage\d+-.*\.md$/.test(f)).sort()) {
+      add(f.replace(/\.md$/, ""), path.join(base, f));
+    }
+    for (const d of fs
+      .readdirSync(base)
+      .filter((d) => /^unit\d+$/.test(d) && fs.statSync(path.join(base, d)).isDirectory())
+      .sort((a, b) => parseInt(a.slice(4)) - parseInt(b.slice(4)))) {
+      for (const f of fs
+        .readdirSync(path.join(base, d))
+        .filter((f) => f.endsWith(".md"))
+        .sort()) {
+        add(f.replace(/\.md$/, ""), path.join(base, d, f));
+      }
     }
   }
   return out;

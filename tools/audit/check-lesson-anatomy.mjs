@@ -71,32 +71,61 @@ function labelOk(arPart, accepted) {
 
 const TEACHING = ["Your Conquest", "Watch & Listen", "Decode it", "Accent Lab", "Your Turn", "Your Orders", "Self-check"];
 
-/** Lesson types, most specific first. `must` lists that type's mandatory sections. */
+const MUST = {
+  teaching: TEACHING,
+  "unit-task": ["Your Conquest", "Watch & Listen", "Accent Lab", "Your Turn", "Your Orders", "Self-check"],
+  review: ["Your Conquest", "Your Turn", "Your Orders", "Self-check"],
+  orientation: ["Your Conquest", "Your Turn", "Your Orders"],
+  "stage-finale": ["Your Conquest"],
+};
+
+/**
+ * Per-stage exceptions to the default rules. Everything not listed here follows
+ * the defaults: a lesson ending `-l05` is that unit's speaking task, anything
+ * else is a teaching lesson.
+ *
+ * Only add a stage's entry once that stage's consolidation unit is authored —
+ * guessing its shape in advance is how a checker ends up enforcing a rule the
+ * content was never written to.
+ */
+const STAGE_RULES = {
+  0: {
+    orientation: ["s0-u0-l01"], // teaches no language: commitment and first sounds
+    "stage-finale": ["s0-u10-l05"], // assessment script + graduation recording
+    review: ["s0-u10-l01", "s0-u10-l02", "s0-u10-l04"], // consolidation across ten units
+  },
+};
+
+/** Lesson types, most specific first. */
 function lessonType(id) {
-  if (id === "s0-u0-l01") return { type: "orientation", must: ["Your Conquest", "Your Turn", "Your Orders"] };
-  if (id === "s0-u10-l05") return { type: "stage-finale", must: ["Your Conquest"] };
-  if (/^s0-u10-l0[124]$/.test(id))
-    return { type: "review", must: ["Your Conquest", "Your Turn", "Your Orders", "Self-check"] };
-  if (/-l05$/.test(id))
-    return {
-      type: "unit-task",
-      must: ["Your Conquest", "Watch & Listen", "Accent Lab", "Your Turn", "Your Orders", "Self-check"],
-    };
-  return { type: "teaching", must: TEACHING };
+  const stage = parseInt(/^s(\d+)-/.exec(id)?.[1] ?? "-1", 10);
+  const rules = STAGE_RULES[stage] ?? {};
+  for (const [type, ids] of Object.entries(rules)) {
+    if (ids.includes(id)) return { type, must: MUST[type] };
+  }
+  if (/-l05$/.test(id)) return { type: "unit-task", must: MUST["unit-task"] };
+  return { type: "teaching", must: MUST.teaching };
 }
 
+/** Every authored lesson across every stage that has a materials/ directory. */
 function lessons() {
-  const base = path.join(REPO, "materials", "stage0");
+  const root = path.join(REPO, "materials");
   const out = [];
-  for (const u of fs
-    .readdirSync(base)
-    .filter((d) => /^unit\d+$/.test(d))
-    .sort((a, b) => parseInt(a.slice(4)) - parseInt(b.slice(4)))) {
-    for (const f of fs
-      .readdirSync(path.join(base, u))
-      .filter((f) => /^s0-u\d+-l\d+\.md$/.test(f))
-      .sort()) {
-      out.push({ id: f.replace(/\.md$/, ""), p: path.join(base, u, f) });
+  for (const s of fs
+    .readdirSync(root)
+    .filter((d) => /^stage\d+$/.test(d))
+    .sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)))) {
+    const base = path.join(root, s);
+    for (const u of fs
+      .readdirSync(base)
+      .filter((d) => /^unit\d+$/.test(d) && fs.statSync(path.join(base, d)).isDirectory())
+      .sort((a, b) => parseInt(a.slice(4)) - parseInt(b.slice(4)))) {
+      for (const f of fs
+        .readdirSync(path.join(base, u))
+        .filter((f) => /^s\d+-u\d+-l\d+\.md$/.test(f))
+        .sort((a, b) => parseInt(a.match(/-l(\d+)\./)[1]) - parseInt(b.match(/-l(\d+)\./)[1]))) {
+        out.push({ id: f.replace(/\.md$/, ""), p: path.join(base, u, f) });
+      }
     }
   }
   return out;
