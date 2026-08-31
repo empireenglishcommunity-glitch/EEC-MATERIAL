@@ -1,24 +1,15 @@
 #!/usr/bin/env node
-/* ==========================================================================
+/* ========================================================================== 
  * Empire English — portal lesson-embed generator
  * --------------------------------------------------------------------------
- * Regenerates `web/src/content/materials-stage0.ts` from the finished lesson
- * markdown in `materials/stage0/**​/*.md`.
- *
- * WHY THIS EXISTS
- * That file carries the banner "AUTO-GENERATED … do not edit by hand", but the
- * generator was never committed — so the only copy of the content the portal
- * actually serves was a build artefact nobody could rebuild. The 55 embedded
- * lessons happened to be byte-identical to their sources when this was written,
- * but nothing enforced it: editing a lesson and forgetting to re-embed would
- * change the PDF and leave the portal serving the old text, silently.
- *
- * The embed exists (rather than reading the markdown at request time) so lesson
- * content stays server-side and ships with the bundle. Keep it generated.
+ * Regenerates `web/src/content/materials-stageN.ts` from finished markdown in
+ * `materials/stageN/`. The embed keeps coursebook content server-side in the
+ * Next bundle; the portal never depends on repository files at request time.
  *
  * Usage:
- *   node generate-portal-embed.mjs           # rewrite the embed
- *   node generate-portal-embed.mjs --check    # verify only; exit 1 on drift
+ *   node generate-portal-embed.mjs              # Stage 0 compatibility default
+ *   node generate-portal-embed.mjs --stage 1
+ *   node generate-portal-embed.mjs --stage 1 --check
  * ========================================================================== */
 
 import fs from "node:fs";
@@ -27,53 +18,52 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "..", "..");
-const OUT = path.join(REPO, "web", "src", "content", "materials-stage0.ts");
 const CHECK = process.argv.includes("--check");
+const stageIndex = process.argv.indexOf("--stage");
+const STAGE = stageIndex >= 0 ? Number(process.argv[stageIndex + 1]) : 0;
+const EXPECTED = { 0: { lessons: 55, wrappers: 13 }, 1: { lessons: 50, wrappers: 12 } };
 
-const BANNER = "// AUTO-GENERATED from materials/stage0/**/*.md — do not edit by hand.";
-
-/** Lexicographic key order, so the file is stable and a diff shows only real changes. */
-function sortKeys(o) {
-  const out = {};
-  for (const k of Object.keys(o).sort()) out[k] = o[k];
-  return out;
+if (!Number.isInteger(STAGE) || !(STAGE in EXPECTED)) {
+  console.error(`✗ unsupported or missing stage: ${process.argv[stageIndex + 1] ?? STAGE}`);
+  process.exit(1);
 }
 
-/** Every finished Stage-0 lesson, keyed by lesson id (s0-u<unit>-l<nn>). */
+const BASE = path.join(REPO, "materials", `stage${STAGE}`);
+const OUT = path.join(REPO, "web", "src", "content", `materials-stage${STAGE}.ts`);
+const BANNER = `// AUTO-GENERATED from materials/stage${STAGE}/**/*.md — do not edit by hand.`;
+
+function sortKeys(record) {
+  const sorted = {};
+  for (const key of Object.keys(record).sort()) sorted[key] = record[key];
+  return sorted;
+}
+
 function collectLessons() {
-  const base = path.join(REPO, "materials", "stage0");
-  const out = {};
+  const lessons = {};
+  const pattern = new RegExp(`^s${STAGE}-u\\d+-l\\d+\\.md$`);
   const units = fs
-    .readdirSync(base)
-    .filter((d) => /^unit\d+$/.test(d) && fs.statSync(path.join(base, d)).isDirectory());
-  for (const u of units) {
-    for (const f of fs.readdirSync(path.join(base, u)).filter((f) => /^s0-u\d+-l\d+\.md$/.test(f))) {
-      out[f.replace(/\.md$/, "")] = fs.readFileSync(path.join(base, u, f), "utf8");
+    .readdirSync(BASE)
+    .filter((dir) => /^unit\d+$/.test(dir) && fs.statSync(path.join(BASE, dir)).isDirectory());
+  for (const unit of units) {
+    for (const file of fs.readdirSync(path.join(BASE, unit)).filter((name) => pattern.test(name))) {
+      lessons[file.replace(/\.md$/, "")] = fs.readFileSync(path.join(BASE, unit, file), "utf8");
     }
   }
-  return sortKeys(out);
+  return sortKeys(lessons);
 }
 
-/**
- * The wrapper pages around the lessons: the stage front matter, the stage
- * glossary, and each unit's campaign front matter. Keyed by filename stem
- * (`stage0-front-matter`, `stage0-glossary`, `unit3-front-matter`).
- *
- * These reached the PDF from the start but never reached the portal, so a
- * student on the site never saw the unit wrapper the book opens each unit with.
- */
 function collectWrappers() {
-  const base = path.join(REPO, "materials", "stage0");
-  const out = {};
-  for (const f of fs.readdirSync(base).filter((f) => /^stage\d+-.*\.md$/.test(f))) {
-    out[f.replace(/\.md$/, "")] = fs.readFileSync(path.join(base, f), "utf8");
+  const wrappers = {};
+  const stagePattern = new RegExp(`^stage${STAGE}-.*\\.md$`);
+  for (const file of fs.readdirSync(BASE).filter((name) => stagePattern.test(name))) {
+    wrappers[file.replace(/\.md$/, "")] = fs.readFileSync(path.join(BASE, file), "utf8");
   }
-  for (const u of fs.readdirSync(base).filter((d) => /^unit\d+$/.test(d))) {
-    for (const f of fs.readdirSync(path.join(base, u)).filter((f) => /front-matter\.md$/.test(f))) {
-      out[f.replace(/\.md$/, "")] = fs.readFileSync(path.join(base, u, f), "utf8");
+  for (const unit of fs.readdirSync(BASE).filter((dir) => /^unit\d+$/.test(dir))) {
+    for (const file of fs.readdirSync(path.join(BASE, unit)).filter((name) => /front-matter\.md$/.test(name))) {
+      wrappers[file.replace(/\.md$/, "")] = fs.readFileSync(path.join(BASE, unit, file), "utf8");
     }
   }
-  return sortKeys(out);
+  return sortKeys(wrappers);
 }
 
 function render(lessons, wrappers) {
@@ -85,60 +75,62 @@ function render(lessons, wrappers) {
   );
 }
 
+function parseExport(current, name) {
+  const line = current.split("\n").find((candidate) => candidate.startsWith(`export const ${name}`));
+  if (!line) return null;
+  const json = line.slice(line.indexOf("{"), line.lastIndexOf("}") + 1);
+  try {
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+function reportChanges(current, name, nextRecord) {
+  const old = parseExport(current, name);
+  if (old == null) {
+    console.error(`  ${name}: missing or unparseable in the committed file`);
+    return;
+  }
+  const nextKeys = Object.keys(nextRecord);
+  const oldKeys = Object.keys(old);
+  const added = nextKeys.filter((key) => !oldKeys.includes(key));
+  const removed = oldKeys.filter((key) => !nextKeys.includes(key));
+  const changed = nextKeys.filter((key) => oldKeys.includes(key) && old[key] !== nextRecord[key]);
+  if (!added.length && !removed.length && !changed.length) return;
+  console.error(`  ${name}:`);
+  if (added.length) console.error(`    added:   ${added.join(", ")}`);
+  if (removed.length) console.error(`    removed: ${removed.join(", ")}`);
+  if (changed.length) console.error(`    changed: ${changed.join(", ")}`);
+}
+
 const lessons = collectLessons();
 const wrappers = collectWrappers();
-const next = render(lessons, wrappers);
-const ids = Object.keys(lessons);
+const lessonCount = Object.keys(lessons).length;
+const wrapperCount = Object.keys(wrappers).length;
+const expected = EXPECTED[STAGE];
 
+if (lessonCount !== expected.lessons || wrapperCount !== expected.wrappers) {
+  console.error(
+    `✗ Stage ${STAGE} source count mismatch: expected ${expected.lessons} lessons/${expected.wrappers} wrappers, ` +
+      `found ${lessonCount}/${wrapperCount}`,
+  );
+  process.exit(1);
+}
+
+const next = render(lessons, wrappers);
 if (CHECK) {
   const current = fs.existsSync(OUT) ? fs.readFileSync(OUT, "utf8") : "";
   if (current === next) {
-    console.log(
-      `✓ portal embed is in sync with materials/stage0 ` +
-        `(${ids.length} lessons, ${Object.keys(wrappers).length} wrapper pages)`,
-    );
+    console.log(`✓ Stage-${STAGE} portal embed is in sync (${lessonCount} lessons, ${wrapperCount} wrapper pages)`);
     process.exit(0);
   }
-  console.error(`✗ portal embed is STALE — web/src/content/materials-stage0.ts does not match materials/stage0/`);
-  // Say exactly which pages differ, so the fix is obvious. Each export is parsed
-  // on its own line — matching across the whole file would grab both objects.
-  const parseExport = (name) => {
-    const line = current.split("\n").find((l) => l.startsWith(`export const ${name}`));
-    if (!line) return null;
-    const json = line.slice(line.indexOf("{"), line.lastIndexOf("}") + 1);
-    try {
-      return JSON.parse(json);
-    } catch {
-      return null;
-    }
-  };
-
-  for (const [name, next_] of [
-    ["FINISHED_LESSON_MD", lessons],
-    ["WRAPPER_MD", wrappers],
-  ]) {
-    const old = parseExport(name);
-    if (old == null) {
-      console.error(`  ${name}: missing or unparseable in the committed file`);
-      continue;
-    }
-    const nextIds = Object.keys(next_);
-    const oldIds = Object.keys(old);
-    const added = nextIds.filter((i) => !oldIds.includes(i));
-    const removed = oldIds.filter((i) => !nextIds.includes(i));
-    const changed = nextIds.filter((i) => oldIds.includes(i) && old[i] !== next_[i]);
-    if (!added.length && !removed.length && !changed.length) continue;
-    console.error(`  ${name}:`);
-    if (added.length) console.error(`    added:   ${added.join(", ")}`);
-    if (removed.length) console.error(`    removed: ${removed.join(", ")}`);
-    if (changed.length) console.error(`    changed: ${changed.join(", ")}`);
-  }
-  console.error(`  fix: node tools/audit/generate-portal-embed.mjs`);
+  console.error(`✗ portal embed is STALE — ${path.relative(REPO, OUT)} does not match materials/stage${STAGE}/`);
+  reportChanges(current, "FINISHED_LESSON_MD", lessons);
+  reportChanges(current, "WRAPPER_MD", wrappers);
+  console.error(`  fix: node tools/audit/generate-portal-embed.mjs --stage ${STAGE}`);
   process.exit(1);
 }
 
 fs.writeFileSync(OUT, next);
-console.log(
-  `✓ wrote ${path.relative(REPO, OUT)} — ${ids.length} lessons, ` +
-    `${Object.keys(wrappers).length} wrapper pages`,
-);
+console.log(`✓ wrote ${path.relative(REPO, OUT)} — ${lessonCount} lessons, ${wrapperCount} wrapper pages`);

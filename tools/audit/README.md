@@ -10,38 +10,41 @@ npm run all                      # drift, then anatomy, then bidi
 
 | Script | What it answers | Why it exists |
 |---|---|---|
-| `npm run drift` | Are the two generated files still exactly what `materials/stage0/` implies — the portal embed and the Stage-0 glossary? | The embed is banner-marked "AUTO-GENERATED … do not edit by hand", but no generator was committed. The portal serves the embed, the PDF reads the markdown — so drift means the two ship **different lessons** with nothing failing. |
+| `npm run drift` | Are the generated portal embed and both stage glossaries exactly what their `materials/` sources imply? | The portal embed and glossaries are banner-marked generated files. Drift means the PDF and portal can ship different material, or a glossary can stop matching its lessons, with nothing else failing. |
 | `npm run anatomy` | Does every lesson match `materials/_style/lesson-anatomy.md`? | The blueprint citation, mandatory sections, section order, Arabic sub-labels, Teacher overlay, record task and sign-off are the definition of "done". Checking by hand across 55 lessons does not scale. |
 | `npm run bidi` | Does any line render its closing punctuation on the wrong side? | The Arabic locale sets `dir="rtl"` on `<html>`. Lesson prose inherited it, so **796 lines** of English rendered as `?Can you repeat, please`. The PDF stylesheet had already solved this; the portal had not. |
-| `npm run dial` | How much of each stage's explanation is actually in Arabic? | `lesson-anatomy.md` §3 sets a support level per stage (~70% → ~40% → ~15% → none) but never defined how to measure it, so it could not be checked. Reports only — the right level is editorial. |
+| `npm run dial` | Does each lesson deliver the Arabic support level **its own blueprint declares**? | The blueprints give every lesson an `Arabic support: ~N%` line but never said how to measure it, so it could not be checked. The target is read from the curriculum, not from a table here, so the gate cannot drift from the plan. Fails outside ±2 points. Stage 0 is grandfathered — see `lesson-anatomy.md` §3a. |
 
-`anatomy` and `bidi` cover **every** stage under `materials/`. The embed and glossary
-generators are Stage-0 scoped on purpose: the portal serves Stage 0, and generalising them
-before a stage is actually wired in would be guessing.
+`anatomy`, `dial`, and `bidi` cover **every** stage under `materials/`. Glossary
+generation covers Stage 0 and Stage 1; Stage 0 keeps its byte-stable legacy parser,
+while Stage 1 parses heterogeneous Arsenal table schemas by header and fails closed
+on an unknown schema. The portal embed remains Stage-0-scoped until Stage 1 is wired.
 
 ## Regenerating after a content edit
 
-After editing anything under `materials/stage0/`:
+After editing lesson material:
 
 ```bash
-cd tools/audit && npm run generate     # glossary, then the portal embed
-npm run all                            # then verify
+cd tools/audit && npm run generate     # both glossaries, then the Stage-0 portal embed
+npm run all                            # then verify all stages
 ```
 
-Order matters: the glossary is itself content that gets embedded, so generate it
-before the embed.
+Order matters for Stage 0: its glossary is itself content that gets embedded, so
+generate the glossaries before the embed. Stage 1's glossary is consumed by the PDF
+pipeline and will be embedded when Stage 1 portal generation is enabled.
 
 **`generate-portal-embed.mjs`** rebuilds `web/src/content/materials-stage0.ts` —
 55 lessons plus 13 wrapper pages (stage front matter, glossary, and each unit's
 front matter). It was validated by reproducing the previously committed embed
 byte-for-byte. `--check` verifies without writing and names what differs.
 
-**`generate-stage0-glossary.mjs`** rebuilds `materials/stage0/stage0-glossary.md`
-from the **Your Arsenal** tables of all 55 lessons. It is derived rather than
-written so it cannot teach a word the lessons no longer use. Deliberately not
-alphabetised: many rows are grouped sets (`bank / pharmacy / hospital` glossed
-`بنك / صيدلية / مستشفى`) and splitting them to sort risks pairing an English word
-with the wrong Arabic gloss.
+**`generate-stage0-glossary.mjs`** is the byte-compatible Stage-0 entry point.
+**`generate-stage-glossary.mjs --stage 1`** rebuilds
+`materials/stage1/stage1-glossary.md`. Both derive entries from **Your Arsenal**
+tables so a glossary cannot silently teach language its lessons no longer use.
+Stage 1's parser handles vocabulary, pronunciation, rule, and functional-language
+tables explicitly; an unknown table header fails generation instead of shifting the
+wrong data into the Arabic column. Source order is deliberate rather than alphabetical.
 
 ## Notes on the bidi probe
 

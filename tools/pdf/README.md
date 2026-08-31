@@ -8,15 +8,20 @@ PDF coursebooks** — two editions from one source:
 | **Student's Edition** | lessons with the `> [!TEACHER]` overlay **stripped** | `web/private/coursebook/eec-stage<N>-student.pdf` |
 | **Teacher's Edition** | same lessons + overlay rendered as gold callout boxes | `web/private/coursebook/eec-stage<N>-teacher.pdf` |
 
-Output lives under `web/public/`, so the books are served by the live site and are
-downloadable / send-ready at:
+Output lives under `web/private/`, which Next never serves as a static asset — the
+Dockerfile copies it into the image and an authenticated route streams it. The books
+are downloadable / send-ready at:
 
 ```
-https://empireenglish.online/api/coursebook/student   # signed-in learners
-https://empireenglish.online/api/coursebook/teacher   # teachers only
+# Stage 0 (legacy aliases)
+https://empireenglish.online/api/coursebook/student      # signed-in learners
+https://empireenglish.online/api/coursebook/teacher      # teachers only
+# Stage-qualified
+https://empireenglish.online/api/coursebook/s1/student
+https://empireenglish.online/api/coursebook/s1/teacher
 ```
 
-The Student's Edition is also linked from the learner portal dashboard.
+The Student's Edition is also linked from each stage's portal dashboard.
 
 ## Why this engine
 
@@ -41,12 +46,13 @@ bash setup-env.sh    # Chromium libs, NSS, fonts (Arabic + Latin + color emoji +
 ## Generate
 
 ```bash
-npm run build        # both editions, Stage 0
-npm run student      # student only
-npm run teacher      # teacher only
+npm run build          # both editions, Stage 0
+npm run student        # Stage 0 student only
+npm run teacher        # Stage 0 teacher only
+npm run build:stage1   # both editions, Stage 1
 
 # advanced
-node build-book.mjs --stage 0 --edition both     # all Stage-0 units
+node build-book.mjs --stage 1 --edition both     # all Stage-1 units
 node build-book.mjs --stage 0 --edition student --unit 3   # a single unit
 ```
 

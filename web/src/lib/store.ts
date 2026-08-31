@@ -70,7 +70,8 @@ export async function getUserProgress(userId: string): Promise<string[]> {
 
 // Per-unit formative quiz results.
 export type QuizResult = { best: number; total: number; lastScore: number; attempts: number; at: string };
-// userId -> unitKey ("u0".."u10") -> result
+// userId -> quizKey -> result. Stage 0 uses "u0".."u10"; other stages are
+// stage-qualified ("s1-u1"..) so results never collide across stages.
 export type QuizResults = Record<string, Record<string, QuizResult>>;
 
 export async function getQuizResults(): Promise<QuizResults> {

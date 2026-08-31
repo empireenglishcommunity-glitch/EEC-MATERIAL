@@ -7,13 +7,19 @@
   "scripts": {
     "bidi": "node bidi-render-probe.mjs",
     "bidi:verbose": "node bidi-render-probe.mjs --verbose",
-    "embed": "node generate-portal-embed.mjs",
-    "glossary": "node generate-stage0-glossary.mjs",
-    "drift": "node generate-portal-embed.mjs --check && node generate-stage0-glossary.mjs --check",
+    "embed:stage0": "node generate-portal-embed.mjs --stage 0",
+    "embed:stage1": "node generate-portal-embed.mjs --stage 1",
+    "embed": "npm run embed:stage0 && npm run embed:stage1",
+    "embed:check": "node generate-portal-embed.mjs --stage 0 --check && node generate-portal-embed.mjs --stage 1 --check",
+    "glossary:stage0": "node generate-stage0-glossary.mjs",
+    "glossary:stage1": "node generate-stage-glossary.mjs --stage 1",
+    "glossary": "npm run glossary:stage0 && npm run glossary:stage1",
+    "glossary:check": "node generate-stage0-glossary.mjs --check && node generate-stage-glossary.mjs --stage 1 --check",
+    "drift": "npm run embed:check && npm run glossary:check",
     "anatomy": "node check-lesson-anatomy.mjs",
     "dial": "node measure-arabic-dial.mjs",
     "generate": "npm run glossary && npm run embed",
-    "all": "npm run drift && npm run anatomy && npm run bidi"
+    "all": "npm run drift && npm run anatomy && npm run dial && npm run bidi"
   },
   "dependencies": {
     "marked": "^16.4.2",

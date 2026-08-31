@@ -5,6 +5,8 @@ import { STAGE0 } from "@/lib/lessons";
 import { unitFrontMatterId, hasWrapperPage } from "@/lib/lesson-content";
 import CoursebookPage from "@/components/CoursebookPage";
 
+// Stage-0 unit overview. Stage 1 uses /portal/stages/s1/units/[unit].
+
 /**
  * A unit's campaign front matter — the mission, the lesson table, the prize and
  * the end-of-unit check. This is what the PDF opens each unit with.
@@ -19,7 +21,7 @@ export default async function UnitOverviewPage({
 
   const meta = STAGE0.find((u) => u.id === unit);
   const pageId = unitFrontMatterId(unit);
-  if (!meta || !pageId || !hasWrapperPage(pageId)) notFound();
+  if (!meta || !pageId || !hasWrapperPage("s0", pageId)) notFound();
 
   const ar = locale === "ar";
   const first = meta.lessons[0];
@@ -27,6 +29,7 @@ export default async function UnitOverviewPage({
   return (
     <CoursebookPage
       locale={locale}
+      stageId="s0"
       pageId={pageId}
       eyebrow={`${ar ? "الوحدة" : "Unit"} ${meta.num} — ${meta.title}`}
     >
