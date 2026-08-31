@@ -49,6 +49,40 @@ h1, h2, h3 {
   color: var(--color-ink);
   line-height: 1.7;
 }
+
+/* Per-block bidi, so each line picks its OWN base direction from its first
+   strong character instead of inheriting the page's.
+
+   Lesson content is bilingual: Arabic explanation around English target
+   language. The `ar` locale sets `dir="rtl"` on <html> (see
+   src/app/[locale]/layout.tsx + src/i18n/config.ts), which every lesson block
+   used to inherit — so an English sentence rendered with its closing `.`, `?`
+   or `:` moved to the wrong side ("?Can you repeat, please"). That is actively
+   misleading in a course that teaches English punctuation and question forms.
+
+   This mirrors tools/pdf/book.css, which already did it — the coursebook PDF
+   was correct and only the portal was wrong. Keep the two in sync.
+
+   Measured with tools/audit/bidi-render-probe.mjs across all 55 lessons:
+   796 misrendered lines before, 0 after. To reproduce the "before" number,
+   stash this block and re-run the probe. The 69 lines it still reports as
+   "needs rewording" are a content matter, not a stylesheet one: they open in
+   one script and are mostly the other, so no base direction can place their
+   closing punctuation correctly. See materials/_style/empire-style-guide.md §4. */
+.lesson-prose p,
+.lesson-prose li,
+.lesson-prose td,
+.lesson-prose th,
+.lesson-prose blockquote,
+.lesson-prose h1,
+.lesson-prose h2,
+.lesson-prose h3,
+.lesson-prose h4,
+.lesson-prose dt,
+.lesson-prose dd {
+  unicode-bidi: plaintext;
+  text-align: start;
+}
 .lesson-prose h2 {
   font-size: 1.6rem;
   font-weight: 800;
