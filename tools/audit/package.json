@@ -13,7 +13,7 @@
     "anatomy": "node check-lesson-anatomy.mjs",
     "dial": "node measure-arabic-dial.mjs",
     "generate": "npm run glossary && npm run embed",
-    "all": "npm run drift && npm run anatomy && npm run bidi"
+    "all": "npm run drift && npm run anatomy && npm run dial && npm run bidi"
   },
   "dependencies": {
     "marked": "^16.4.2",

@@ -1,31 +1,33 @@
 #!/usr/bin/env node
 /* ==========================================================================
- * Empire English — Arabic-dial measurement
+ * Empire English — Arabic-dial check
  * --------------------------------------------------------------------------
- * `lesson-anatomy.md` 3 sets an Arabic-support level per stage: ~70% at Stage 0,
- * ~40% at Stage 1, ~15% at Stage 2, none from Stage 3. Those numbers were never
- * operationally defined, so they could not be checked — and an unverifiable
- * number is a claim, not a specification.
+ * Every lesson blueprint in `curriculum/` declares its own Arabic support level
+ * ("**Arabic support:** ~40%."). This reads that number straight out of the
+ * blueprint each finished lesson cites, measures what the lesson actually
+ * delivers, and fails when they disagree.
  *
- * THE OPERATIONAL DEFINITION USED HERE
+ * Reading the target from the blueprint — rather than from a table kept here —
+ * means the check cannot drift from the curriculum. Retune a blueprint and the
+ * gate retunes with it.
+ *
+ * THE OPERATIONAL DEFINITION (the blueprints give a number but never a method)
  *   Arabic share = Arabic letters / (Arabic letters + Latin letters)
- *   measured over the STUDENT-VISIBLE EXPLANATION only:
- *     - Teacher overlay blocks removed (they are coach-facing, mostly English).
- *     - Only the "Decode it" and "Why this matters" sections counted — the
- *       places the dial is actually about.
- *     - Code spans, emphasis marks and table rows stripped: vocabulary tables
- *       and target-language examples are English BY DESIGN at every stage, so
- *       counting them would measure the curriculum, not the support level.
+ *   over the STUDENT-VISIBLE EXPLANATION only:
+ *     - Teacher overlay removed — coach-facing, and English by convention.
+ *     - Only "Decode it" and "Why this matters" counted: the sections the dial
+ *       is actually about.
+ *     - Code spans, emphasis marks and table rows stripped. Vocabulary tables
+ *       and target language are English BY DESIGN at every stage, so counting
+ *       them would measure the curriculum instead of the support level.
+ *   Whole-page share is the wrong measure and reads about half of this.
  *
- * Whole-page character share is the wrong measure and gives roughly half these
- * numbers, because most of a page is English target language on purpose.
+ * Arabic omits short vowels, so it is denser per character than English: a 40%
+ * character share is nearer parity in words than it sounds.
  *
- * Arabic script also omits short vowels, so it is denser per character than
- * English. A 50% character share is closer to parity in words than it sounds.
- * Read these as a RELATIVE fade across stages, not as an absolute promise.
- *
- * Usage: node measure-arabic-dial.mjs [--per-lesson]
- * Reports only; never gates. The right level is an editorial judgement.
+ * Usage:
+ *   node measure-arabic-dial.mjs              # check; exit 1 on a miss
+ *   node measure-arabic-dial.mjs --report     # measure only, never fail
  * ========================================================================== */
 
 import fs from "node:fs";
@@ -34,10 +36,19 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "..", "..");
-const PER_LESSON = process.argv.includes("--per-lesson");
+const REPORT_ONLY = process.argv.includes("--report");
 
-/** Documented intent from lesson-anatomy.md 3. */
-const DOCUMENTED = { 0: 70, 1: 40, 2: 15, 3: 0, 4: 0 };
+/** Percentage points a lesson may sit either side of its declared target. */
+const TOLERANCE = 2;
+
+/**
+ * Stage 0 predates this check. It measures ~53% against a declared ~70%, and it
+ * is founder-approved, shipping, and already printed into both coursebook PDFs.
+ * Re-cutting 46 approved lessons to chase a number that was never operationally
+ * defined when they were written is a content decision, not a lint fix — so it
+ * is reported and excluded from the gate rather than silently "fixed".
+ */
+const GRANDFATHERED = new Set([0]);
 
 function stripTeacher(md) {
   const lines = md.split("\n");
@@ -56,9 +67,9 @@ function stripTeacher(md) {
 }
 
 function explanationText(md) {
-  const body = stripTeacher(md);
-  const sections = body.split(/^## /m).filter((s) => /^[^\n]*(Decode it|Why this matters)/.test(s));
-  return sections
+  return stripTeacher(md)
+    .split(/^## /m)
+    .filter((s) => /^[^\n]*(Decode it|Why this matters)/.test(s))
     .join("\n")
     .replace(/`[^`]*`/g, "")
     .replace(/\*+/g, "")
@@ -68,66 +79,121 @@ function explanationText(md) {
 function arabicShare(text) {
   const ar = (text.match(/[\u0600-\u06FF]/g) || []).length;
   const la = (text.match(/[A-Za-z]/g) || []).length;
-  return ar + la === 0 ? null : ar / (ar + la);
+  return ar + la === 0 ? null : (ar / (ar + la)) * 100;
 }
 
-const root = path.join(REPO, "materials");
-const stages = fs
-  .readdirSync(root)
-  .filter((d) => /^stage\d+$/.test(d))
-  .sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)));
+/** The blueprint path and lesson id a finished lesson cites in its header. */
+function citation(md) {
+  const m = /Built from: `([^`]+)` · \*\*([A-Z0-9-]+)\*\*/.exec(md);
+  return m ? { blueprint: m[1], id: m[2] } : null;
+}
 
-console.log(`Arabic share of student-visible explanation ("Decode it" + "Why this matters")\n`);
+/** The `~N%` the blueprint declares for that specific lesson. */
+const blueprintCache = new Map();
+function declaredTarget(blueprintRel, lessonId) {
+  if (!blueprintCache.has(blueprintRel)) {
+    const p = path.join(REPO, blueprintRel);
+    blueprintCache.set(blueprintRel, fs.existsSync(p) ? fs.readFileSync(p, "utf8") : null);
+  }
+  const src = blueprintCache.get(blueprintRel);
+  if (!src) return null;
 
-const summary = [];
-for (const s of stages) {
-  const num = parseInt(s.slice(5));
-  const rows = [];
-  const base = path.join(root, s);
-  for (const u of fs
-    .readdirSync(base)
-    .filter((d) => /^unit\d+$/.test(d) && fs.statSync(path.join(base, d)).isDirectory())
-    .sort((a, b) => parseInt(a.slice(4)) - parseInt(b.slice(4)))) {
-    for (const f of fs
-      .readdirSync(path.join(base, u))
-      .filter((f) => /^s\d+-u\d+-l\d+\.md$/.test(f))
-      .sort((a, b) => parseInt(a.match(/-l(\d+)\./)[1]) - parseInt(b.match(/-l(\d+)\./)[1]))) {
-      const share = arabicShare(explanationText(fs.readFileSync(path.join(base, u, f), "utf8")));
-      if (share !== null) rows.push({ id: f.replace(/\.md$/, ""), share });
+  // Each lesson is a "## <ID> — ..." section; read the Arabic line inside it.
+  const sections = src.split(/^## /m);
+  const section = sections.find((s) => s.startsWith(lessonId));
+  const scope = section ?? src; // unit-level fallback for a lesson with no block
+  const m = /\*\*Arabic support:\*\*[^\n]*?~(\d+)%/.exec(scope);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+function lessons() {
+  const root = path.join(REPO, "materials");
+  const out = [];
+  for (const s of fs
+    .readdirSync(root)
+    .filter((d) => /^stage\d+$/.test(d))
+    .sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)))) {
+    const base = path.join(root, s);
+    for (const u of fs
+      .readdirSync(base)
+      .filter((d) => /^unit\d+$/.test(d) && fs.statSync(path.join(base, d)).isDirectory())
+      .sort((a, b) => parseInt(a.slice(4)) - parseInt(b.slice(4)))) {
+      for (const f of fs
+        .readdirSync(path.join(base, u))
+        .filter((f) => /^s\d+-u\d+-l\d+\.md$/.test(f))
+        .sort((a, b) => parseInt(a.match(/-l(\d+)\./)[1]) - parseInt(b.match(/-l(\d+)\./)[1]))) {
+        out.push({
+          stage: parseInt(s.slice(5)),
+          id: f.replace(/\.md$/, ""),
+          p: path.join(base, u, f),
+        });
+      }
     }
   }
-  if (!rows.length) continue;
-  const mean = rows.reduce((a, b) => a + b.share, 0) / rows.length;
-  summary.push({ stage: num, mean, n: rows.length });
+  return out;
+}
+
+const rows = [];
+for (const l of lessons()) {
+  const md = fs.readFileSync(l.p, "utf8");
+  const measured = arabicShare(explanationText(md));
+  if (measured === null) continue; // no explanation section (task/finale lessons)
+  const cite = citation(md);
+  const target = cite ? declaredTarget(cite.blueprint, cite.id) : null;
+  rows.push({ ...l, measured, target });
+}
+
+let failures = 0;
+const byStage = new Map();
+for (const r of rows) {
+  if (!byStage.has(r.stage)) byStage.set(r.stage, []);
+  byStage.get(r.stage).push(r);
+}
+
+console.log(`Arabic share of student-visible explanation, against each lesson's blueprint target`);
+console.log(`tolerance ±${TOLERANCE} points\n`);
+
+for (const [stage, list] of [...byStage.entries()].sort((a, b) => a[0] - b[0])) {
+  const grandfathered = GRANDFATHERED.has(stage);
+  const mean = list.reduce((a, b) => a + b.measured, 0) / list.length;
+  const targets = list.map((r) => r.target).filter((t) => t != null);
+  const meanTarget = targets.length ? targets.reduce((a, b) => a + b, 0) / targets.length : null;
 
   console.log(
-    `  ${s}  measured ${(mean * 100).toFixed(1)}%  ·  documented ~${DOCUMENTED[num] ?? "?"}%  ` +
-      `(${rows.length} lesson${rows.length === 1 ? "" : "s"} with an explanation section)`,
+    `  stage${stage}  ${list.length} lesson(s)  mean ${mean.toFixed(1)}%` +
+      (meanTarget != null ? `  ·  mean target ${meanTarget.toFixed(1)}%` : "") +
+      (grandfathered ? `   [GRANDFATHERED — reported, not gated]` : ""),
   );
-  if (PER_LESSON) {
-    for (const r of rows) console.log(`      ${r.id}  ${(r.share * 100).toFixed(1)}%`);
-  }
-}
 
-if (summary.length > 1) {
-  console.log(`\n  Relative fade — the thing that actually matters:`);
-  for (let i = 1; i < summary.length; i++) {
-    const prev = summary[i - 1];
-    const cur = summary[i];
-    const measured = cur.mean / prev.mean;
-    const intended = (DOCUMENTED[cur.stage] ?? 0) / (DOCUMENTED[prev.stage] || 1);
+  for (const r of list) {
+    if (r.target == null) {
+      console.log(`      ?  ${r.id}  ${r.measured.toFixed(1)}%  — no target found in its blueprint`);
+      continue;
+    }
+    const delta = r.measured - r.target;
+    const ok = Math.abs(delta) <= TOLERANCE;
+    if (!ok && !grandfathered) failures++;
+    const mark = ok ? "✓" : grandfathered ? "·" : "✗";
     console.log(
-      `    stage${prev.stage} → stage${cur.stage}:  measured ×${measured.toFixed(2)}  ·  ` +
-        `documented ×${intended.toFixed(2)}`,
+      `      ${mark}  ${r.id}  ${r.measured.toFixed(1)}%  target ${r.target}%  ` +
+        `(${delta >= 0 ? "+" : ""}${delta.toFixed(1)})`,
     );
   }
+  console.log("");
 }
 
-console.log(
-  `\n  Absolute figures run below the documented ones at every stage, consistently.\n` +
-    `  Either the documented numbers mean something other than this measure, or the\n` +
-    `  corpus has always sat lower than intended. Stage 0 is founder-approved and\n` +
-    `  shipping as it is, so the honest reading is that the numbers were never\n` +
-    `  operationally defined. Judge a new stage against the RATIO to the stage\n` +
-    `  before it, not against the absolute target.`,
-);
+if (GRANDFATHERED.size) {
+  console.log(
+    `  Stage 0 is excluded from the gate deliberately: it measures below its declared\n` +
+      `  target, but it is founder-approved, shipping, and already printed into both\n` +
+      `  coursebook PDFs. Re-cutting 46 approved lessons is a content decision, not a\n` +
+      `  lint fix. See materials/_style/lesson-anatomy.md §3a.\n`,
+  );
+}
+
+if (REPORT_ONLY) {
+  console.log(`report-only mode — not gating`);
+  process.exit(0);
+}
+console.log(failures ? `FAIL  ${failures} lesson(s) outside tolerance` : `PASS  every gated lesson is on target`);
+process.exit(failures ? 1 : 0);

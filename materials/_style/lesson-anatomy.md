@@ -109,32 +109,52 @@ Rules:
 
 The **format visibly reflects** this (fewer Arabic callouts as stages rise).
 
-### 3a. How the dial is measured — and why the numbers above are a direction, not a promise
+### 3a. How the dial is measured, and where the real target lives
 
-The percentages in §3 were never operationally defined, which made them unverifiable.
-`tools/audit/measure-arabic-dial.mjs` (`npm run dial`) now defines them:
+**The stage-level percentages in §3 are a summary. The binding number is the one each
+lesson's own blueprint declares** — `curriculum/…` gives every lesson an
+`**Arabic support:** ~N%` line, and those fade *within* a stage (Stage 0 runs from ~70%
+in Unit 0 down to ~10% by Unit 10). Averaging them to one figure per stage hides that.
+
+`tools/audit/measure-arabic-dial.mjs` (`npm run dial`) reads the target out of the
+blueprint each finished lesson cites, measures what the lesson delivers, and **fails when
+they disagree by more than ±2 points**. Reading the target from the curriculum rather than
+from a table kept in the tool means the check cannot drift from the plan: retune a
+blueprint and the gate retunes with it.
 
 > **Arabic share** = Arabic letters ÷ (Arabic + Latin letters), over the
 > **student-visible explanation only** — the *Decode it* and *Why this matters*
 > sections, with the Teacher overlay, code spans and table rows removed.
 
-Vocabulary tables, target language and examples are English **by design** at every
-stage, so counting the whole page measures the curriculum rather than the support level
-— and gives roughly half these figures. Arabic script also omits short vowels, so it is
-denser per character than English: a 50% character share is nearer parity in words than
-it sounds.
+Vocabulary tables, target language and examples are English **by design** at every stage,
+so counting the whole page measures the curriculum rather than the support level, and reads
+about half of this. Arabic also omits short vowels, so it is denser per character than
+English: a 40% character share is nearer parity in words than it sounds.
 
-Measured that way, the corpus sits **consistently below** the documented targets:
+A lesson with no *Decode it* or *Why this matters* section — a unit speaking task, a stage
+finale — has no explanation to measure and is skipped rather than guessed at.
 
-| Stage | Documented | Measured |
-|--|--|--|
-| 0 (Recruit) | ~70% | **52.8%** |
-| 1 (Citizen) | ~40% | **26.2%** |
+**Stage 0 is grandfathered, and not for the reason first assumed.** Measured per lesson
+against its own blueprint target, Stage 0 mostly runs **hotter** than planned, not cooler:
 
-Stage 0 is founder-approved and shipping at 52.8%, so the honest conclusion is that the
-targets never described this measure. **Judge a new stage against the ratio to the stage
-before it, not against the absolute number.** Stage 0 → Stage 1 measures **×0.50** against
-a documented intent of ×0.57 — the fade is real and close to plan.
+| | |
+|--|--|
+| above its target by >2 points | **28 lessons** |
+| within ±2 | 6 lessons |
+| below its target by >2 points | 11 lessons |
+| stage mean | **52.8%** measured against **44.2%** declared |
+
+The drift is largest in the consolidation unit, where blueprints ask for ~10–15% and the
+authored lessons sit above 80% — understandable, since a review lesson is nearly all
+instruction and instruction was written in Arabic. Stage 0 is founder-approved, shipping,
+and printed into both coursebook PDFs, so re-cutting 46 lessons is a **content decision,
+not a lint fix**. It is reported every run and excluded from the gate until someone takes
+that decision deliberately.
+
+*(An earlier version of this section claimed the corpus sat consistently* below *target.
+That was measured against the §3 stage summary rather than the per-lesson blueprints, and
+it was wrong in both direction and magnitude. The per-lesson comparison is the correct
+one.)*
 
 ## 4. Per-lesson "Done" checklist (the quality gate)
 
