@@ -40,7 +40,11 @@ const STAGE_META = {
   "0": { rank: "Recruit", cefr: "Pre-A1 / A1", title: "Foundations", arabic: "الأساس — من الصفر لأول محادثة" },
   "1": { rank: "Citizen", cefr: "A2", title: "Elementary", arabic: "المواطن" },
   "2": { rank: "Legionary", cefr: "B1", title: "Intermediate", arabic: "الفيلق" },
-  "3": { rank: "Confident", cefr: "B2", title: "Upper-Intermediate — The Coronation", arabic: "التتويج" },
+  // Title tracks curriculum/01-cefr-roadmap.md §6 ("Stage 3 — Confident (B2)")
+  // and web/src/lib/lessons.ts STAGES.s3, so the book cover and the portal do
+  // not call the same stage two different things. "The Coronation" survives as
+  // the Arabic line, which is where the rank ceremony belongs.
+  "3": { rank: "Confident", cefr: "B2", title: "Confident — Flagship Graduation", arabic: "التتويج" },
   "4": { rank: "Sovereign", cefr: "C1 (+Exam)", title: "Advanced", arabic: "الإمبراطور" },
 };
 
