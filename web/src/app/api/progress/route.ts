@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getProgress, saveProgress } from "@/lib/store";
 import { ALL_LESSON_IDS } from "@/lib/lessons";
+import { stageOfLessonId, userCanAccessStage } from "@/lib/access";
 
 // Toggle a lesson's completion for the currently-signed-in learner.
 // Body: { lessonId: string, done: boolean }
@@ -14,6 +15,10 @@ export async function POST(req: Request) {
     const { lessonId, done } = (await req.json()) as { lessonId?: string; done?: boolean };
     if (!lessonId || !ALL_LESSON_IDS.includes(lessonId)) {
       return NextResponse.json({ ok: false, error: "invalid_lesson" }, { status: 400 });
+    }
+    const stage = stageOfLessonId(lessonId);
+    if (!stage || !(await userCanAccessStage(user, stage))) {
+      return NextResponse.json({ ok: false, error: "stage_locked" }, { status: 403 });
     }
     const progress = await getProgress();
     const set = new Set(progress[user.id] ?? []);

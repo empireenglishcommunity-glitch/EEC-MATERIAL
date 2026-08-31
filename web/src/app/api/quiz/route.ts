@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getQuizResults, saveQuizResults, type QuizResult } from "@/lib/store";
 import { getQuiz } from "@/content/quizzes";
+import { stageOfQuizKey, userCanAccessStage } from "@/lib/access";
 
 // Grade a unit's formative quiz server-side (never trust client scoring).
 // Body: { unit: "u1", answers: number[] }
@@ -16,6 +17,9 @@ export async function POST(req: Request) {
     const quiz = unit ? getQuiz(unit) : null;
     if (!quiz) {
       return NextResponse.json({ ok: false, error: "invalid_unit" }, { status: 400 });
+    }
+    if (!(await userCanAccessStage(user, stageOfQuizKey(quiz.unit)))) {
+      return NextResponse.json({ ok: false, error: "stage_locked" }, { status: 403 });
     }
     if (!Array.isArray(answers) || answers.length !== quiz.questions.length) {
       return NextResponse.json({ ok: false, error: "invalid_answers" }, { status: 400 });

@@ -2,6 +2,8 @@ import { notFound, redirect } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getCurrentUser } from "@/lib/auth";
 import { getStage } from "@/lib/lessons";
+import { userCanAccessStage } from "@/lib/access";
+import { stageNav } from "@/lib/portal-nav";
 import AccentLab from "@/components/AccentLab";
 
 export default async function StageAccentLab({
@@ -17,6 +19,7 @@ export default async function StageAccentLab({
 
   const user = await getCurrentUser();
   if (!user) return null; // layout guards
+  if (!(await userCanAccessStage(user, meta.id))) redirect(stageNav(locale, meta.id).dashboard);
 
   return <AccentLab locale={locale} stageId={meta.id} user={user} />;
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getUserProgress, getUserQuizResults, getUserAccentPractice, isTeacher, type User } from "@/lib/store";
 import { STAGES, getStageLessonIds, type StageId } from "@/lib/lessons";
+import { canAccessStage } from "@/lib/access";
 import { getUnitQuiz, quizKey } from "@/content/quizzes";
 import { getStageAccentDrills } from "@/content/accent-drills";
 import { stageNav } from "@/lib/portal-nav";
@@ -41,17 +42,33 @@ export default async function StageDashboard({
       <div className="flex flex-wrap items-center gap-2">
         {(Object.keys(STAGES) as StageId[]).map((sid) => {
           const active = sid === stageId;
+          const unlocked = canAccessStage(user, sid, doneAll);
+          const label = `Stage ${STAGES[sid].num} · ${STAGES[sid].rank}`;
+          if (active) {
+            return (
+              <span key={sid} className="rounded-full bg-royal-900 px-4 py-1.5 text-sm font-semibold text-white">
+                {label}
+              </span>
+            );
+          }
+          if (!unlocked) {
+            return (
+              <span
+                key={sid}
+                title={ar ? "مقفولة — خلّص المرحلة السابقة الأول" : "Locked — finish the previous stage first"}
+                className="cursor-not-allowed rounded-full bg-royal-50 px-4 py-1.5 text-sm font-semibold text-royal-400 ring-1 ring-royal-100"
+              >
+                🔒 {label}
+              </span>
+            );
+          }
           return (
             <Link
               key={sid}
               href={stageNav(locale, sid).dashboard}
-              className={
-                active
-                  ? "rounded-full bg-royal-900 px-4 py-1.5 text-sm font-semibold text-white"
-                  : "rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-royal-700 ring-1 ring-royal-200 hover:bg-royal-50"
-              }
+              className="rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-royal-700 ring-1 ring-royal-200 hover:bg-royal-50"
             >
-              Stage {STAGES[sid].num} · {STAGES[sid].rank}
+              {label}
             </Link>
           );
         })}

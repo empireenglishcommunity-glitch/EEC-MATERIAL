@@ -4,6 +4,7 @@ import { isLocale } from "@/i18n/config";
 import { getCurrentUser } from "@/lib/auth";
 import { getUserQuizResults } from "@/lib/store";
 import { getStage } from "@/lib/lessons";
+import { userCanAccessStage } from "@/lib/access";
 import { getUnitQuiz } from "@/content/quizzes";
 import { stageNav } from "@/lib/portal-nav";
 import { Section } from "@/components/ui";
@@ -25,6 +26,7 @@ export default async function StageQuizPage({
 
   const user = await getCurrentUser();
   if (!user) return null; // layout guards
+  if (!(await userCanAccessStage(user, meta.id))) redirect(stageNav(locale, meta.id).dashboard);
 
   const prev = (await getUserQuizResults(user.id))[quiz.unit];
   const ar = locale === "ar";

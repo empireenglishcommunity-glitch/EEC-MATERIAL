@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getAccentPractice, saveAccentPractice } from "@/lib/store";
-import { ACCENT_DRILL_IDS } from "@/content/accent-drills";
+import { ACCENT_DRILL_IDS, getAccentDrill } from "@/content/accent-drills";
+import { userCanAccessStage } from "@/lib/access";
 
 // Toggle an Accent Lab drill as "practiced" for the current learner.
 // Body: { drillId: string, practiced: boolean }
@@ -14,6 +15,10 @@ export async function POST(req: Request) {
     const { drillId, practiced } = (await req.json()) as { drillId?: string; practiced?: boolean };
     if (!drillId || !ACCENT_DRILL_IDS.includes(drillId)) {
       return NextResponse.json({ ok: false, error: "invalid_drill" }, { status: 400 });
+    }
+    const drill = getAccentDrill(drillId);
+    if (!drill || !(await userCanAccessStage(user, drill.stage))) {
+      return NextResponse.json({ ok: false, error: "stage_locked" }, { status: 403 });
     }
     const all = await getAccentPractice();
     const set = new Set(all[user.id] ?? []);
