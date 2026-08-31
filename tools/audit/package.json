@@ -18,10 +18,11 @@
     "glossary": "npm run glossary:stage0 && npm run glossary:stage1 && npm run glossary:stage2",
     "glossary:check": "node generate-stage0-glossary.mjs --check && node generate-stage-glossary.mjs --stage 1 --check && node generate-stage-glossary.mjs --stage 2 --check",
     "drift": "npm run embed:check && npm run glossary:check",
+    "wrappers": "node check-portal-wrappers.mjs",
     "anatomy": "node check-lesson-anatomy.mjs",
     "dial": "node measure-arabic-dial.mjs",
     "generate": "npm run glossary && npm run embed",
-    "all": "npm run drift && npm run anatomy && npm run dial && npm run bidi"
+    "all": "npm run drift && npm run wrappers && npm run anatomy && npm run dial && npm run bidi"
   },
   "dependencies": {
     "marked": "^16.4.2",

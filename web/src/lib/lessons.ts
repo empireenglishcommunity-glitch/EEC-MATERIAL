@@ -223,3 +223,25 @@ export function getAdjacentLessons(id: string): { prev: FlatLesson | null; next:
 export function stageDashboardPath(locale: string, stageId: StageId): string {
   return stageId === "s0" ? `/${locale}/portal` : `/${locale}/portal/stages/${stageId}`;
 }
+
+/**
+ * The WRAPPER_MD key for a stage-level wrapper page.
+ *
+ * These keys come from the markdown FILENAME — `materials/stage2/stage2-glossary.md`
+ * is keyed `stage2-glossary` — so they are built from the stage NUMBER, not from the
+ * stage id. `s2` and `stage2` are different strings, and getting that wrong produces a
+ * silent 404 rather than a build error: the route compiles, the lookup misses, and the
+ * page simply says "not found".
+ *
+ * That is not hypothetical. `/portal/stages/{s1,s2}/{start,glossary}` — four pages —
+ * were live and 404ing because each route built its own `${meta.id}-glossary` string
+ * while Stage 0's two pages hardcoded the correct `stage0-glossary` literal. Stage 0
+ * worked, so the defect was invisible in the only stage that had been clicked through.
+ *
+ * Every stage-wrapper route MUST use this function, including the Stage-0 ones. One
+ * derivation means the next stage cannot reintroduce the mismatch, and
+ * `tools/audit/check-portal-wrappers.mjs` fails the build if a route hand-rolls the key.
+ */
+export function stageWrapperPageId(stageId: StageId, kind: "front-matter" | "glossary"): string {
+  return `stage${STAGES[stageId].num}-${kind}`;
+}
