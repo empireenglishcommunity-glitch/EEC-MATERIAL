@@ -106,11 +106,20 @@ function declaredTarget(blueprintRel, lessonId) {
   const src = blueprintCache.get(blueprintRel);
   if (!src) return null;
 
-  // Each lesson is a "## <ID> — ..." section; read the Arabic line inside it.
+  // Each lesson is a "## <ID> — ..." section; prefer the Arabic line inside it.
+  //
+  // Then fall back to the UNIT-LEVEL line in the same file. Both steps are load
+  // bearing, and the second one used to be wrong in a way that mattered: the
+  // fallback was `section ?? src`, so it only applied when the lesson section was
+  // missing ENTIRELY. Stages 0-2 happen to restate the Arabic level inside every
+  // lesson block, so a found-but-silent section never occurred. Stages 3 and 4
+  // declare immersion ONCE per unit and never repeat it per lesson — which meant
+  // every one of those 110 lessons resolved to "no target" and the gate passed by
+  // not looking. Search the section, then the whole file.
   const sections = src.split(/^## /m);
   const section = sections.find((s) => s.startsWith(lessonId));
-  const scope = section ?? src; // unit-level fallback for a lesson with no block
-  const line = /\*\*Arabic support:\*\*[^\n]*/.exec(scope)?.[0];
+  const find = (scope) => /\*\*Arabic support:\*\*[^\n]*/.exec(scope)?.[0];
+  const line = (section && find(section)) || find(src);
   if (!line) return null;
 
   // The curriculum writes the level three ways, and all three are a real target:
@@ -186,7 +195,17 @@ for (const [stage, list] of [...byStage.entries()].sort((a, b) => a[0] - b[0])) 
 
   for (const r of list) {
     if (r.target == null) {
-      console.log(`      ?  ${r.id}  ${r.measured.toFixed(1)}%  — no target found in its blueprint`);
+      // An undiscoverable target is a FAILURE, not a note. This used to print a
+      // "?" and pass, which is the worst behaviour a gate can have: a mistyped
+      // citation, a renamed blueprint or a stage that declares its level once per
+      // unit all became invisible, and the run still said PASS. Stage 0 stays
+      // report-only along with the rest of its grandfathering.
+      if (!grandfathered) failures++;
+      console.log(
+        `      ${grandfathered ? "·" : "✗"}  ${r.id}  ${r.measured.toFixed(1)}%  — NO TARGET FOUND. ` +
+          `Its blueprint declares no "**Arabic support:**" level for this lesson or its unit, ` +
+          `or the header cites the wrong blueprint. An unmeasured lesson must not pass silently.`,
+      );
       continue;
     }
     const delta = r.measured - r.target;
