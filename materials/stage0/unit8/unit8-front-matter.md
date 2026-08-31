@@ -53,4 +53,4 @@ present continuous (now) · vs present simple · *What are you doing?*
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم.*
+*Empire English 👑 · Stage 0 · Recruit rank · لبنة كل يوم*

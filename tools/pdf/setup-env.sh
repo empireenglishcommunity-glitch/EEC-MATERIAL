@@ -36,13 +36,16 @@ fi
 echo "== [3/4] Fonts (Arabic + Latin + emoji) =="
 dnf install -y google-noto-naskh-arabic-fonts google-noto-sans-arabic-fonts \
   google-noto-sans-fonts google-noto-serif-fonts \
-  dejavu-sans-fonts >/dev/null 2>&1   # DejaVu covers arrows/symbols (→, etc.)
+  dejavu-sans-fonts \
+  dejavu-sans-mono-fonts >/dev/null 2>&1   # Sans covers arrows/symbols (→); Mono is the
+                                           # code-span face every lesson's blueprint
+                                           # citation uses (book.css pins it by name).
 # Color-emoji font so the Empire section markers (🎯 🔁 👂 👑 …) render, not tofu.
 dnf install -y google-noto-emoji-color-fonts >/dev/null 2>&1 \
   || dnf install -y google-noto-color-emoji-fonts >/dev/null 2>&1 \
   || dnf install -y google-noto-emoji-fonts >/dev/null 2>&1
 fc-cache -f >/dev/null 2>&1
-echo "  arabic faces: $(fc-list | grep -ic arabic) | emoji faces: $(fc-list | grep -ic emoji)"
+echo "  arabic faces: $(fc-list | grep -ic arabic) | emoji faces: $(fc-list | grep -ic emoji) | mono faces: $(fc-list | grep -ic mono)"
 
 echo "== [4/4] Chromium (puppeteer) =="
 if ! ls "$PUPPETEER_CACHE_DIR"/chrome/*/chrome-linux64/chrome >/dev/null 2>&1; then

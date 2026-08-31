@@ -83,18 +83,34 @@ docker compose ps            # eec-web should be "Up"
 
 Verify the new build on the box:
 ```bash
-curl -I http://127.0.0.1:8080/ar                                  # 200 (site)
-curl -I http://127.0.0.1:8080/coursebook/eec-stage0-student.pdf   # 200, application/pdf
+curl -I http://127.0.0.1:8080/ar                             # 200 (site)
+curl -I http://127.0.0.1:8080/api/coursebook/student         # 401 — gated, and that is correct
+curl -I http://127.0.0.1:8080/api/coursebook/teacher \
+     -H "x-admin-token: $ADMIN_TOKEN"                        # 200, application/pdf
+curl -I http://127.0.0.1:8080/coursebook/eec-stage0-teacher.pdf   # 404 — must NOT be public
 ```
 
+A `401` on `/api/coursebook/student` is the gate working. A `503` means the PDFs are
+missing from the image — check that the Dockerfile still copies `private/`.
+
 ### What ships in this build
-- **55 finished Stage-0 lessons** embedded in the portal (both editions from one source).
-- The **Empire Coursebook PDFs** are baked into the image (Dockerfile copies `public/`)
-  and served at `/coursebook/eec-stage0-student.pdf` and `/coursebook/eec-stage0-teacher.pdf`.
-  The Student's Edition is also linked from the portal dashboard.
-- Regenerate the PDFs anytime with the pipeline in `tools/pdf/` (see its README), then
-  redeploy. They are committed under `web/public/coursebook/`, so a fresh `git pull` +
-  `docker compose up -d --build` publishes the current books automatically.
+- **55 finished Stage-0 lessons**, the **11 unit front-matter wrappers**, the **Stage-0
+  front matter** and the **glossary**, all embedded in the portal from one source.
+- The **Empire Coursebook PDFs** are baked into the image and served **behind auth** by
+  `/api/coursebook/[edition]`:
+  - `student` — any signed-in learner. Linked from the portal dashboard.
+  - `teacher` — a user with `role: "teacher"`, or a caller sending the `ADMIN_TOKEN`
+    header. The dashboard shows this card only to teachers.
+- They live in **`web/private/coursebook/`**, not `public/`. Anything under `public/` is
+  world readable at a guessable URL, which is how the Teacher's Edition — answer keys,
+  timings, delivery notes — used to be downloadable by anyone. The Dockerfile copies
+  `private/` explicitly, because Next's standalone output does not.
+- Regenerate the PDFs with the pipeline in `tools/pdf/` (**run `setup-env.sh` first** —
+  see its README for why a successful build can still be wrong), then redeploy. They are
+  committed, so a fresh `git pull` + `docker compose up -d --build` publishes them.
+- To promote someone to teacher, set `"role": "teacher"` on their object in
+  `$DATA_DIR/users.json` and restart, or pass `"role":"teacher"` when creating them via
+  `POST /api/admin/users`.
 
 ## Resource note
 Capped at 512MB / 0.75 CPU in `docker-compose.yml` — comfortable alongside n8n on the

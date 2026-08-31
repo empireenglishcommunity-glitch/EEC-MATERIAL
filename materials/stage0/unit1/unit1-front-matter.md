@@ -56,4 +56,4 @@ possessives · this/that · have/has · describing your family — building on y
 
 ---
 
-*Empire English 👑 · Stage 0 · Recruit rank · consistency beats intensity.*
+*Empire English 👑 · Stage 0 · Recruit rank · consistency beats intensity*

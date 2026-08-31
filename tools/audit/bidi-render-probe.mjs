@@ -74,20 +74,32 @@ function stripTeacherBlocks(md) {
   return out.join("\n");
 }
 
+/**
+ * Every page the learner can be shown: the 55 lessons, the 11 unit front-matter
+ * wrappers, and the stage front matter + glossary. All of it renders through the
+ * same two stylesheets, so all of it has to be probed — scanning lessons alone
+ * would have missed the stage wrapper entirely.
+ */
 function lessonFiles() {
   const base = path.join(REPO, "materials", "stage0");
   const out = [];
+  const add = (id, p) => {
+    if (LESSON && id !== LESSON) return;
+    out.push({ id, p });
+  };
+
+  for (const f of fs.readdirSync(base).filter((f) => /^stage\d+-.*\.md$/.test(f)).sort()) {
+    add(f.replace(/\.md$/, ""), path.join(base, f));
+  }
   for (const d of fs
     .readdirSync(base)
     .filter((d) => /^unit\d+$/.test(d))
     .sort((a, b) => parseInt(a.slice(4)) - parseInt(b.slice(4)))) {
     for (const f of fs
       .readdirSync(path.join(base, d))
-      .filter((f) => /^s0-u\d+-l\d+\.md$/.test(f))
+      .filter((f) => f.endsWith(".md"))
       .sort()) {
-      const id = f.replace(/\.md$/, "");
-      if (LESSON && id !== LESSON) continue;
-      out.push({ id, p: path.join(base, d, f) });
+      add(f.replace(/\.md$/, ""), path.join(base, d, f));
     }
   }
   return out;
@@ -122,6 +134,35 @@ const html = (body) => `<!doctype html>
 </style></head>
 <body><article class="lesson-prose">${body}</article></body>
 </html>`;
+
+/**
+ * Map a rendered line back to the markdown line that produced it, so a report is
+ * something you can act on rather than something you have to go hunting for.
+ * Matching is on text with markdown syntax stripped and whitespace collapsed.
+ */
+const norm = (s) =>
+  s
+    .replace(/`([^`]*)`/g, "$1")
+    .replace(/[*_>#|]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const sourceCache = new Map();
+function withSource(hit, file) {
+  if (!sourceCache.has(file)) {
+    sourceCache.set(
+      file,
+      fs
+        .readFileSync(file, "utf8")
+        .split("\n")
+        .map((l, i) => ({ n: i + 1, norm: norm(l) })),
+    );
+  }
+  const needle = norm(hit.text);
+  const probe = needle.slice(0, 60);
+  const line = sourceCache.get(file).find((l) => l.norm && (l.norm.includes(probe) || needle.includes(l.norm)));
+  return { ...hit, file: path.relative(REPO, file), line: line ? line.n : null };
+}
 
 const PROBE = () => {
   const LAT = /[A-Za-z]/;
@@ -220,8 +261,8 @@ const PROBE = () => {
       const { bad, ambiguous } = await page.evaluate(PROBE);
       total += bad.length;
       ambig += ambiguous.length;
-      if (bad.length) perLesson.push({ id: f.id, bad });
-      for (const a of ambiguous) ambigLines.push({ id: f.id, ...a });
+      if (bad.length) perLesson.push({ id: f.id, bad: bad.map((b) => withSource(b, f.p)) });
+      for (const a of ambiguous) ambigLines.push({ id: f.id, ...withSource(a, f.p) });
       if (PNG && LESSON) await page.screenshot({ path: PNG, fullPage: true });
     }
   } finally {
@@ -229,7 +270,7 @@ const PROBE = () => {
   }
 
   console.log(`mode: ${PATCHED ? "PATCHED (unicode-bidi: plaintext)" : "globals.css as committed"}`);
-  console.log(`lessons probed: ${files.length}`);
+  console.log(`pages probed:   ${files.length}`);
   console.log(`FAIL  misrendered lines (closing punctuation on the wrong side): ${total}`);
   console.log(`note  needs rewording (mixed-direction line, no base direction is right): ${ambig}`);
 
@@ -248,8 +289,20 @@ const PROBE = () => {
   }
 
   if (VERBOSE && ambig) {
-    console.log(`\n  direction-ambiguous lines (first strong character disagrees with the dominant script):`);
-    for (const a of ambigLines.slice(0, 40)) console.log(`    ${a.id} <${a.tag}> "${a.text}"`);
+    console.log(`\n  Lines needing an editor, grouped by file. A renderer picks base direction from the`);
+    console.log(`  first strong character, so these cannot be fixed in CSS — see empire-style-guide.md §4.\n`);
+    const byFile = new Map();
+    for (const a of ambigLines) {
+      if (!byFile.has(a.file)) byFile.set(a.file, []);
+      byFile.get(a.file).push(a);
+    }
+    for (const [file, hits] of byFile) {
+      console.log(`  ${file}`);
+      for (const h of hits) {
+        console.log(`    ${h.line ? `:${h.line}` : "(line ?)"}  reads ${h.want}`);
+        console.log(`        ${h.text}`);
+      }
+    }
   }
 
   process.exit(total ? 1 : 0);

@@ -11,6 +11,10 @@ portal serves. But on the Arabic locale, **796 lines rendered their closing
 punctuation on the wrong side**, and the spec plan showed two entire completed phases
 as untouched.
 
+> **Second pass, same day:** everything actionable in §2 was then fixed, and Stage 0 is
+> now complete end to end — see [§2.6](#26-closed-later-the-same-day). What remains open
+> is three founder reviews and Phase 5.
+
 ---
 
 ## 1. What was verified, and how
@@ -130,56 +134,88 @@ either flagged forever or silently normalised away.
 
 ---
 
+## 2.6 Closed later the same day
+
+The findings above were reported first and fixed in a second pass. Recorded here so
+this document is not read as a list of things still wrong.
+
+- **Stage 0 is now complete.** The stage front matter (rank, roadmap, how to study,
+  honesty section) and the glossary were written — closing the last content gap. The
+  glossary is **generated** from every lesson's *Your Arsenal* table, so it cannot teach
+  a word the lessons no longer use: **128 entries** across 11 units.
+- **Unit front matter reaches the portal.** The embed now carries **13 wrapper pages**,
+  and `/portal/units/[unit]`, `/portal/start` and `/portal/glossary` render them. The
+  portal and the book finally show the same coursebook.
+- **The coursebook PDFs are behind authentication.** Moved out of `web/public/` to
+  `web/private/`, served by `/api/coursebook/[edition]`. Verified against a running
+  server: anonymous → 401 student / 404 teacher; student session → 200 student /
+  **404 teacher**; teacher role → 200; `ADMIN_TOKEN` header → 200; wrong token → 404;
+  the old public paths → 404.
+- **All 69 mixed-direction lines are gone** — 0 failures *and* 0 advisories across 68
+  pages. Fixed by normalising three fragment templates (the sign-off, the chain-recall
+  cue, the record-the-task line) and then rewording the remainder individually. Two of
+  those individual edits were themselves wrong on first attempt — they dropped a period
+  from a bullet whose siblings kept theirs — and were redone by keeping the punctuation
+  and making the line unambiguous instead, once by glossing the grammar terms in Arabic,
+  which improved the teaching as well.
+- **The PDFs were rebuilt correctly**, after running `setup-env.sh`. All six font
+  families embed, including `NotoColorEmoji` and `DejaVuSansMono`: 204 pp student,
+  222 pp teacher.
+- **A second implicit font dependency was found and fixed.** `book.css` styled `code`
+  without naming a font, so code spans resolved to whatever generic monospace the build
+  machine had — and every one of the 55 lessons sets its blueprint citation in a code
+  span. The monospace stack is now pinned, and `setup-env.sh` installs it.
+
 ## 3. Still open
 
 Ordered by what actually blocks value.
 
 1. **Three founder checkpoints** (spec 2.4, 3.4, 4.4). Nothing is blocked on building.
    These need someone to look at Unit 1, the PDF, and Stage 0, and say yes.
-2. **The Stage-0 wrapper (spec 4.2) — the last content gap in Stage 0.** Stage cover,
-   "Recruit" rank page, roadmap, and the Stage-0 glossary were never written. The 11
-   *unit* front-matter files exist; the *stage*-level ones do not.
-3. **Rebuild the coursebook PDFs** so they pick up this audit's five heading edits.
-   Deliberately **not** done here — see the trap below.
-4. **Unit front matter never reaches the portal.** It is in the PDF only — the embed
-   holds 55 lesson keys and 0 front-matter keys — so portal students never see the
-   campaign wrapper each unit opens with in the book. Two outputs, two experiences.
-5. **69 mixed-direction lines** to reword (§2.1). Cosmetic, but visible on every page.
-6. **220 lessons for Stages 1–4** (spec Phase 5). Not started; all blueprints exist.
+2. **220 lessons for Stages 1–4** (spec Phase 5). Not started; all blueprints exist.
    Build just ahead of the cohort, per the design.
 
 ### Trap found the hard way: never rebuild the PDFs without running `setup-env.sh`
 
-The five heading edits in this audit mean the committed PDFs are seven characters out
-of date. Regenerating them here produced files that **looked** fine — the build printed
-success and both editions rendered — but were **degraded**: 4.4M → 4.1M, with every
-`DejaVuSans` face gone from the embedded font list.
+The first attempt at rebuilding the coursebooks produced files that **looked** fine — the
+build printed success and both editions rendered — but were **degraded**: 4.4M → 4.1M,
+with every `DejaVuSans` face gone from the embedded font list.
 
 `tools/pdf/setup-env.sh` installs `dejavu-sans-fonts` "*because DejaVu covers
 arrows/symbols*" and a colour-emoji font "*so the Empire section markers (🎯 🔁 👂 👑 …)
-render, not tofu*". This sandbox had **0 emoji faces and 0 DejaVu faces installed**, so
-the rebuild would have replaced every section marker and every `→ ↗ ↘` in all 55
-lessons with missing glyphs — on every page of both editions.
+render, not tofu*". The machine had **0 emoji faces and 0 DejaVu faces installed**, so
+that build would have replaced every section marker and every `→ ↗ ↘` in all 55 lessons
+with missing glyphs, on every page of both editions.
 
-The regenerated files were therefore **reverted**, and the PDFs remain seven characters
-stale on purpose. A successful build is not evidence of a correct one: **check the
-embedded font list**, not the exit code.
+Those files were discarded, `setup-env.sh` was run, and the rebuild verified. A
+successful build is not evidence of a correct one: **check the embedded font list**, not
+the exit code.
 
 ```bash
-strings web/public/coursebook/eec-stage0-student.pdf \
-  | grep -oE '(Cinzel|SourceSans3|NotoNaskhArabic|NotoSans|DejaVuSans)[A-Za-z-]*' | sort -u
+strings web/private/coursebook/eec-stage0-student.pdf \
+  | grep -oE '(Cinzel|SourceSans3|NotoNaskhArabic|NotoSans|DejaVuSans|DejaVuSansMono)[A-Za-z-]*' \
+  | sort -u
 ```
 
-### Two items needing a decision rather than work
+Chasing this turned up the same bug one level down: `book.css` styled `code` without
+naming a font, so code spans took whatever generic monospace existed — and all 55
+lessons set their blueprint citation in a code span. Pinned, and the font added to
+`setup-env.sh`. Both were implicit dependencies on the build machine, which is the
+category of defect to look for here.
 
-**The Teacher's Edition PDF is publicly downloadable.**
-`web/public/coursebook/eec-stage0-teacher.pdf` is committed and served at a guessable,
-ungated URL, while the portal links only the student edition. Anything in `public/` is
-public — the login gate on `/portal` does not cover it. The teaching notes, timings,
-differentiation and success checks are the Teacher's Edition's value, so decide
-deliberately: accept it as open, or move it behind the gate. Flagged rather than
-changed, because it may well be intentional. (The student PDF is equally open; that
-one is likely fine, since its answer key is already in the student text.)
+### Items that were decisions rather than work
+
+**~~The Teacher's Edition PDF is publicly downloadable.~~ — RESOLVED, see §2.6.**
+Both editions were in `web/public/`, so both were downloadable at a guessable, ungated
+URL; the `/portal` login never covered them. They now live in `web/private/` and are
+served by `/api/coursebook/[edition]` — a session for the student edition, `role:
+"teacher"` or the `ADMIN_TOKEN` header for the teacher edition. A learner who probes the
+teacher URL gets a `404`, not a `403`, so the endpoint does not confirm that a teacher
+edition exists.
+
+One consequence worth knowing: `web/private/` is **not** copied into Next's standalone
+output, so the Dockerfile copies it explicitly. If `/api/coursebook/student` ever
+returns `503`, that `COPY` line is the first thing to check.
 
 **This repo is missing from the ecosystem's memory hub.**
 `empire-chronicle` is the canonical index, and `EEC-MATERIAL` appears **nowhere** in it
