@@ -2,8 +2,10 @@
 
 > **Sub-project:** `.kiro/specs/eec-lesson-materials/` · **Reads with:** `empire-style-guide.md`,
 > `curriculum/02-lesson-template.md` (the Learning Loop this maps to).
-> **Purpose:** the exact, fixed structure of every finished lesson + the Teacher-overlay convention + the
-> per-lesson "done" checklist. Every lesson in `materials/` follows this — no exceptions.
+> **Purpose:** the exact structure of every finished lesson + the Teacher-overlay convention + the
+> per-lesson "done" checklist.
+> **Enforced by:** `tools/audit/check-lesson-anatomy.mjs` (`cd tools/audit && npm run anatomy`). If this
+> document and that script ever disagree, that is a bug in one of them — fix both in the same commit.
 
 ---
 
@@ -29,8 +31,51 @@ Each section header shows the **Empire label + function + Arabic** (per the styl
 | 12 | **Self-check** — صحّح لنفسك (answer key to Train) | (self-study) | derived |
 | — | **Empire sign-off** (honesty line + 👑) | — | style guide §1 |
 
-**Mandatory sections:** Your Conquest, Watch & Listen, Decode it, Accent Lab, Your Turn (with record task),
-Your Orders, Self-check. (Accent Lab + the record task are never dropped — they carry the method + proof engine.)
+### 1a. Mandatory sections, by lesson type
+
+A **teaching lesson** — the default, and 41 of Stage 0's 55 — must carry all seven of:
+Your Conquest, Watch & Listen, Decode it, Accent Lab, Your Turn (with record task), Your Orders, Self-check.
+Accent Lab and the record task are never dropped from a teaching lesson: they carry the method and the proof
+engine.
+
+Four lesson types legitimately differ, because they are not teaching new language. They are listed here — and
+in the checker — so that a deliberate variant is distinguishable from a lesson someone left half-finished:
+
+| Type | Which lessons | Must carry | Why it differs |
+|--|--|--|--|
+| **teaching** | all others (41) | the seven above | the default |
+| **unit-task** | every `L05` in Units 1–9 (10) | Your Conquest, Watch & Listen, Accent Lab, Your Turn, Your Orders, Self-check | the unit's speaking milestone: it **performs** the unit's language, so "Decode it" is replaced by a performance checklist and Accent Lab becomes a clinic on the learner's own flagged weak sound |
+| **review** | `S0-U10-L01`, `L02`, `L04` (3) | Your Conquest, Your Turn, Your Orders, Self-check | consolidation across ten units — there is no single new rule to decode |
+| **orientation** | `S0-U0-L01` (1) | Your Conquest, Your Turn, Your Orders | teaches no language at all; its job is commitment and emotional safety, and the first sounds lesson is `L03` |
+| **stage-finale** | `S0-U10-L05` (1) | Your Conquest | an assessment script (quiz → speaking task → graduation sample → result → log), numbered by step rather than by anatomy section |
+
+### 1b. Accepted Arabic sub-labels
+
+Each section header is `Empire label — Arabic`. The Arabic may appear bare or with a parenthetical
+qualifier — `هدفك` and `هدفك (milestone)` are both correct; a reworded label is not.
+
+Some sections have more than one accepted Arabic label, because non-teaching lessons use a consistent
+alternative vocabulary: a unit-task lesson shows **النموذج** (the model) rather than "اسمع وشوف", runs an
+Accent **عيادة** (clinic) rather than a **معمل** (lab), and calls Your Turn **التسجيل** (the recording). A
+pronunciation lesson explains **الطريقة** (the method) rather than **القاعدة** (the rule), because it is
+teaching articulation and not grammar.
+
+| Section | Accepted Arabic |
+|--|--|
+| Your Conquest | `هدفك` |
+| Why this matters | `ليه ده مهم` |
+| Warm-up | `سخّن` |
+| Watch & Listen | `اسمع وشوف` · `اسمع` · `النموذج` |
+| Decode it | `القاعدة` · `الطريقة` · `طقم النجاة` · `إزاي بقّك بيعمل الصوت` |
+| Your Arsenal | `ذخيرتك` |
+| Accent Lab | `معمل النطق` · `عيادة النطق` |
+| Train | `تدرّب` · `البروفة الكاملة` |
+| Your Turn | `دورك` · `التسجيل` |
+| Your Orders | `مهمتك` |
+| Remember | `افتكر` |
+| Self-check | `صحّح لنفسك` · `Unit N mini-quiz` |
+
+Adding a new label is a deliberate decision: put it in this table and in the checker, or don't use it.
 
 ## 2. The Teacher overlay (what makes it the Teacher's Edition)
 
