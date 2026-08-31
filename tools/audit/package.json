@@ -11,6 +11,7 @@
     "glossary": "node generate-stage0-glossary.mjs",
     "drift": "node generate-portal-embed.mjs --check && node generate-stage0-glossary.mjs --check",
     "anatomy": "node check-lesson-anatomy.mjs",
+    "dial": "node measure-arabic-dial.mjs",
     "generate": "npm run glossary && npm run embed",
     "all": "npm run drift && npm run anatomy && npm run bidi"
   },
