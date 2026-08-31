@@ -11,9 +11,17 @@ export type AccentDrill = {
   unit?: number;
   sound: string; // e.g. "/p/ vs /b/"
   titleEn: string;
-  titleAr: string;
   cueEn: string;
-  cueAr: string;
+  /**
+   * Arabic title/cue. OPTIONAL, and absent on purpose from Stage 3 onward:
+   * those stages are 0% Arabic by curriculum decision (full immersion), so an
+   * Arabic cue would contradict the stage it belongs to. The UI falls back to
+   * the English text for an Arabic-locale learner, which is exactly what the
+   * live session does. Copying the English into a field named `Ar` would have
+   * looked tidier and lied about what the drill is.
+   */
+  titleAr?: string;
+  cueAr?: string;
   phrase: string; // the sentence the learner records + compares
   words: string[];
   pairs: string[]; // minimal pairs
@@ -441,10 +449,178 @@ export const STAGE2_ACCENT_DRILLS: AccentDrill[] = [
   },
 ];
 
+/**
+ * Stage-3 (B2) drills — one per unit.
+ *
+ * Stage 3 is where the Accent Lab stops teaching sounds and starts refining
+ * speech: thought groups, contrastive stress, intonation for attitude, register
+ * in prosody, and self-monitoring (`curriculum/03-accent-lab-syllabus.md` §6).
+ * Several of these therefore have no minimal pair in the segmental sense, so
+ * `pairs` carries a prosodic contrast instead — two readings of the same words
+ * that mean different things.
+ *
+ * English only, deliberately: the stage declares 0% Arabic in all twelve units.
+ */
+export const STAGE3_ACCENT_DRILLS: AccentDrill[] = [
+  {
+    id: "s3-u1-thought-groups",
+    stage: "s3",
+    unit: 1,
+    sound: "thought groups",
+    titleEn: "Breathe at the joins, not mid-clause",
+    cueEn:
+      "A long turn fails on breathing before it fails on grammar. One idea per thought group; break where you would write a comma. If you run out of air mid-clause, the group was too long — not your lungs.",
+    phrase: "I've been trying to change career for about two years now — on and off, properly since last spring.",
+    words: ["I've been trying", "for about two years now", "on and off", "properly since last spring"],
+    pairs: ["one long unbroken run / four clean groups", "breath mid-clause / breath at the join"],
+    signature: true,
+  },
+  {
+    id: "s3-u2-had-been-d",
+    stage: "s3",
+    unit: 2,
+    sound: "/d/ in had been",
+    titleEn: "The /d/ that carries the past perfect",
+    cueEn:
+      "\u201cshe'd been working\u201d compresses to almost nothing, but the /d/ is the tense. Drop it and you have said \u201cshe been working\u201d — which places the whole story in the wrong time.",
+    phrase: "She'd been working all night, so by the time we arrived she'd already gone home.",
+    words: ["she'd been", "they'd been", "I'd been", "we'd already"],
+    pairs: ["she been working / she'd been working", "I been waiting / I'd been waiting"],
+  },
+  {
+    id: "s3-u3-certainty-intonation",
+    stage: "s3",
+    unit: 3,
+    sound: "intonation of certainty vs doubt",
+    titleEn: "Say the same prediction two ways",
+    cueEn:
+      "Certainty falls and lands. Doubt rises slightly and stays open. The words can be identical — the pitch is what tells your listener how much to rely on you, and getting it backwards is worse than hedging badly.",
+    phrase: "By the end of the year I'll have finished it.",
+    words: ["definitely", "probably", "I'd imagine", "I wouldn't count on it"],
+    pairs: ["falling — I'm sure / rising — I'm guessing", "It'll be fine. / It'll be fine…?"],
+  },
+  {
+    id: "s3-u4-reduction-trio",
+    stage: "s3",
+    unit: 4,
+    sound: "/\u026Afa\u026Ad/ \u00b7 /a\u026Ad\u0259v/ \u00b7 /a\u026Adbi/",
+    titleEn: "One consonant apart, three time frames",
+    cueEn:
+      "The condition, the past result and the present result differ by a single consonant. This is the most consequential sound distinction in Stage 3: if the three collapse under speed, your listener loses the whole sequence of what happened and what would have.",
+    phrase: "If I'd known, I'd have called — and I'd be there now.",
+    words: ["if I'd", "I'd have", "I'd be", "I'd never have"],
+    pairs: ["I'd have called / I'd be calling", "if I'd have known / if I'd known"],
+    signature: true,
+  },
+  {
+    id: "s3-u5-must-have",
+    stage: "s3",
+    unit: 5,
+    sound: "/m\u028Cst\u0259v/ vs /w\u028Ad\u0259v/",
+    titleEn: "Deduction against conditional",
+    cueEn:
+      "\u201cmust have\u201d and \u201cwould have\u201d reduce to two very similar shapes, and confusing them inverts your meaning: one claims something did happen, the other that it didn't. Keep the opening consonant clean.",
+    phrase: "They must have decided before I walked in — otherwise they would have asked.",
+    words: ["must have", "can't have", "might have", "would have"],
+    pairs: ["must have gone / would have gone", "can't have known / couldn't have known"],
+  },
+  {
+    id: "s3-u6-been-stack",
+    stage: "s3",
+    unit: 6,
+    sound: "/\u0283\u028Ad\u0259v b\u026An/",
+    titleEn: "The passive auxiliary stack",
+    cueEn:
+      "\u201cshould have been checked\u201d is three auxiliaries compressed into about two syllables — and the \u201cbeen\u201d is the passive. It is the single most common advanced-passive slip: drop it and you have said someone should have done the checking themselves.",
+    phrase: "It should have been checked before it went out, and it can't have been approved.",
+    words: ["should have been", "must have been", "can't have been", "could have been"],
+    pairs: ["should have checked / should have been checked", "must have sent / must have been sent"],
+    signature: true,
+  },
+  {
+    id: "s3-u7-comma-pause",
+    stage: "s3",
+    unit: 7,
+    sound: "the comma pause",
+    titleEn: "Nobody can hear your commas",
+    cueEn:
+      "In speech, a tiny pause is the only thing separating \u201cmy brother who lives in Cairo\u201d (I have several) from \u201cmy brother, who lives in Cairo\u201d (I have one). Your listener cannot see punctuation. They can hear pauses.",
+    phrase: "My brother, who lives in Cairo, is an engineer.",
+    words: ["who", "which", "whom", "where"],
+    pairs: [
+      "my brother who lives in Cairo / my brother, who lives in Cairo",
+      "the engineers who had been warned ignored it / the engineers, who had been warned, ignored it",
+    ],
+  },
+  {
+    id: "s3-u8-reporting-rhythm",
+    stage: "s3",
+    unit: 8,
+    sound: "rhythm across reporting frames",
+    titleEn: "The frame is unstressed; the content is not",
+    cueEn:
+      "\u201che pointed out that\u201d, \u201cshe has indicated that\u201d — the reporting frame runs fast and flat so the reported claim can carry the beat. Stressing the frame makes you sound like you are quoting a document.",
+    phrase: "She admitted that she hadn't read it, and then insisted that we go ahead anyway.",
+    words: ["admitted that", "insisted that", "pointed out that", "has indicated that"],
+    pairs: ["stressed frame, flat content / flat frame, stressed content"],
+  },
+  {
+    id: "s3-u9-register-prosody",
+    stage: "s3",
+    unit: 9,
+    sound: "register-appropriate prosody",
+    titleEn: "Formal is slower and flatter, never louder",
+    cueEn:
+      "Register lives in your voice as much as in your words. Learners raise volume when they mean to raise formality — widen your pauses and flatten your pitch instead. Say one sentence twice and hear two different rooms.",
+    phrase: "I don't think that's going to work.",
+    words: ["I'm afraid", "I'd be cautious about", "honestly", "to be fair"],
+    pairs: ["flat and final / softened with a rise on \u201cthink\u201d", "louder = angry / slower = formal"],
+    signature: true,
+  },
+  {
+    id: "s3-u10-emphasis-for-impact",
+    stage: "s3",
+    unit: 10,
+    sound: "contrastive stress",
+    titleEn: "One word carries the sentence — pick it",
+    cueEn:
+      "\u201cI didn't say she took it\u201d has six meanings depending on which word you stress. In a meeting or a presentation, choosing that word is how you make a point instead of merely stating one. Flat delivery hides good content.",
+    phrase: "I never said she borrowed my car.",
+    words: ["I", "never", "said", "she", "borrowed", "my"],
+    pairs: ["monotone / one stressed word", "I never said SHE borrowed it / I never SAID she borrowed it"],
+  },
+  {
+    id: "s3-u11-concede-and-hold",
+    stage: "s3",
+    unit: 11,
+    sound: "concession falls, the hold rises",
+    titleEn: "The pitch shape of standing your ground",
+    cueEn:
+      "The concession falls — it is genuine. The hold lifts — it is not a retreat. Under challenge: slow down, drop your pitch, breathe. Speeding up and going higher is what makes a good argument sound rattled.",
+    phrase: "You're right that it's expensive — and I still think it's cheaper than the alternative.",
+    words: ["that's fair", "you're right that", "and", "I'd still say"],
+    pairs: ["rising concession, falling hold (collapse) / falling concession, rising hold (control)"],
+  },
+  {
+    id: "s3-u12-self-monitoring",
+    stage: "s3",
+    unit: 12,
+    sound: "self-monitoring + repair",
+    titleEn: "Repair the phrase, never restart the sentence",
+    cueEn:
+      "Monitor ONE named feature at a time, in the background, while your attention stays on what you are saying. When you catch a slip, fix the phrase at normal volume and keep going. The same slip repaired reads as control; restarted, it reads as breakdown.",
+    phrase: "The file should have — should have been checked before it went out.",
+    words: ["rather", "sorry", "or rather", "let me put that another way"],
+    pairs: ["restart the whole sentence / repair mid-phrase", "apologetic whisper / normal volume"],
+    signature: true,
+  },
+];
+
 export const ACCENT_DRILLS: AccentDrill[] = [
   ...STAGE0_ACCENT_DRILLS,
   ...STAGE1_ACCENT_DRILLS,
   ...STAGE2_ACCENT_DRILLS,
+  ...STAGE3_ACCENT_DRILLS,
 ];
 
 export const ACCENT_DRILL_IDS = ACCENT_DRILLS.map((d) => d.id);

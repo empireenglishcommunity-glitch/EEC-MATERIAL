@@ -2,7 +2,7 @@ import { getStageLessonIds, isStageId, type StageId } from "@/lib/lessons";
 import { isTeacher, getUserProgress, type User } from "@/lib/store";
 
 // Stage progression order. A stage's prerequisite is the stage before it.
-const STAGE_ORDER: StageId[] = ["s0", "s1", "s2"];
+const STAGE_ORDER: StageId[] = ["s0", "s1", "s2", "s3"];
 
 /** True when every lesson of a stage is marked complete. */
 export function hasCompletedStage(stageId: StageId, doneLessonIds: string[]): boolean {

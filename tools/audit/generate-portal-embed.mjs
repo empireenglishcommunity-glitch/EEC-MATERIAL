@@ -26,6 +26,7 @@ const EXPECTED = {
   0: { lessons: 55, wrappers: 13 },
   1: { lessons: 50, wrappers: 12 },
   2: { lessons: 60, wrappers: 14 },
+  3: { lessons: 60, wrappers: 14 },
 };
 
 if (!Number.isInteger(STAGE) || !(STAGE in EXPECTED)) {
